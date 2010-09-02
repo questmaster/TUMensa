@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Vector;
 
 import de.questmaster.tudmensa.R;
 
@@ -87,7 +88,7 @@ public class MensaMeals extends ListActivity {
     }
     
     private void getWebPage() {
-    	String webTable = null;
+    	Vector<String> webTable = new Vector<String>();
     	
     	try {
 			URL uTest = new URL("http://www.studentenwerkdarmstadt.de/index.php?option=com_spk&task=stadtmitte&view=week");
@@ -99,7 +100,7 @@ public class MensaMeals extends ListActivity {
 				// find first line of meal tables
 				if (s.indexOf("class=\"spk_table\">") >= 0) {
 					// remove before table
-					webTable = s.substring(s.indexOf("<table"));
+					s = s.substring(s.indexOf("<table"));
 					store = true;
 				}
 				if (store) {
@@ -110,7 +111,7 @@ public class MensaMeals extends ListActivity {
 					}
 					
 					// append line
-					webTable += s;
+					webTable.add(s);
 					
 					if (!store) {
 						break; // fertig
