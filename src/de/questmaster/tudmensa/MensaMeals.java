@@ -87,17 +87,34 @@ public class MensaMeals extends ListActivity {
     }
     
     private void getWebPage() {
-    	String s;
+    	String webTable = null;
     	
     	try {
 			URL uTest = new URL("http://www.studentenwerkdarmstadt.de/index.php?option=com_spk&task=stadtmitte&view=week");
 			BufferedReader br = new BufferedReader(new InputStreamReader(uTest.openStream()));
 
+			boolean store = false;
+			String s;
 			while ((s = br.readLine()) != null)   {
 				// find first line of meal tables
-				if (s.indexOf("class=\"spk_table\">") > 0) {
-					// TODO
-					System.out.print("found");
+				if (s.indexOf("class=\"spk_table\">") >= 0) {
+					// remove before table
+					webTable = s.substring(s.indexOf("<table"));
+					store = true;
+				}
+				if (store) {
+					if (s.indexOf("</table>") >= 0) {
+						// remove after table
+						s = "</table>";
+						store = false;
+					}
+					
+					// append line
+					webTable += s;
+					
+					if (!store) {
+						break; // fertig
+					}
 				}
 		    }
 			
