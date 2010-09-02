@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources>
+    <string name="app_name">TU Darmstadt - Mensen menu</string>
+    <string name="no_meals">No Meals Yet</string>
+    <string name="menu_insert">Add Item</string>
+<string name="custom_dialog_activity_text">Custom dialog</string>
+</resources>
