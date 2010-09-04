@@ -16,26 +16,24 @@
 
 package de.questmaster.tudmensa;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Vector;
-
 import de.questmaster.tudmensa.R;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
-//import android.view.MenuItem;
+import android.view.MenuItem;
 import android.widget.SimpleCursorAdapter;
 
 public class MensaMeals extends ListActivity {
-	public static final int INSERT_ID = Menu.FIRST;
+	public static final int UPDATE_ID = Menu.FIRST;
+	public static final int SETTINGS_ID = Menu.FIRST + 1;
+	
+	public static final int ON_SETTINGS_CHANGE = 0;
 
-	// private int mNoteNumber = 1;
+	private MensaMealsSettings.Settings mSettings = new MensaMealsSettings.Settings (); 
+
 	private MealsDbAdapter mDbHelper;
 
 	/** Called when the activity is first created. */
@@ -46,26 +44,68 @@ public class MensaMeals extends ListActivity {
 		mDbHelper = new MealsDbAdapter(this);
 		mDbHelper.open();
 
-		parseTable(getWebPage("stadtmitte", "week"));
+		// get data
+		DataExtractor de = new DataExtractor(this, mDbHelper);
+		de.retrieveData(mSettings.m_sMensaLocation);
 
 		fillData();
 	}
 
-	/*
-	 * @Override public boolean onCreateOptionsMenu(Menu menu) { boolean result
-	 * = super.onCreateOptionsMenu(menu); menu.add(0, INSERT_ID, 0,
-	 * R.string.menu_insert); return result; }
-	 * 
-	 * @Override public boolean onOptionsItemSelected(MenuItem item) { switch
-	 * (item.getItemId()) { case INSERT_ID: createNote(); return true; } return
-	 * super.onOptionsItemSelected(item); }
-	 * 
-	 * private void createNote() { String noteName = "Note " + mNoteNumber++;
-	 * mDbHelper.createNote(noteName, ""); fillData(); }
-	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		boolean result = super.onCreateOptionsMenu(menu);
+		MenuItem mItem = null;
+
+		mItem = menu.add(0, UPDATE_ID, 0, R.string.menu_update);
+		mItem.setIcon(android.R.drawable.ic_menu_rotate);
+
+		mItem = menu.add(0, SETTINGS_ID, 1, R.string.menu_settings);
+//		mItem.setShortcut('3', 's');
+		mItem.setIcon(android.R.drawable.ic_menu_preferences);
+
+		return result;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case UPDATE_ID:
+			DataExtractor de = new DataExtractor(this, mDbHelper);
+			de.retrieveData(mSettings.m_sMensaLocation);
+			break;
+			
+		case SETTINGS_ID:
+	        Intent iSettings = new Intent ();
+	        iSettings.setClass(this, MensaMealsSettings.class);
+	        startActivityForResult(iSettings, ON_SETTINGS_CHANGE); 
+			break;
+		}
+		
+		return super.onOptionsItemSelected(item);
+	}
+
+	@Override 
+	protected void onActivityResult (int requestCode, int resultCode, Intent data) {
+		switch (requestCode) {
+		case ON_SETTINGS_CHANGE:
+	        mSettings.ReadSettings (this);
+	        
+	        // TODO clear database
+	        
+			break;
+		}
+	}
+	
+	protected void onDestroy () {
+		super.onDestroy();
+		
+		// close database
+		mDbHelper.close();
+	}
+	
 	private void fillData() {
 		// Get all of the notes from the database and create the item list
-		Cursor c = mDbHelper.fetchAllMeals();
+		Cursor c = mDbHelper.fetchMealsOfDay("20100903");
 		startManagingCursor(c);
 
 		String[] from = new String[] { MealsDbAdapter.KEY_NAME };
@@ -75,94 +115,5 @@ public class MensaMeals extends ListActivity {
 		SimpleCursorAdapter meals = new SimpleCursorAdapter(this,
 				R.layout.meals_entry, c, from, to);
 		setListAdapter(meals);
-	}
-
-	private Vector<String> getWebPage(String task, String view) {
-		Vector<String> webTable = new Vector<String>();
-
-		try {
-			URL uTest = new URL(
-					"http://www.studentenwerkdarmstadt.de/index.php?option=com_spk&task="
-							+ task + "&view=" + view);
-			BufferedReader br = new BufferedReader(new InputStreamReader(
-					uTest.openStream()));
-
-			boolean store = false;
-			String s;
-			while ((s = br.readLine()) != null) {
-				// find first line of meal tables
-				if (s.indexOf("class=\"spk_table\">") >= 0) {
-					// remove before table
-					s = s.substring(s.indexOf("<tr><td"));
-					store = true;
-				}
-				if (store) {
-					if (s.indexOf("</table>") >= 0) {
-						// remove after table
-						s = "</table>";
-						store = false;
-					}
-
-					// append line
-					webTable.add(s);
-
-					if (!store) {
-						break; // fertig
-					}
-				}
-			}
-		} catch (MalformedURLException e) {
-			// Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return webTable;
-	}
-
-	private void parseTable(Vector<String> tbl) {
-		Vector<String> days = new Vector<String>();
-		String curCounter = "";
-
-		for (String s : tbl) {
-			// new Row -> maybe new counter
-			if (s.startsWith("<tr>")) {
-				if (s.indexOf("&nbsp;") < 0) {
-					// get new Counter name
-					curCounter = extractData(s);
-				}
-			}
-
-			if (s.startsWith("<td")) {
-				String tmp = extractData(s);
-
-				// date line
-				if (curCounter.compareTo("") == 0 && tmp.length() == 10) {
-						tmp = tmp.substring(6, 10) + tmp.substring(3, 5) + tmp.substring(0, 2);
-						days.add(tmp);
-				} else if (tmp.lastIndexOf(",") > 0 && // €-sign unfortunately not encoded, so checking price-tag
-						Character.isDigit(tmp.charAt(tmp.lastIndexOf(",")-1)) &&
-						Character.isDigit(tmp.charAt(tmp.lastIndexOf(",")+1)) &&
-						Character.isDigit(tmp.charAt(tmp.lastIndexOf(",")+2))) { 
-					// TODO meal line
-					System.out.println("meal line");
-				}
-			}
-
-			// TODO </table>: end -> store to db
-			if (s.equals("</table>")) {
-				System.out.println("store to db");
-			}
-		}
-	}
-
-	private String extractData(String s) {
-		// cut end "</td>"
-		s = s.substring(0, s.length() - 5);
-
-		// cut begining
-		return s.substring(s.lastIndexOf(">") + 1, s.length()).trim();
 	}
 }

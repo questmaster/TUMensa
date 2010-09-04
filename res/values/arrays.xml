@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="MensaLocations">
+        <item>Mensa Stadtmitte</item>
+        <item>Mensa Lichtwiese</item>
+        <item>Mensa Schöfferstraße</item>  
+        <item>Bistro Haardtring</item>
+        <item>Mensa Dieburg</item>  
+    </string-array>
+    <string-array name="MensaLocationsValues">
+        <item>stadtmitte</item>
+        <item>lichtwiese</item>
+        <item>sch%F6fferstra%DFe</item>  
+        <item>haardtring</item>
+        <item>dieburg</item>  
+    </string-array>
+</resources>

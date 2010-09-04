@@ -8,7 +8,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application>
+    <activity android:name=".MensaMealsSettings" android:label="@string/settings_name"></activity>
+</application>
 
 <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 </manifest> 
