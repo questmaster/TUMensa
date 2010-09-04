@@ -36,6 +36,7 @@ import android.util.Log;
  */
 public class MealsDbAdapter {
 
+    public static final String KEY_LOCATION = "location";
     public static final String KEY_DATE = "date";
     public static final String KEY_MEAL_NUM = "num";
     public static final String KEY_COUNTER = "counter";
@@ -53,13 +54,14 @@ public class MealsDbAdapter {
      */
     private static final String DATABASE_CREATE =
             "create table meals (_id integer primary key autoincrement, "
-        		+ "num short not null, date text not null, counter text not null,"
+        		+ "location text not null, num short not null,"
+        		+ "date text not null, counter text not null,"
     			+ "name text not null, type text not null,"
     			+ "price real not null);";
 
     private static final String DATABASE_NAME = "data";
     private static final String DATABASE_TABLE = "meals";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     private final Context mCtx;
 
@@ -123,8 +125,9 @@ public class MealsDbAdapter {
      * @param body the body of the note
      * @return rowId or -1 if failed
      */
-    public long createMeal(String date, int num, String counter, String name, String type, float price) {
+    public long createMeal(String location, String date, int num, String counter, String name, String type, float price) {
         ContentValues initialValues = new ContentValues();
+        initialValues.put(KEY_LOCATION, location);
         initialValues.put(KEY_DATE, date);
         initialValues.put(KEY_MEAL_NUM, num);
         initialValues.put(KEY_COUNTER, counter);
@@ -158,7 +161,7 @@ public class MealsDbAdapter {
      */
     public Cursor fetchAllMeals() {
 
-        return mDb.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_DATE, KEY_MEAL_NUM,
+        return mDb.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_LOCATION, KEY_DATE, KEY_MEAL_NUM,
                 KEY_COUNTER, KEY_NAME, KEY_TYPE, KEY_PRICE}, null, null, null, null, null);
     }
 
@@ -172,7 +175,7 @@ public class MealsDbAdapter {
     public Cursor fetchMeal(long rowId) throws SQLException {
 
         Cursor mCursor =
-                mDb.query(true, DATABASE_TABLE, new String[] {KEY_ROWID, KEY_DATE, KEY_MEAL_NUM,
+                mDb.query(true, DATABASE_TABLE, new String[] {KEY_ROWID, KEY_LOCATION, KEY_DATE, KEY_MEAL_NUM,
                         KEY_COUNTER, KEY_NAME, KEY_TYPE, KEY_PRICE}, KEY_ROWID + "=" + rowId, null,
                         null, null, null, null);
         if (mCursor != null) {
@@ -182,12 +185,13 @@ public class MealsDbAdapter {
 
     }
 
-    public Cursor fetchMealsOfDay(String date) throws SQLException {
+    public Cursor fetchMealsOfDay(String location, String date) throws SQLException {
 
         Cursor mCursor =
-                mDb.query(true, DATABASE_TABLE, new String[] {KEY_ROWID, KEY_DATE, KEY_MEAL_NUM,
-                        KEY_COUNTER, KEY_NAME, KEY_TYPE, KEY_PRICE}, KEY_DATE + "=\"" + date + "\"", null,
-                        null, null, null, null);
+                mDb.query(true, DATABASE_TABLE, new String[] {KEY_ROWID, KEY_LOCATION, KEY_DATE, KEY_MEAL_NUM,
+                        KEY_COUNTER, KEY_NAME, KEY_TYPE, KEY_PRICE},
+                        KEY_DATE + "=\"" + date + "\" AND " + KEY_LOCATION + "=\"" + location + "\"",
+                        null, null, null, null, null);
         if (mCursor != null) {
             mCursor.moveToFirst();
         }
@@ -195,12 +199,12 @@ public class MealsDbAdapter {
 
     }
 
-    public long fetchMealId(String date, String counter, int num) throws SQLException {
+    public long fetchMealId(String location, String date, String counter, int num) throws SQLException {
 
         Cursor mCursor =
-                mDb.query(true, DATABASE_TABLE, new String[] {KEY_ROWID, KEY_DATE, KEY_MEAL_NUM,
+                mDb.query(true, DATABASE_TABLE, new String[] {KEY_ROWID, KEY_LOCATION, KEY_DATE, KEY_MEAL_NUM,
                         KEY_COUNTER, KEY_NAME, KEY_TYPE, KEY_PRICE}, 
-                        KEY_DATE + "=\"" + date + "\" AND " + KEY_COUNTER + "=\"" + counter + "\" AND " + KEY_MEAL_NUM + "=" + num, 
+                        KEY_LOCATION + "=\"" + location + "\" AND " + KEY_DATE + "=\"" + date + "\" AND " + KEY_COUNTER + "=\"" + counter + "\" AND " + KEY_MEAL_NUM + "=" + num, 
                         null, null, null, null, null);
        if (mCursor != null) {
     	   if (mCursor.moveToFirst()) {
@@ -220,8 +224,9 @@ public class MealsDbAdapter {
      * @param body value to set note body to
      * @return true if the note was successfully updated, false otherwise
      */
-    public boolean updateMeal(long rowId, String date, int num, String counter, String name, String type, float price) {
+    public boolean updateMeal(long rowId, String location, String date, int num, String counter, String name, String type, float price) {
         ContentValues args = new ContentValues();
+        args.put(KEY_LOCATION, location);
         args.put(KEY_DATE, date);
         args.put(KEY_MEAL_NUM, num);
         args.put(KEY_COUNTER, counter);

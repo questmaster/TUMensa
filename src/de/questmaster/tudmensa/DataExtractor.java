@@ -9,13 +9,13 @@ import java.util.Vector;
 import de.questmaster.tudmensa.R;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.res.Resources;
 
 public class DataExtractor {
 
 	private Context cActivity = null;
 	private MealsDbAdapter mDbHelper = null;
 	private String firstDate = null;
+	private String location = null;
 
 	public DataExtractor(Context c, MealsDbAdapter db) {
 		this.mDbHelper = db;
@@ -26,10 +26,11 @@ public class DataExtractor {
 		ProgressDialog pd = new ProgressDialog(cActivity);
 			//ProgressDialog.show(cActivity	, R.string.dialog_updating, R.string.dialog_updating_text, true);
 		pd.setTitle(R.string.dialog_updating);
-//		pd.setMessage(Resources.getSystem().getString(R.string.dialog_updating_text));
+		pd.setMessage(cActivity.getResources().getString(R.string.dialog_updating_text));
 		pd.setIndeterminate(true);
 		pd.show();
 		
+		this.location = location;
 		parseTable(getWebPage(location, "week"));
 		parseTable(getWebPage(location, "nextweek"));
 
@@ -138,10 +139,10 @@ public class DataExtractor {
 					// Add table entry
 					String date = days.get(day_index);
 					long rowId = 0;
-					if (( rowId = mDbHelper.fetchMealId(date, curCounter, meal_num)) >= 0) {
-						mDbHelper.updateMeal(rowId, date, meal_num, curCounter, meal, type, price);
+					if (( rowId = mDbHelper.fetchMealId(location, date, curCounter, meal_num)) >= 0) {
+						mDbHelper.updateMeal(rowId, location, date, meal_num, curCounter, meal, type, price);
 					} else
-						mDbHelper.createMeal(date, meal_num, curCounter, meal, type, price);
+						mDbHelper.createMeal(location, date, meal_num, curCounter, meal, type, price);
 				}
 				
 				day_index++;

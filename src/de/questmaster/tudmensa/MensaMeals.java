@@ -41,13 +41,18 @@ public class MensaMeals extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.meals_list);
+		
+		// Settings
+		mSettings.ReadSettings (this);
+		
+		// Database
 		mDbHelper = new MealsDbAdapter(this);
 		mDbHelper.open();
 
 		// get data
 		DataExtractor de = new DataExtractor(this, mDbHelper);
 		de.retrieveData(mSettings.m_sMensaLocation);
-
+		
 		fillData();
 	}
 
@@ -72,6 +77,7 @@ public class MensaMeals extends ListActivity {
 		case UPDATE_ID:
 			DataExtractor de = new DataExtractor(this, mDbHelper);
 			de.retrieveData(mSettings.m_sMensaLocation);
+			fillData();
 			break;
 			
 		case SETTINGS_ID:
@@ -105,7 +111,7 @@ public class MensaMeals extends ListActivity {
 	
 	private void fillData() {
 		// Get all of the notes from the database and create the item list
-		Cursor c = mDbHelper.fetchMealsOfDay("20100903");
+		Cursor c = mDbHelper.fetchMealsOfDay(mSettings.m_sMensaLocation, "20100903");
 		startManagingCursor(c);
 
 		String[] from = new String[] { MealsDbAdapter.KEY_NAME };
