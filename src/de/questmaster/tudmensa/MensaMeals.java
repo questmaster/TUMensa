@@ -18,15 +18,16 @@ package de.questmaster.tudmensa;
 
 import de.questmaster.tudmensa.R;
 
-import android.app.ListActivity;
+import android.app.ExpandableListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.SimpleCursorAdapter;
+import android.widget.SimpleCursorTreeAdapter;
 
-public class MensaMeals extends ListActivity {
+public class MensaMeals extends ExpandableListActivity {
 	public static final int UPDATE_ID = Menu.FIRST;
 	public static final int SETTINGS_ID = Menu.FIRST + 1;
 	
@@ -34,8 +35,30 @@ public class MensaMeals extends ListActivity {
 
 	private MensaMealsSettings.Settings mSettings = new MensaMealsSettings.Settings (); 
 
-	private MealsDbAdapter mDbHelper;
+	protected MealsDbAdapter mDbHelper;
 
+	public class CustomCursorTreeAdapter extends SimpleCursorTreeAdapter {
+		
+		public CustomCursorTreeAdapter(Context context, Cursor cursor, int groupLayout,
+				String[] groupFrom, int[] groupTo, int childLayout,
+				String[] childFrom, int[] childTo) {
+			super(context, cursor, groupLayout, groupFrom, groupTo, childLayout, childFrom,
+					childTo);
+		}
+
+		@Override
+		protected Cursor getChildrenCursor(Cursor groupCursor) {
+			String location = groupCursor.getString(groupCursor.getColumnIndex(MealsDbAdapter.KEY_LOCATION));
+			String date = groupCursor.getString(groupCursor.getColumnIndex(MealsDbAdapter.KEY_DATE));
+			String counter = groupCursor.getString(groupCursor.getColumnIndex(MealsDbAdapter.KEY_COUNTER));
+					
+			Cursor c = mDbHelper.fetchMealsOfGroupDay(location, date, counter);
+			startManagingCursor(c);
+			return c;
+		}
+
+	}
+	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -96,7 +119,7 @@ public class MensaMeals extends ListActivity {
 		case ON_SETTINGS_CHANGE:
 	        mSettings.ReadSettings (this);
 	        
-	        // TODO clear database
+	        // TODO clear database?
 	        
 			break;
 		}
@@ -111,15 +134,18 @@ public class MensaMeals extends ListActivity {
 	
 	private void fillData() {
 		// Get all of the notes from the database and create the item list
-		Cursor c = mDbHelper.fetchMealsOfDay(mSettings.m_sMensaLocation, "20100903");
+		Cursor c = mDbHelper.fetchGroupsOfDay(mSettings.m_sMensaLocation, "20100906");
 		startManagingCursor(c);
 
-		String[] from = new String[] { MealsDbAdapter.KEY_NAME };
-		int[] to = new int[] { R.id.text1 };
+		String[] group_from = new String[] { MealsDbAdapter.KEY_COUNTER };
+		int[] group_to = new int[] { R.id.text1 };
+		String[] child_from = new String[] { MealsDbAdapter.KEY_NAME };
+		int[] child_to = new int[] { R.id.text2 };
 
 		// Now create an array adapter and set it to display using our row
-		SimpleCursorAdapter meals = new SimpleCursorAdapter(this,
-				R.layout.meals_entry, c, from, to);
+		CustomCursorTreeAdapter meals = new CustomCursorTreeAdapter(this, c, 
+				R.layout.simple_expandable_list_item_1, group_from, group_to,
+				R.layout.simple_expandable_list_item_2, child_from, child_to);
 		setListAdapter(meals);
 	}
 }

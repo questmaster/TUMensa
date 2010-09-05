@@ -23,12 +23,14 @@ public class DataExtractor {
 	}
 
 	public void retrieveData(String location) {
-		ProgressDialog pd = new ProgressDialog(cActivity);
-			//ProgressDialog.show(cActivity	, R.string.dialog_updating, R.string.dialog_updating_text, true);
-		pd.setTitle(R.string.dialog_updating);
-		pd.setMessage(cActivity.getResources().getString(R.string.dialog_updating_text));
-		pd.setIndeterminate(true);
-		pd.show();
+		// TODO Dialog is not shown!
+		ProgressDialog pd = //new ProgressDialog(cActivity);
+			ProgressDialog.show(cActivity, cActivity.getResources().getString(R.string.dialog_updating), 
+					cActivity.getResources().getString(R.string.dialog_updating_text), true);
+//		pd.setTitle(R.string.dialog_updating);
+//		pd.setMessage(cActivity.getResources().getString(R.string.dialog_updating_text));
+//		pd.setIndeterminate(true);
+//		pd.show();
 		
 		this.location = location;
 		parseTable(getWebPage(location, "week"));
@@ -45,7 +47,7 @@ public class DataExtractor {
 			URL uTest = new URL(
 					"http://www.studentenwerkdarmstadt.de/index.php?option=com_spk&task="
 							+ task + "&view=" + view);
-			BufferedReader br = new BufferedReader(new InputStreamReader(uTest.openStream()), 1024);
+			BufferedReader br = new BufferedReader(new InputStreamReader(uTest.openStream()), 2048);
 
 			boolean store = false;
 			String s;

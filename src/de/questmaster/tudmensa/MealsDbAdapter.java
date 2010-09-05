@@ -60,7 +60,7 @@ public class MealsDbAdapter {
     			+ "price real not null);";
 
     private static final String DATABASE_NAME = "data";
-    private static final String DATABASE_TABLE = "meals";
+    static final String DATABASE_TABLE = "meals";
     private static final int DATABASE_VERSION = 4;
 
     private final Context mCtx;
@@ -172,7 +172,7 @@ public class MealsDbAdapter {
      * @return Cursor positioned to matching note, if found
      * @throws SQLException if note could not be found/retrieved
      */
-    public Cursor fetchMeal(long rowId) throws SQLException {
+    public Cursor fetchMeal(long rowId) {
 
         Cursor mCursor =
                 mDb.query(true, DATABASE_TABLE, new String[] {KEY_ROWID, KEY_LOCATION, KEY_DATE, KEY_MEAL_NUM,
@@ -185,7 +185,7 @@ public class MealsDbAdapter {
 
     }
 
-    public Cursor fetchMealsOfDay(String location, String date) throws SQLException {
+    public Cursor fetchMealsOfDay(String location, String date) {
 
         Cursor mCursor =
                 mDb.query(true, DATABASE_TABLE, new String[] {KEY_ROWID, KEY_LOCATION, KEY_DATE, KEY_MEAL_NUM,
@@ -199,19 +199,47 @@ public class MealsDbAdapter {
 
     }
 
-    public long fetchMealId(String location, String date, String counter, int num) throws SQLException {
+    public Cursor fetchMealsOfGroupDay(String location, String date, String counter) {
 
         Cursor mCursor =
                 mDb.query(true, DATABASE_TABLE, new String[] {KEY_ROWID, KEY_LOCATION, KEY_DATE, KEY_MEAL_NUM,
-                        KEY_COUNTER, KEY_NAME, KEY_TYPE, KEY_PRICE}, 
+                        KEY_COUNTER, KEY_NAME, KEY_TYPE, KEY_PRICE},
+                        KEY_DATE + "=\"" + date + "\" AND " + KEY_LOCATION + "=\"" + location + "\" AND " + KEY_COUNTER + "=\"" + counter + "\"",
+                        null, null, null, null, null);
+        if (mCursor != null) {
+            mCursor.moveToFirst();
+        }
+        return mCursor;
+
+    }
+
+    public Cursor fetchGroupsOfDay(String location, String date) {
+
+        Cursor mCursor =
+                mDb.query(true, DATABASE_TABLE, new String[] {KEY_LOCATION, KEY_DATE, KEY_COUNTER},
+                        KEY_DATE + "=\"" + date + "\" AND " + KEY_LOCATION + "=\"" + location + "\"",
+                        null, null, null, null, null);
+        if (mCursor != null) {
+            mCursor.moveToFirst();
+        }
+        return mCursor;
+
+    }
+
+    public long fetchMealId(String location, String date, String counter, int num)  {
+    	long result = -1;
+    	
+        Cursor mCursor =
+                mDb.query(true, DATABASE_TABLE, new String[] {KEY_ROWID}, 
                         KEY_LOCATION + "=\"" + location + "\" AND " + KEY_DATE + "=\"" + date + "\" AND " + KEY_COUNTER + "=\"" + counter + "\" AND " + KEY_MEAL_NUM + "=" + num, 
                         null, null, null, null, null);
        if (mCursor != null) {
     	   if (mCursor.moveToFirst()) {
-    		   return mCursor.getLong(0);
+    		   result = mCursor.getLong(0);
     	   }
        }
-       return -1;
+       mCursor.close();
+       return result;
     }
 
     /**
