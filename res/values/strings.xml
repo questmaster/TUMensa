@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <resources>
     <string name="settings_name">Mensa menu settings</string>
-    <string name="app_name">TU Darmstadt - Mensen menu</string>
+    <string name="app_name">Mensa Menu - TU Darmstadt</string>
     <string name="no_meals">No data for todays menu available.</string>
     
-<string name="custom_dialog_activity_text">Custom dialog</string>
+
 <string name="dialog_updating">Updating</string>
     <string name="dialog_updating_text">Updating Database.</string>
 <string name="pref_cat_mensa">Mensa</string>

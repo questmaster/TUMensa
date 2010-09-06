@@ -57,11 +57,11 @@ public class MealsDbAdapter {
         		+ "location text not null, num short not null,"
         		+ "date text not null, counter text not null,"
     			+ "name text not null, type text not null,"
-    			+ "price real not null);";
+    			+ "price text not null);";
 
     private static final String DATABASE_NAME = "data";
     static final String DATABASE_TABLE = "meals";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     private final Context mCtx;
 
@@ -125,7 +125,7 @@ public class MealsDbAdapter {
      * @param body the body of the note
      * @return rowId or -1 if failed
      */
-    public long createMeal(String location, String date, int num, String counter, String name, String type, float price) {
+    public long createMeal(String location, String date, int num, String counter, String name, String type, String price) {
         ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_LOCATION, location);
         initialValues.put(KEY_DATE, date);
@@ -216,9 +216,9 @@ public class MealsDbAdapter {
     public Cursor fetchGroupsOfDay(String location, String date) {
 
         Cursor mCursor =
-                mDb.query(true, DATABASE_TABLE, new String[] {KEY_LOCATION, KEY_DATE, KEY_COUNTER},
+                mDb.query(true, DATABASE_TABLE, new String[] {KEY_ROWID, KEY_LOCATION, KEY_DATE, KEY_COUNTER},
                         KEY_DATE + "=\"" + date + "\" AND " + KEY_LOCATION + "=\"" + location + "\"",
-                        null, null, null, null, null);
+                        null, KEY_COUNTER, null, null, null);
         if (mCursor != null) {
             mCursor.moveToFirst();
         }
@@ -252,7 +252,7 @@ public class MealsDbAdapter {
      * @param body value to set note body to
      * @return true if the note was successfully updated, false otherwise
      */
-    public boolean updateMeal(long rowId, String location, String date, int num, String counter, String name, String type, float price) {
+    public boolean updateMeal(long rowId, String location, String date, int num, String counter, String name, String type, String price) {
         ContentValues args = new ContentValues();
         args.put(KEY_LOCATION, location);
         args.put(KEY_DATE, date);

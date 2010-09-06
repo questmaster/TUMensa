@@ -1,7 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView android:id="@+id/text2"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:padding="10dp"
-    android:textSize="16sp" />
+<LinearLayout android:id="@+id/widget35"
+	android:layout_width="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="wrap_content">
+	<ImageView android:id="@+id/meal_type" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:minHeight="50dp"
+		android:minWidth="50dp" android:maxHeight="50dp" android:maxWidth="50dp"
+		android:layout_marginTop="10dp" android:layout_marginLeft="10dp"
+		android:layout_marginBottom="10dp" android:src="@drawable/icon">
+	</ImageView>
+	<LinearLayout android:id="@+id/widget37"
+		android:layout_height="wrap_content" android:orientation="vertical"
+		android:layout_width="fill_parent">
+		<TextView android:id="@+id/meal" android:layout_height="wrap_content"
+			android:textSize="16sp" android:layout_width="fill_parent"
+			android:paddingTop="10dp" android:paddingLeft="10dp"
+			android:paddingRight="10dp" android:text="Meal description">
+		</TextView>
+		<TextView android:id="@+id/price" android:layout_height="wrap_content"
+			android:layout_width="fill_parent"
+			android:gravity="right" android:paddingBottom="10dp"
+			android:paddingRight="10dp" android:text="Price $">
+		</TextView>
+	</LinearLayout>
+</LinearLayout>
