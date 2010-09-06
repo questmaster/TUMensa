@@ -216,9 +216,9 @@ public class MealsDbAdapter {
     public Cursor fetchGroupsOfDay(String location, String date) {
 
         Cursor mCursor =
-                mDb.query(true, DATABASE_TABLE, new String[] {KEY_LOCATION, KEY_DATE, KEY_COUNTER},
+                mDb.query(true, DATABASE_TABLE, new String[] {KEY_ROWID, KEY_LOCATION, KEY_DATE, KEY_COUNTER},
                         KEY_DATE + "=\"" + date + "\" AND " + KEY_LOCATION + "=\"" + location + "\"",
-                        null, null, null, null, null);
+                        null, KEY_COUNTER, null, null, null);
         if (mCursor != null) {
             mCursor.moveToFirst();
         }

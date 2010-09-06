@@ -16,6 +16,8 @@
 
 package de.questmaster.tudmensa;
 
+import java.util.Calendar;
+
 import de.questmaster.tudmensa.R;
 
 import android.app.ExpandableListActivity;
@@ -51,8 +53,9 @@ public class MensaMeals extends ExpandableListActivity {
 			String location = groupCursor.getString(groupCursor.getColumnIndex(MealsDbAdapter.KEY_LOCATION));
 			String date = groupCursor.getString(groupCursor.getColumnIndex(MealsDbAdapter.KEY_DATE));
 			String counter = groupCursor.getString(groupCursor.getColumnIndex(MealsDbAdapter.KEY_COUNTER));
-					
+
 			Cursor c = mDbHelper.fetchMealsOfGroupDay(location, date, counter);
+//			Cursor c = mDbHelper.fetchAllMeals();
 			startManagingCursor(c);
 			return c;
 		}
@@ -67,7 +70,7 @@ public class MensaMeals extends ExpandableListActivity {
 		
 		// Settings
 		mSettings.ReadSettings (this);
-		
+
 		// Database
 		mDbHelper = new MealsDbAdapter(this);
 		mDbHelper.open();
@@ -133,8 +136,22 @@ public class MensaMeals extends ExpandableListActivity {
 	}
 	
 	private void fillData() {
+		// prepare date string
+		Calendar today = Calendar.getInstance();
+		if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+			today.add(Calendar.DAY_OF_YEAR, 2);
+		} else if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+			today.add(Calendar.DAY_OF_YEAR, 1);
+		}
+		String year = String.valueOf(today.get(Calendar.YEAR));
+		String month = String.valueOf(today.get(Calendar.MONTH)+1);
+		if (month.length() == 1) month = "0" + month;
+		String day = String.valueOf(today.get(Calendar.DAY_OF_MONTH)+1);
+		if (day.length() == 1) day = "0" + day;
+		String date = year+month+day;
+		
 		// Get all of the notes from the database and create the item list
-		Cursor c = mDbHelper.fetchGroupsOfDay(mSettings.m_sMensaLocation, "20100906");
+		Cursor c = mDbHelper.fetchGroupsOfDay(mSettings.m_sMensaLocation, date);
 		startManagingCursor(c);
 
 		String[] group_from = new String[] { MealsDbAdapter.KEY_COUNTER };
@@ -147,5 +164,8 @@ public class MensaMeals extends ExpandableListActivity {
 				R.layout.simple_expandable_list_item_1, group_from, group_to,
 				R.layout.simple_expandable_list_item_2, child_from, child_to);
 		setListAdapter(meals);
+		
+		// TODO expand all items
+		
 	}
 }
