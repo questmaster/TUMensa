@@ -51,14 +51,12 @@ public class MensaMeals extends ExpandableListActivity {
 
 		@Override
 		protected Cursor getChildrenCursor(Cursor groupCursor) {
-			String location = groupCursor.getString(groupCursor
-					.getColumnIndex(MealsDbAdapter.KEY_LOCATION));
-			String date = groupCursor.getString(groupCursor
-					.getColumnIndex(MealsDbAdapter.KEY_DATE));
-			String counter = groupCursor.getString(groupCursor
-					.getColumnIndex(MealsDbAdapter.KEY_COUNTER));
+			String location = groupCursor.getString(groupCursor.getColumnIndex(MealsDbAdapter.KEY_LOCATION));
+			String date = groupCursor.getString(groupCursor.getColumnIndex(MealsDbAdapter.KEY_DATE));
+			String counter = groupCursor.getString(groupCursor.getColumnIndex(MealsDbAdapter.KEY_COUNTER));
 
 			Cursor c = mDbHelper.fetchMealsOfGroupDay(location, date, counter);
+//			Cursor c = mDbHelper.fetchAllMeals();
 			startManagingCursor(c);
 			return c;
 		}

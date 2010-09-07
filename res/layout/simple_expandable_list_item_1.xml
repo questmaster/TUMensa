@@ -7,4 +7,6 @@
 	android:orientation="horizontal" android:gravity="center_vertical"
 	android:textAppearance="?android:attr/textAppearanceMedium"
 	android:ellipsize="marquee" android:fadingEdge="horizontal"
-	android:layout_width="fill_parent" android:text="Counter" android:paddingLeft="10dp" android:background="#6E6E6E" android:textStyle="bold"/>
+	android:layout_width="fill_parent" android:text="Counter"
+	android:paddingLeft="10dp" android:background="#6E6E6E"
+	android:textStyle="bold" />
