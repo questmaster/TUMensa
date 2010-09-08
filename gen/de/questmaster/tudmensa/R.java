@@ -16,15 +16,23 @@ public final class R {
     }
     public static final class drawable {
         public static final int essen=0x7f020000;
-        public static final int essenlogo=0x7f020001;
-        public static final int meal_f=0x7f020002;
-        public static final int meal_g=0x7f020003;
-        public static final int meal_k=0x7f020004;
-        public static final int meal_r=0x7f020005;
-        public static final int meal_rs=0x7f020006;
-        public static final int meal_s=0x7f020007;
-        public static final int meal_v=0x7f020008;
-        public static final int trans_pix=0x7f020009;
+        public static final int essen_t=0x7f020001;
+        public static final int essenlogo=0x7f020002;
+        public static final int meal_f=0x7f020003;
+        public static final int meal_f_t=0x7f020004;
+        public static final int meal_g=0x7f020005;
+        public static final int meal_g_t=0x7f020006;
+        public static final int meal_k=0x7f020007;
+        public static final int meal_k_t=0x7f020008;
+        public static final int meal_r=0x7f020009;
+        public static final int meal_r_t=0x7f02000a;
+        public static final int meal_rs=0x7f02000b;
+        public static final int meal_rs_t=0x7f02000c;
+        public static final int meal_s=0x7f02000d;
+        public static final int meal_s_t=0x7f02000e;
+        public static final int meal_v=0x7f02000f;
+        public static final int meal_v_t=0x7f020010;
+        public static final int trans_pix=0x7f020011;
     }
     public static final class id {
         public static final int counter=0x7f060000;

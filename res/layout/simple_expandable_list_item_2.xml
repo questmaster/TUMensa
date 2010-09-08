@@ -13,8 +13,7 @@
 		android:layout_width="fill_parent">
 		<TextView android:id="@+id/meal" android:layout_height="wrap_content"
 			android:textSize="16sp" android:layout_width="fill_parent"
-			android:paddingTop="10dp" android:paddingLeft="10dp"
-			android:paddingRight="10dp" android:text="Meal description">
+			android:paddingTop="10dp" android:paddingRight="10dp" android:text="Meal description" android:paddingLeft="5dp">
 		</TextView>
 		<TextView android:id="@+id/price" android:layout_height="wrap_content"
 			android:layout_width="fill_parent"

@@ -82,7 +82,7 @@ public class MensaMeals extends ExpandableListActivity {
 
 		fillData();
 	}
-
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean result = super.onCreateOptionsMenu(menu);
@@ -141,8 +141,10 @@ public class MensaMeals extends ExpandableListActivity {
 		mDbHelper.close();
 	}
 
+	// TODO onItemClicked show Type and legend information
+	
 	private void fillData() {
-		// prepare date string
+		// prepare date string TODO Integrate day selection
 		Calendar today = Calendar.getInstance();
 		if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
 			today.add(Calendar.DAY_OF_YEAR, 2);
@@ -158,7 +160,7 @@ public class MensaMeals extends ExpandableListActivity {
 			day = "0" + day;
 		String date = year + month + day;
 
-		// Set new title
+		// Set new title TODO Correct location name
 		setTitle("Speisekarte für " + mSettings.m_sMensaLocation + " am " + day
 				+ "." + month + "." + year);
 
@@ -195,8 +197,8 @@ public class MensaMeals extends ExpandableListActivity {
 				getResources().getString(R.string.dialog_updating_text), true);
 
 		// get data
-		Thread de = new DataExtractor(mDbHelper,
-				mSettings.m_sMensaLocation);
+		Thread de = new Thread( new DataExtractor(mDbHelper,
+				mSettings.m_sMensaLocation));
 		de.start();
 
 		// wait for end of extraction

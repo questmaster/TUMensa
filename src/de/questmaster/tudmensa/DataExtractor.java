@@ -7,7 +7,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Vector;
 
-public class DataExtractor extends Thread {
+public class DataExtractor implements Runnable {
 
 	private MealsDbAdapter mDbHelper = null;
 	private String firstDate = null;
@@ -135,21 +135,21 @@ public class DataExtractor extends Thread {
 
 					// create type drawable
 					if (type.equals("F")) {
-						type = String.valueOf(R.drawable.meal_f);
+						type = String.valueOf(R.drawable.meal_f_t);
 					} else if (type.equals("G")) {
-						type = String.valueOf(R.drawable.meal_g);
+						type = String.valueOf(R.drawable.meal_g_t);
 					} else if (type.equals("K")) {
-						type = String.valueOf(R.drawable.meal_k);
+						type = String.valueOf(R.drawable.meal_k_t);
 					} else if (type.equals("R")) {
-						type = String.valueOf(R.drawable.meal_r);
+						type = String.valueOf(R.drawable.meal_r_t);
 					} else if (type.equals("RS")) {
-						type = String.valueOf(R.drawable.meal_rs);
+						type = String.valueOf(R.drawable.meal_rs_t);
 					} else if (type.equals("S")) {
-						type = String.valueOf(R.drawable.meal_s);
+						type = String.valueOf(R.drawable.meal_s_t);
 					} else if (type.equals("V")) {
-						type = String.valueOf(R.drawable.meal_v);
+						type = String.valueOf(R.drawable.meal_v_t);
 					} else
-						type = String.valueOf(R.drawable.essen);
+						type = String.valueOf(R.drawable.essen_t);
 					
 					// Add table entry
 					String date = days.get(day_index);
