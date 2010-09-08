@@ -6,7 +6,7 @@
 		android:layout_height="wrap_content" android:minHeight="50dp"
 		android:minWidth="50dp" android:maxHeight="50dp" android:maxWidth="50dp"
 		android:layout_marginTop="10dp" android:layout_marginLeft="10dp"
-		android:layout_marginBottom="10dp" android:src="@drawable/icon">
+		android:layout_marginBottom="10dp" android:src="@drawable/meal_g">
 	</ImageView>
 	<LinearLayout android:id="@+id/widget37"
 		android:layout_height="wrap_content" android:orientation="vertical"

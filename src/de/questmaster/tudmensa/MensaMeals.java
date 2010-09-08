@@ -51,12 +51,15 @@ public class MensaMeals extends ExpandableListActivity {
 
 		@Override
 		protected Cursor getChildrenCursor(Cursor groupCursor) {
-			String location = groupCursor.getString(groupCursor.getColumnIndex(MealsDbAdapter.KEY_LOCATION));
-			String date = groupCursor.getString(groupCursor.getColumnIndex(MealsDbAdapter.KEY_DATE));
-			String counter = groupCursor.getString(groupCursor.getColumnIndex(MealsDbAdapter.KEY_COUNTER));
+			String location = groupCursor.getString(groupCursor
+					.getColumnIndex(MealsDbAdapter.KEY_LOCATION));
+			String date = groupCursor.getString(groupCursor
+					.getColumnIndex(MealsDbAdapter.KEY_DATE));
+			String counter = groupCursor.getString(groupCursor
+					.getColumnIndex(MealsDbAdapter.KEY_COUNTER));
 
 			Cursor c = mDbHelper.fetchMealsOfGroupDay(location, date, counter);
-//			Cursor c = mDbHelper.fetchAllMeals();
+			// Cursor c = mDbHelper.fetchAllMeals();
 			startManagingCursor(c);
 			return c;
 		}
@@ -68,6 +71,7 @@ public class MensaMeals extends ExpandableListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.meals_list);
+		// setTheme(android.R.style.Theme_Light);
 
 		// Settings
 		mSettings.ReadSettings(this);
@@ -98,14 +102,7 @@ public class MensaMeals extends ExpandableListActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case UPDATE_ID:
-			// TODO Dialog not shown
-			ProgressDialog pd = ProgressDialog.show(this, getResources()
-					.getString(R.string.dialog_updating), getResources()
-					.getString(R.string.dialog_updating_text), true, true);
-
-			new DataExtractor(mDbHelper, mSettings.m_sMensaLocation).start();
-
-			pd.dismiss();
+			getData();
 			fillData();
 			break;
 
@@ -132,6 +129,11 @@ public class MensaMeals extends ExpandableListActivity {
 		}
 	}
 
+	// keep the Groups expanded
+	public void onGroupCollapse (int groupPosition) {
+		getExpandableListView().expandGroup(groupPosition);
+	}
+	
 	protected void onDestroy() {
 		super.onDestroy();
 
@@ -151,23 +153,19 @@ public class MensaMeals extends ExpandableListActivity {
 		String month = String.valueOf(today.get(Calendar.MONTH) + 1);
 		if (month.length() == 1)
 			month = "0" + month;
-		String day = String.valueOf(today.get(Calendar.DAY_OF_MONTH) + 1);
+		String day = String.valueOf(today.get(Calendar.DAY_OF_MONTH));
 		if (day.length() == 1)
 			day = "0" + day;
 		String date = year + month + day;
 
+		// Set new title
+		setTitle("Speisekarte für " + mSettings.m_sMensaLocation + " am " + day
+				+ "." + month + "." + year);
+
 		// Get all of the notes from the database and create the item list
 		Cursor c = mDbHelper.fetchGroupsOfDay(mSettings.m_sMensaLocation, date);
 		if (c.getCount() == 0) {
-			// TODO Dialog not shown
-			ProgressDialog pd = ProgressDialog.show(this, getResources()
-					.getString(R.string.dialog_updating), getResources()
-					.getString(R.string.dialog_updating_text), true);
-
-			// get data
-			new DataExtractor(mDbHelper, mSettings.m_sMensaLocation).start();
-
-			pd.dismiss();
+			getData();
 			c.requery();
 		}
 		startManagingCursor(c);
@@ -188,5 +186,28 @@ public class MensaMeals extends ExpandableListActivity {
 		for (int i = 0; i < c.getCount(); i++) {
 			getExpandableListView().expandGroup(i);
 		}
+	}
+
+	private void getData() {
+		// TODO Dialog not shown
+		ProgressDialog pd = ProgressDialog.show(this,
+				getResources().getString(R.string.dialog_updating),
+				getResources().getString(R.string.dialog_updating_text), true);
+
+		// get data
+		Thread de = new DataExtractor(mDbHelper,
+				mSettings.m_sMensaLocation);
+		de.start();
+
+		// wait for end of extraction
+		while (de.isAlive()) {
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				// Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		pd.dismiss();
 	}
 }

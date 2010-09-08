@@ -15,15 +15,16 @@ public final class R {
     public static final class attr {
     }
     public static final class drawable {
-        public static final int f=0x7f020000;
-        public static final int g=0x7f020001;
-        public static final int icon=0x7f020002;
-        public static final int k=0x7f020003;
-        public static final int r=0x7f020004;
-        public static final int rs=0x7f020005;
-        public static final int s=0x7f020006;
-        public static final int trans_pix=0x7f020007;
-        public static final int v=0x7f020008;
+        public static final int essen=0x7f020000;
+        public static final int essenlogo=0x7f020001;
+        public static final int meal_f=0x7f020002;
+        public static final int meal_g=0x7f020003;
+        public static final int meal_k=0x7f020004;
+        public static final int meal_r=0x7f020005;
+        public static final int meal_rs=0x7f020006;
+        public static final int meal_s=0x7f020007;
+        public static final int meal_v=0x7f020008;
+        public static final int trans_pix=0x7f020009;
     }
     public static final class id {
         public static final int counter=0x7f060000;

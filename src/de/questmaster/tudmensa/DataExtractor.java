@@ -106,7 +106,7 @@ public class DataExtractor extends Thread {
 					}
 
 					// €-sign unfortunately not encoded, so checking price-tag
-				} else if (tmp.lastIndexOf(",") > 0
+				} else if (tmp.lastIndexOf(",") > 0 && day_index < days.size()
 						&& Character
 								.isDigit(tmp.charAt(tmp.lastIndexOf(",") - 1))
 						&& Character
@@ -134,8 +134,23 @@ public class DataExtractor extends Thread {
 					meal = htmlDecode(meal);
 
 					// create type drawable
-					type = "@drawable/" + type.toLowerCase();
-
+					if (type.equals("F")) {
+						type = String.valueOf(R.drawable.meal_f);
+					} else if (type.equals("G")) {
+						type = String.valueOf(R.drawable.meal_g);
+					} else if (type.equals("K")) {
+						type = String.valueOf(R.drawable.meal_k);
+					} else if (type.equals("R")) {
+						type = String.valueOf(R.drawable.meal_r);
+					} else if (type.equals("RS")) {
+						type = String.valueOf(R.drawable.meal_rs);
+					} else if (type.equals("S")) {
+						type = String.valueOf(R.drawable.meal_s);
+					} else if (type.equals("V")) {
+						type = String.valueOf(R.drawable.meal_v);
+					} else
+						type = String.valueOf(R.drawable.essen);
+					
 					// Add table entry
 					String date = days.get(day_index);
 					long rowId = 0;
@@ -158,6 +173,7 @@ public class DataExtractor extends Thread {
 			// </table>: end -> clean old entries
 			if (s.equals("</table>")) {
 				mDbHelper.deleteOldMeal(firstDate);
+				break;
 			}
 		}
 	}
