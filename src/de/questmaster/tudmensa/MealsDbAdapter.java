@@ -43,6 +43,7 @@ public class MealsDbAdapter {
     public static final String KEY_NAME = "name";
     public static final String KEY_TYPE = "type";
     public static final String KEY_PRICE = "price";
+    public static final String KEY_INFO = "info";
     public static final String KEY_ROWID = "_id";
 
     private static final String TAG = "MealsDbAdapter";
@@ -57,11 +58,11 @@ public class MealsDbAdapter {
         		+ "location text not null, num short not null,"
         		+ "date text not null, counter text not null,"
     			+ "name text not null, type text not null,"
-    			+ "price text not null);";
+    			+ "price text not null, info text);";
 
     private static final String DATABASE_NAME = "data";
     static final String DATABASE_TABLE = "meals";
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
 
     private final Context mCtx;
 
@@ -125,7 +126,7 @@ public class MealsDbAdapter {
      * @param body the body of the note
      * @return rowId or -1 if failed
      */
-    public long createMeal(String location, String date, int num, String counter, String name, String type, String price) {
+    public long createMeal(String location, String date, int num, String counter, String name, String type, String price, String info) {
         ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_LOCATION, location);
         initialValues.put(KEY_DATE, date);
@@ -134,6 +135,7 @@ public class MealsDbAdapter {
         initialValues.put(KEY_NAME, name);
         initialValues.put(KEY_TYPE, type);
         initialValues.put(KEY_PRICE, price);
+        initialValues.put(KEY_INFO, info);
 
         return mDb.insert(DATABASE_TABLE, null, initialValues);
     }
@@ -162,7 +164,7 @@ public class MealsDbAdapter {
     public Cursor fetchAllMeals() {
 
         return mDb.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_LOCATION, KEY_DATE, KEY_MEAL_NUM,
-                KEY_COUNTER, KEY_NAME, KEY_TYPE, KEY_PRICE}, null, null, null, null, null);
+                KEY_COUNTER, KEY_NAME, KEY_TYPE, KEY_PRICE, KEY_INFO}, null, null, null, null, null);
     }
 
     /**
@@ -176,7 +178,7 @@ public class MealsDbAdapter {
 
         Cursor mCursor =
                 mDb.query(true, DATABASE_TABLE, new String[] {KEY_ROWID, KEY_LOCATION, KEY_DATE, KEY_MEAL_NUM,
-                        KEY_COUNTER, KEY_NAME, KEY_TYPE, KEY_PRICE}, KEY_ROWID + "=" + rowId, null,
+                        KEY_COUNTER, KEY_NAME, KEY_TYPE, KEY_PRICE, KEY_INFO}, KEY_ROWID + "=" + rowId, null,
                         null, null, null, null);
         if (mCursor != null) {
             mCursor.moveToFirst();
@@ -189,7 +191,7 @@ public class MealsDbAdapter {
 
         Cursor mCursor =
                 mDb.query(true, DATABASE_TABLE, new String[] {KEY_ROWID, KEY_LOCATION, KEY_DATE, KEY_MEAL_NUM,
-                        KEY_COUNTER, KEY_NAME, KEY_TYPE, KEY_PRICE},
+                        KEY_COUNTER, KEY_NAME, KEY_TYPE, KEY_PRICE, KEY_INFO},
                         KEY_DATE + "=\"" + date + "\" AND " + KEY_LOCATION + "=\"" + location + "\"",
                         null, null, null, null, null);
         if (mCursor != null) {
@@ -203,7 +205,7 @@ public class MealsDbAdapter {
 
         Cursor mCursor =
                 mDb.query(true, DATABASE_TABLE, new String[] {KEY_ROWID, KEY_LOCATION, KEY_DATE, KEY_MEAL_NUM,
-                        KEY_COUNTER, KEY_NAME, KEY_TYPE, KEY_PRICE},
+                        KEY_COUNTER, KEY_NAME, KEY_TYPE, KEY_PRICE, KEY_INFO},
                         KEY_DATE + "=\"" + date + "\" AND " + KEY_LOCATION + "=\"" + location + "\" AND " + KEY_COUNTER + "=\"" + counter + "\"",
                         null, null, null, null, null);
         if (mCursor != null) {
@@ -252,7 +254,7 @@ public class MealsDbAdapter {
      * @param body value to set note body to
      * @return true if the note was successfully updated, false otherwise
      */
-    public boolean updateMeal(long rowId, String location, String date, int num, String counter, String name, String type, String price) {
+    public boolean updateMeal(long rowId, String location, String date, int num, String counter, String name, String type, String price, String info) {
         ContentValues args = new ContentValues();
         args.put(KEY_LOCATION, location);
         args.put(KEY_DATE, date);
@@ -261,6 +263,7 @@ public class MealsDbAdapter {
         args.put(KEY_NAME, name);
         args.put(KEY_TYPE, type);
         args.put(KEY_PRICE, price);
+        args.put(KEY_INFO, info);
 
         return mDb.update(DATABASE_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
     }

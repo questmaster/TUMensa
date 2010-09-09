@@ -14,4 +14,23 @@
     
 <string name="menu_update">Aktualisieren</string>
 <string name="dialog_updating">Aktualisieren</string>
+<string name="poultry">Geflügel</string>
+    <string name="beef">Rind</string>
+    <string name="fish">Fisch</string>
+    <string name="calf">Kalb</string>
+    <string name="pig">Schwein</string>
+    <string name="vegie">Vegetarisch</string>
+    <string name="beefpig">Rind und Schwein</string>
+    <string name="menu_of">Menü vom </string>
+    
+<string name="colorant">Farbstoff</string>
+    <string name="preservative">Konservierungsstoff</string>
+    <string name="antioxidant">Antioxidationsmittel</string>
+    <string name="flavor_enhancer">Geschmacksverstärker</string>
+    <string name="sulphur_treated">geschwefelt</string>
+    <string name="blackened ">geschwärzt</string>
+    <string name="waxed">gewachst</string>
+    <string name="phosphate">Phosphat</string>
+    <string name="phenylalanine_source">Phenylalaninquelle</string>
+    <string name="sweetening">Süssungsmittel</string>
 </resources>

@@ -7,13 +7,17 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Vector;
 
+import android.content.Context;
+
 public class DataExtractor implements Runnable {
 
+	private Context cActivity = null;
 	private MealsDbAdapter mDbHelper = null;
 	private String firstDate = null;
 	private String location = null;
 
-	public DataExtractor(MealsDbAdapter db, String location) {
+	public DataExtractor(Context c, MealsDbAdapter db, String location) {
+		this.cActivity = c;
 		this.mDbHelper = db;
 		this.location = location;
 	}
@@ -22,7 +26,7 @@ public class DataExtractor implements Runnable {
 
 		parseTable(getWebPage(location, "week"));
 		parseTable(getWebPage(location, "nextweek"));
-		
+
 	}
 
 	/* parse Website and store in database */
@@ -106,7 +110,8 @@ public class DataExtractor implements Runnable {
 					}
 
 					// €-sign unfortunately not encoded, so checking price-tag
-				} else if (tmp.lastIndexOf(",") > 0 && day_index < days.size()
+				} else if (tmp.lastIndexOf(",") > 0
+						&& day_index < days.size()
 						&& Character
 								.isDigit(tmp.charAt(tmp.lastIndexOf(",") - 1))
 						&& Character
@@ -133,34 +138,111 @@ public class DataExtractor implements Runnable {
 							.substring(0, tmp.length() - type.length()).trim();
 					meal = htmlDecode(meal);
 
+					String info;
 					// create type drawable
 					if (type.equals("F")) {
-						type = String.valueOf(R.drawable.meal_f_t);
+						type = String.valueOf(R.drawable.meal_f);
+						info = cActivity.getResources()
+								.getString(R.string.fish);
 					} else if (type.equals("G")) {
-						type = String.valueOf(R.drawable.meal_g_t);
+						type = String.valueOf(R.drawable.meal_g);
+						info = cActivity.getResources().getString(
+								R.string.poultry);
 					} else if (type.equals("K")) {
-						type = String.valueOf(R.drawable.meal_k_t);
+						type = String.valueOf(R.drawable.meal_k);
+						info = cActivity.getResources()
+								.getString(R.string.calf);
 					} else if (type.equals("R")) {
-						type = String.valueOf(R.drawable.meal_r_t);
+						type = String.valueOf(R.drawable.meal_r);
+						info = cActivity.getResources()
+								.getString(R.string.beef);
 					} else if (type.equals("RS")) {
-						type = String.valueOf(R.drawable.meal_rs_t);
+						type = String.valueOf(R.drawable.meal_rs);
+						info = cActivity.getResources().getString(
+								R.string.beefpig);
 					} else if (type.equals("S")) {
-						type = String.valueOf(R.drawable.meal_s_t);
+						type = String.valueOf(R.drawable.meal_s);
+						info = cActivity.getResources().getString(R.string.pig);
 					} else if (type.equals("V")) {
-						type = String.valueOf(R.drawable.meal_v_t);
-					} else
-						type = String.valueOf(R.drawable.essen_t);
-					
+						type = String.valueOf(R.drawable.meal_v);
+						info = cActivity.getResources().getString(
+								R.string.vegie);
+					} else {
+						type = String.valueOf(R.drawable.essen);
+						info = "";
+					}
+
+					// TODO get additional information (extract from meal name)
+					if (meal.contains("(") && meal.contains(")")) {
+						String additions = meal.substring(
+								meal.indexOf("(") + 1, meal.indexOf(")"));
+						String[] splitAdditions = additions.split(",");
+						for (String s1 : splitAdditions) {
+							switch (Integer.parseInt(s1)) {
+							case 1:
+								info += "\n(1) "
+										+ cActivity.getResources().getString(
+												R.string.colorant);
+								break;
+							case 2:
+								info += "\n(2) "
+										+ cActivity.getResources().getString(
+												R.string.preservative);
+								break;
+							case 3:
+								info += "\n(3) "
+										+ cActivity.getResources().getString(
+												R.string.antioxidant);
+								break;
+							case 4:
+								info += "\n(4) "
+										+ cActivity.getResources().getString(
+												R.string.flavor_enhancer);
+								break;
+							case 5:
+								info += "\n(5) "
+										+ cActivity.getResources().getString(
+												R.string.sulphur_treated);
+								break;
+							case 6:
+								info += "\n(6) "
+										+ cActivity.getResources().getString(
+												R.string.blackened);
+								break;
+							case 7:
+								info += "\n(7) "
+										+ cActivity.getResources().getString(
+												R.string.waxed);
+								break;
+							case 8:
+								info += "\n(8) "
+										+ cActivity.getResources().getString(
+												R.string.phosphate);
+								break;
+							case 9:
+								info += "\n(9) "
+										+ cActivity.getResources().getString(
+												R.string.sweetening);
+								break;
+							case 11:
+								info += "\n(11) "
+										+ cActivity.getResources().getString(
+												R.string.phenylalanine_source);
+								break;
+							}
+						}
+					}
+
 					// Add table entry
 					String date = days.get(day_index);
 					long rowId = 0;
 					if ((rowId = mDbHelper.fetchMealId(location, date,
 							curCounter, meal_num)) >= 0) {
 						mDbHelper.updateMeal(rowId, location, date, meal_num,
-								curCounter, meal, type, price);
+								curCounter, meal, type, price, info);
 					} else
 						mDbHelper.createMeal(location, date, meal_num,
-								curCounter, meal, type, price);
+								curCounter, meal, type, price, info);
 				}
 
 				day_index++;

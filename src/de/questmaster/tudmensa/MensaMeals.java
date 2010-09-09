@@ -28,7 +28,10 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ExpandableListView;
 import android.widget.SimpleCursorTreeAdapter;
+import android.widget.Toast;
 
 public class MensaMeals extends ExpandableListActivity {
 	public static final int UPDATE_ID = Menu.FIRST;
@@ -82,7 +85,7 @@ public class MensaMeals extends ExpandableListActivity {
 
 		fillData();
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean result = super.onCreateOptionsMenu(menu);
@@ -130,10 +133,10 @@ public class MensaMeals extends ExpandableListActivity {
 	}
 
 	// keep the Groups expanded
-	public void onGroupCollapse (int groupPosition) {
+	public void onGroupCollapse(int groupPosition) {
 		getExpandableListView().expandGroup(groupPosition);
 	}
-	
+
 	protected void onDestroy() {
 		super.onDestroy();
 
@@ -141,8 +144,30 @@ public class MensaMeals extends ExpandableListActivity {
 		mDbHelper.close();
 	}
 
+	protected void onRestart() {
+		super.onRestart();
+
+		// expand groups
+		fillData();
+	}
+
 	// TODO onItemClicked show Type and legend information
-	
+	@Override
+	public boolean onChildClick(ExpandableListView parent, View v,
+			int groupPosition, int childPosition, long id) {
+		Cursor c = mDbHelper.fetchMeal(id);
+		startManagingCursor(c);
+
+		// get info date
+		String info = c.getString(c.getColumnIndex(MealsDbAdapter.KEY_INFO));
+
+		if (!info.equals(""))
+			// Display Toast message
+			Toast.makeText(this, info, Toast.LENGTH_SHORT).show();
+
+		return false;
+	}
+
 	private void fillData() {
 		// prepare date string TODO Integrate day selection
 		Calendar today = Calendar.getInstance();
@@ -160,9 +185,18 @@ public class MensaMeals extends ExpandableListActivity {
 			day = "0" + day;
 		String date = year + month + day;
 
-		// Set new title TODO Correct location name
-		setTitle("Speisekarte für " + mSettings.m_sMensaLocation + " am " + day
-				+ "." + month + "." + year);
+		// Set new title
+		int pos = 0;
+		for (String s : getResources().getStringArray(
+				R.array.MensaLocationsValues)) {
+			if (s.equals(mSettings.m_sMensaLocation)) {
+				break;
+			} else
+				pos++;
+		}
+		setTitle(getResources().getString(R.string.menu_of) + " " + day + "."
+				+ month + "." + year + ", "
+				+ getResources().getStringArray(R.array.MensaLocations)[pos]);
 
 		// Get all of the notes from the database and create the item list
 		Cursor c = mDbHelper.fetchGroupsOfDay(mSettings.m_sMensaLocation, date);
@@ -197,14 +231,14 @@ public class MensaMeals extends ExpandableListActivity {
 				getResources().getString(R.string.dialog_updating_text), true);
 
 		// get data
-		Thread de = new Thread( new DataExtractor(mDbHelper,
+		Thread de = new Thread(new DataExtractor(this, mDbHelper,
 				mSettings.m_sMensaLocation));
 		de.start();
 
 		// wait for end of extraction
 		while (de.isAlive()) {
 			try {
-				Thread.sleep(500);
+				Thread.sleep(5000);
 			} catch (InterruptedException e) {
 				// Auto-generated catch block
 				e.printStackTrace();
