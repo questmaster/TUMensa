@@ -7,28 +7,32 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Vector;
 
-import android.content.Context;
-
 public class DataExtractor implements Runnable {
 
-	private Context cActivity = null;
+	private MensaMeals cActivity = null;
 	private MealsDbAdapter mDbHelper = null;
 	private String firstDate = null;
 	private String location = null;
-
-	public DataExtractor(Context c, MealsDbAdapter db, String location) {
+	private boolean work_done = false;
+	
+	public DataExtractor(MensaMeals c, String location) {
 		this.cActivity = c;
-		this.mDbHelper = db;
+		this.mDbHelper = c.mDbHelper;
 		this.location = location;
 	}
 
 	public void run() {
-
+		work_done = false;
 		parseTable(getWebPage(location, "week"));
 		parseTable(getWebPage(location, "nextweek"));
-
+		work_done = true;
+		cActivity.handler.sendEmptyMessage(0);
 	}
 
+	public boolean isAlive() {
+		return !work_done;
+	}
+	
 	/* parse Website and store in database */
 	private Vector<String> getWebPage(String task, String view) {
 		Vector<String> webTable = new Vector<String>();

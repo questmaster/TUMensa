@@ -26,6 +26,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,6 +44,16 @@ public class MensaMeals extends ExpandableListActivity {
 	private MensaMealsSettings.Settings mSettings = new MensaMealsSettings.Settings();
 
 	protected MealsDbAdapter mDbHelper;
+
+	private ProgressDialog pd = null;
+	private boolean autoquery = false;
+	protected Handler handler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			pd.dismiss();
+			fillData();
+		}
+	};
 
 	public class CustomCursorTreeAdapter extends SimpleCursorTreeAdapter {
 
@@ -83,6 +95,7 @@ public class MensaMeals extends ExpandableListActivity {
 		mDbHelper = new MealsDbAdapter(this);
 		mDbHelper.open();
 
+		autoquery = false;
 		fillData();
 	}
 
@@ -148,6 +161,7 @@ public class MensaMeals extends ExpandableListActivity {
 		super.onRestart();
 
 		// expand groups
+		autoquery = false;
 		fillData();
 	}
 
@@ -200,9 +214,15 @@ public class MensaMeals extends ExpandableListActivity {
 
 		// Get all of the notes from the database and create the item list
 		Cursor c = mDbHelper.fetchGroupsOfDay(mSettings.m_sMensaLocation, date);
-		if (c.getCount() == 0) {
-			getData();
-			c.requery();
+		if (c.getCount() == 0) { // if none found start a new query automatically
+			if (!autoquery) {
+				autoquery = true;
+				getData();
+			} else {
+				Toast.makeText(this, R.string.no_data_found, Toast.LENGTH_LONG)
+						.show();
+			}
+			return;
 		}
 		startManagingCursor(c);
 
@@ -225,25 +245,12 @@ public class MensaMeals extends ExpandableListActivity {
 	}
 
 	private void getData() {
-		// TODO Dialog not shown
-		ProgressDialog pd = ProgressDialog.show(this,
-				getResources().getString(R.string.dialog_updating),
+		pd = ProgressDialog.show(this, null,
 				getResources().getString(R.string.dialog_updating_text), true);
 
 		// get data
-		Thread de = new Thread(new DataExtractor(this, mDbHelper,
-				mSettings.m_sMensaLocation));
-		de.start();
-
-		// wait for end of extraction
-		while (de.isAlive()) {
-			try {
-				Thread.sleep(5000);
-			} catch (InterruptedException e) {
-				// Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		pd.dismiss();
+		DataExtractor de = new DataExtractor(this, mSettings.m_sMensaLocation);
+		Thread t = new Thread(de);
+		t.start();
 	}
 }

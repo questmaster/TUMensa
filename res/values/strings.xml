@@ -5,7 +5,7 @@
     <string name="no_meals">No data for todays menu available.</string>
     
 
-<string name="dialog_updating">Updating</string>
+
     <string name="dialog_updating_text">Updating Database.</string>
 <string name="pref_cat_mensa">Mensa</string>
     <string name="pref_MensaLocationSummary">Menu of selected location will be shown.</string>
@@ -31,4 +31,5 @@
     <string name="phosphate">phosphate</string>
     <string name="phenylalanine_source">phenylalanine source</string>
     <string name="sweetening">sweetening</string>
+<string name="no_data_found">There was no data on the Website.</string>
 </resources>
