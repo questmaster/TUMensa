@@ -28,6 +28,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -190,14 +191,7 @@ public class MensaMeals extends ExpandableListActivity {
 		} else if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
 			today.add(Calendar.DAY_OF_YEAR, 1);
 		}
-		String year = String.valueOf(today.get(Calendar.YEAR));
-		String month = String.valueOf(today.get(Calendar.MONTH) + 1);
-		if (month.length() == 1)
-			month = "0" + month;
-		String day = String.valueOf(today.get(Calendar.DAY_OF_MONTH));
-		if (day.length() == 1)
-			day = "0" + day;
-		String date = year + month + day;
+		String date = (String) DateFormat.format("yyyyMMdd", today);
 
 		// Set new title
 		int pos = 0;
@@ -208,13 +202,14 @@ public class MensaMeals extends ExpandableListActivity {
 			} else
 				pos++;
 		}
-		setTitle(getResources().getString(R.string.menu_of) + " " + day + "."
-				+ month + "." + year + ", "
+		setTitle(getResources().getString(R.string.menu_of) + " "
+				+ DateFormat.getDateFormat(this).format(today.getTime()) + ", "
 				+ getResources().getStringArray(R.array.MensaLocations)[pos]);
 
 		// Get all of the notes from the database and create the item list
 		Cursor c = mDbHelper.fetchGroupsOfDay(mSettings.m_sMensaLocation, date);
-		if (c.getCount() == 0) { // if none found start a new query automatically
+		// if none found start a new query automatically
+		if (c.getCount() == 0) { 
 			if (!autoquery) {
 				autoquery = true;
 				getData();
