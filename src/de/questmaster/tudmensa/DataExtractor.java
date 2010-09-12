@@ -145,34 +145,34 @@ public class DataExtractor implements Runnable {
 					String info;
 					// create type drawable
 					if (type.equals("F")) {
-						type = String.valueOf(R.drawable.meal_f);
+						type = String.valueOf(R.drawable.meal_f_d);
 						info = cActivity.getResources()
 								.getString(R.string.fish);
 					} else if (type.equals("G")) {
-						type = String.valueOf(R.drawable.meal_g);
+						type = String.valueOf(R.drawable.meal_g_d);
 						info = cActivity.getResources().getString(
 								R.string.poultry);
 					} else if (type.equals("K")) {
-						type = String.valueOf(R.drawable.meal_k);
+						type = String.valueOf(R.drawable.meal_k_d);
 						info = cActivity.getResources()
 								.getString(R.string.calf);
 					} else if (type.equals("R")) {
-						type = String.valueOf(R.drawable.meal_r);
+						type = String.valueOf(R.drawable.meal_r_d);
 						info = cActivity.getResources()
 								.getString(R.string.beef);
 					} else if (type.equals("RS")) {
-						type = String.valueOf(R.drawable.meal_rs);
+						type = String.valueOf(R.drawable.meal_rs_d);
 						info = cActivity.getResources().getString(
 								R.string.beefpig);
 					} else if (type.equals("S")) {
-						type = String.valueOf(R.drawable.meal_s);
+						type = String.valueOf(R.drawable.meal_s_d);
 						info = cActivity.getResources().getString(R.string.pig);
 					} else if (type.equals("V")) {
-						type = String.valueOf(R.drawable.meal_v);
+						type = String.valueOf(R.drawable.meal_v_d);
 						info = cActivity.getResources().getString(
 								R.string.vegie);
 					} else {
-						type = String.valueOf(R.drawable.essen);
+						type = String.valueOf(R.drawable.essen_d);
 						info = "";
 					}
 
@@ -276,6 +276,7 @@ public class DataExtractor implements Runnable {
 		out = out.replaceAll("&szlig;", "ß");
 		out = out.replaceAll("&amp;", "&");
 		out = out.replaceAll("&quot;", "\"");
+		out = out.replaceAll("&acute;", "\'");
 
 		return out;
 	}

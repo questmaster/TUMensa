@@ -37,24 +37,30 @@ import android.widget.SimpleCursorTreeAdapter;
 import android.widget.Toast;
 
 public class MensaMeals extends ExpandableListActivity {
+	private boolean VERSION_RELEASE = false;
+
 	public static final int UPDATE_ID = Menu.FIRST;
 	public static final int SETTINGS_ID = Menu.FIRST + 1;
+	public static final int CLEAR_DB_ID = Menu.FIRST + 2;
 
 	public static final int ON_SETTINGS_CHANGE = 0;
-
+	
 	private MensaMealsSettings.Settings mSettings = new MensaMealsSettings.Settings();
 
 	protected MealsDbAdapter mDbHelper;
 
 	private ProgressDialog pd = null;
-	private boolean autoquery = false;
 	protected Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
 			pd.dismiss();
+			// TODO updateView after update. Dont do it for an update after startup
+			restart = true;
 			fillData();
 		}
 	};
+
+	private boolean restart = false;
 
 	public class CustomCursorTreeAdapter extends SimpleCursorTreeAdapter {
 
@@ -96,7 +102,6 @@ public class MensaMeals extends ExpandableListActivity {
 		mDbHelper = new MealsDbAdapter(this);
 		mDbHelper.open();
 
-		autoquery = false;
 		fillData();
 	}
 
@@ -106,12 +111,17 @@ public class MensaMeals extends ExpandableListActivity {
 		MenuItem mItem = null;
 
 		mItem = menu.add(0, UPDATE_ID, 0, R.string.menu_update);
-		mItem.setIcon(android.R.drawable.ic_menu_rotate);
+		mItem.setIcon(android.R.drawable.ic_menu_rotate/*ic_menu_refresh*/);
 
 		mItem = menu.add(0, SETTINGS_ID, 1, R.string.menu_settings);
 		// mItem.setShortcut('3', 's');
 		mItem.setIcon(android.R.drawable.ic_menu_preferences);
 
+		if (!VERSION_RELEASE) {
+			mItem = menu.add(0, CLEAR_DB_ID, 2, R.string.delete_db);
+			mItem.setIcon(android.R.drawable.ic_menu_delete);
+		}
+		
 		return result;
 	}
 
@@ -127,6 +137,10 @@ public class MensaMeals extends ExpandableListActivity {
 			Intent iSettings = new Intent();
 			iSettings.setClass(this, MensaMealsSettings.class);
 			startActivityForResult(iSettings, ON_SETTINGS_CHANGE);
+			break;
+
+		case CLEAR_DB_ID:
+			mDbHelper.deleteAllMeal();
 			break;
 		}
 
@@ -150,7 +164,7 @@ public class MensaMeals extends ExpandableListActivity {
 	public void onGroupCollapse(int groupPosition) {
 		getExpandableListView().expandGroup(groupPosition);
 	}
-
+	
 	protected void onDestroy() {
 		super.onDestroy();
 
@@ -162,11 +176,10 @@ public class MensaMeals extends ExpandableListActivity {
 		super.onRestart();
 
 		// expand groups
-		autoquery = false;
 		fillData();
 	}
 
-	// TODO onItemClicked show Type and legend information
+	// onItemClicked show Type and legend information
 	@Override
 	public boolean onChildClick(ExpandableListView parent, View v,
 			int groupPosition, int childPosition, long id) {
@@ -209,17 +222,18 @@ public class MensaMeals extends ExpandableListActivity {
 		// Get all of the notes from the database and create the item list
 		Cursor c = mDbHelper.fetchGroupsOfDay(mSettings.m_sMensaLocation, date);
 		// if none found start a new query automatically
-		if (c.getCount() == 0) { 
-			if (!autoquery) {
-				autoquery = true;
-				getData();
-			} else {
-				Toast.makeText(this, R.string.no_data_found, Toast.LENGTH_LONG)
-						.show();
-			}
+		if (c.getCount() == 0 && !restart ) { 
+			restart = true;
+			getData();
+//			c.requery();
+//			if (c.getCount() == 0) {
+//				Toast.makeText(this, R.string.no_data_found, Toast.LENGTH_LONG).show();
+//				c.close();
+//			}
 			return;
 		}
 		startManagingCursor(c);
+		restart = false;
 
 		String[] group_from = new String[] { MealsDbAdapter.KEY_COUNTER };
 		int[] group_to = new int[] { R.id.counter };
@@ -241,7 +255,7 @@ public class MensaMeals extends ExpandableListActivity {
 
 	private void getData() {
 		pd = ProgressDialog.show(this, null,
-				getResources().getString(R.string.dialog_updating_text), true);
+				getResources().getString(R.string.dialog_updating_text), true, true);
 
 		// get data
 		DataExtractor de = new DataExtractor(this, mSettings.m_sMensaLocation);

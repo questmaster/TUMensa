@@ -156,6 +156,10 @@ public class MealsDbAdapter {
         return mDb.delete(DATABASE_TABLE, KEY_DATE + "<\"" + date + "\"", null) > 0;
     }
 
+    public boolean deleteAllMeal () {
+    	return mDb.delete(DATABASE_TABLE, null, null) > 0;
+    }
+    
     /**
      * Return a Cursor over the list of all notes in the database
      * 
