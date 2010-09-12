@@ -31,36 +31,37 @@ import android.os.Message;
 import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.SimpleCursorTreeAdapter;
 import android.widget.Toast;
 
 public class MensaMeals extends ExpandableListActivity {
-	private boolean VERSION_RELEASE = false;
 
 	public static final int UPDATE_ID = Menu.FIRST;
 	public static final int SETTINGS_ID = Menu.FIRST + 1;
 	public static final int CLEAR_DB_ID = Menu.FIRST + 2;
 
 	public static final int ON_SETTINGS_CHANGE = 0;
-	
+
 	private MensaMealsSettings.Settings mSettings = new MensaMealsSettings.Settings();
 
 	protected MealsDbAdapter mDbHelper;
 
 	private ProgressDialog pd = null;
+	private boolean restart = false;
 	protected Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
 			pd.dismiss();
-			// TODO updateView after update. Dont do it for an update after startup
+			// updateView after update. Don't do it for an update after startup
 			restart = true;
 			fillData();
 		}
 	};
 
-	private boolean restart = false;
+	// private Calendar today = Calendar.getInstance();
 
 	public class CustomCursorTreeAdapter extends SimpleCursorTreeAdapter {
 
@@ -111,17 +112,16 @@ public class MensaMeals extends ExpandableListActivity {
 		MenuItem mItem = null;
 
 		mItem = menu.add(0, UPDATE_ID, 0, R.string.menu_update);
-		mItem.setIcon(android.R.drawable.ic_menu_rotate/*ic_menu_refresh*/);
+		mItem.setIcon(android.R.drawable.ic_menu_rotate/* ic_menu_refresh */);
 
 		mItem = menu.add(0, SETTINGS_ID, 1, R.string.menu_settings);
 		// mItem.setShortcut('3', 's');
 		mItem.setIcon(android.R.drawable.ic_menu_preferences);
 
-		if (!VERSION_RELEASE) {
-			mItem = menu.add(0, CLEAR_DB_ID, 2, R.string.delete_db);
-			mItem.setIcon(android.R.drawable.ic_menu_delete);
-		}
-		
+		// XXX DEBUG
+		mItem = menu.add(0, CLEAR_DB_ID, 2, R.string.delete_db);
+		mItem.setIcon(android.R.drawable.ic_menu_delete);
+
 		return result;
 	}
 
@@ -164,7 +164,7 @@ public class MensaMeals extends ExpandableListActivity {
 	public void onGroupCollapse(int groupPosition) {
 		getExpandableListView().expandGroup(groupPosition);
 	}
-	
+
 	protected void onDestroy() {
 		super.onDestroy();
 
@@ -195,17 +195,38 @@ public class MensaMeals extends ExpandableListActivity {
 
 		return false;
 	}
-	
+
 	@Override
 	public void onBackPressed() {
-		// finish app after leaving view
+		// TODO finish app after leaving view
 		if (this.isTaskRoot()) {
 			this.finish();
 		}
 	}
 
+	@Override
+	// TODO Wechsele Tag mit links/rechts wisch.
+	public boolean onTouchEvent(MotionEvent evt) {
+		// switch (evt.getAction()) {
+		// case MotionEvent.ACTION_MOVE:
+		switch (evt.getEdgeFlags()) {
+		case MotionEvent.EDGE_LEFT:
+			System.err.printf("Left wisch.");
+
+			return true;
+		case MotionEvent.EDGE_RIGHT:
+			System.err.printf("Right wisch.");
+
+			return true;
+		}
+		// break;
+		// }
+
+		return false;
+	}
+
 	private void fillData() {
-		// prepare date string TODO Integrate day selection
+		// prepare date string
 		Calendar today = Calendar.getInstance();
 		if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
 			today.add(Calendar.DAY_OF_YEAR, 2);
@@ -230,7 +251,7 @@ public class MensaMeals extends ExpandableListActivity {
 		// Get all of the notes from the database and create the item list
 		Cursor c = mDbHelper.fetchGroupsOfDay(mSettings.m_sMensaLocation, date);
 		// if none found start a new query automatically
-		if (c.getCount() == 0 && !restart ) { 
+		if (c.getCount() == 0 && !restart) {
 			restart = true;
 			getData();
 			return;
@@ -258,7 +279,8 @@ public class MensaMeals extends ExpandableListActivity {
 
 	private void getData() {
 		pd = ProgressDialog.show(this, null,
-				getResources().getString(R.string.dialog_updating_text), true, true);
+				getResources().getString(R.string.dialog_updating_text), true,
+				true);
 
 		// get data
 		DataExtractor de = new DataExtractor(this, mSettings.m_sMensaLocation);
