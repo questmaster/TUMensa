@@ -47,14 +47,13 @@ public final class R {
         public static final int blackened =0x7f050017;
         public static final int calf=0x7f05000c;
         public static final int colorant=0x7f050011;
-        public static final int delete_db=0x7f05001c;
+        public static final int delete_db=0x7f05001b;
         public static final int dialog_updating_text=0x7f050003;
         public static final int fish=0x7f05000b;
         public static final int flavor_enhancer=0x7f050014;
         public static final int menu_of=0x7f050010;
         public static final int menu_settings=0x7f050007;
         public static final int menu_update=0x7f050008;
-        public static final int no_data_found=0x7f05001b;
         public static final int no_meals=0x7f050002;
         public static final int phenylalanine_source=0x7f050019;
         public static final int phosphate=0x7f050018;

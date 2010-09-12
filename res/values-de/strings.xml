@@ -33,6 +33,6 @@
     <string name="phosphate">Phosphat</string>
     <string name="phenylalanine_source">Phenylalaninquelle</string>
     <string name="sweetening">Süssungsmittel</string>
-<string name="no_data_found">Es wurden keine Daten auf der Website gefunden.</string>
+
 <string name="delete_db">Lösche DB</string>
 </resources>

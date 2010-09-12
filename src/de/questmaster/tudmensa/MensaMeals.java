@@ -195,6 +195,14 @@ public class MensaMeals extends ExpandableListActivity {
 
 		return false;
 	}
+	
+	@Override
+	public void onBackPressed() {
+		// finish app after leaving view
+		if (this.isTaskRoot()) {
+			this.finish();
+		}
+	}
 
 	private void fillData() {
 		// prepare date string TODO Integrate day selection
@@ -225,11 +233,6 @@ public class MensaMeals extends ExpandableListActivity {
 		if (c.getCount() == 0 && !restart ) { 
 			restart = true;
 			getData();
-//			c.requery();
-//			if (c.getCount() == 0) {
-//				Toast.makeText(this, R.string.no_data_found, Toast.LENGTH_LONG).show();
-//				c.close();
-//			}
 			return;
 		}
 		startManagingCursor(c);

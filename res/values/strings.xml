@@ -31,6 +31,6 @@
     <string name="phosphate">phosphate</string>
     <string name="phenylalanine_source">phenylalanine source</string>
     <string name="sweetening">sweetening</string>
-<string name="no_data_found">There was no data on the Website.</string>
+
 <string name="delete_db">Delete DB</string>
 </resources>
