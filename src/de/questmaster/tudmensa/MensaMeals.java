@@ -195,15 +195,13 @@ public class MensaMeals extends ExpandableListActivity {
 		return false;
 	}
 
-// Only from API level 5 > 1.6
-//	@Override
-//	public void onBackPressed() {
-//		// TODO finish app after leaving view
-//		if (this.isTaskRoot()) {
-//			this.finish();
-//		}
-//	}
-//
+	@Override
+	public void onStop() {
+		// finish app after leaving view
+		super.onStop();
+		this.finish();
+	}
+
 //	@Override
 //	// TODO Wechsele Tag mit links/rechts wisch.
 //	public boolean onTouchEvent(MotionEvent evt) {
