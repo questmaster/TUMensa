@@ -176,7 +176,7 @@ public class DataExtractor implements Runnable {
 						info = "";
 					}
 
-					// TODO get additional information (extract from meal name)
+					// get additional information (extract from meal name)
 					if (meal.contains("(") && meal.contains(")")) {
 						String additions = meal.substring(
 								meal.indexOf("(") + 1, meal.indexOf(")"));

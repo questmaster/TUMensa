@@ -102,8 +102,6 @@ public class MensaMeals extends ExpandableListActivity {
 		// Database
 		mDbHelper = new MealsDbAdapter(this);
 		mDbHelper.open();
-
-		fillData();
 	}
 
 	@Override
@@ -172,8 +170,9 @@ public class MensaMeals extends ExpandableListActivity {
 		mDbHelper.close();
 	}
 
-	protected void onRestart() {
-		super.onRestart();
+	@Override
+	protected void onResume() {
+		super.onResume();
 
 		// expand groups
 		fillData();
@@ -196,34 +195,35 @@ public class MensaMeals extends ExpandableListActivity {
 		return false;
 	}
 
-	@Override
-	public void onBackPressed() {
-		// TODO finish app after leaving view
-		if (this.isTaskRoot()) {
-			this.finish();
-		}
-	}
-
-	@Override
-	// TODO Wechsele Tag mit links/rechts wisch.
-	public boolean onTouchEvent(MotionEvent evt) {
-		// switch (evt.getAction()) {
-		// case MotionEvent.ACTION_MOVE:
-		switch (evt.getEdgeFlags()) {
-		case MotionEvent.EDGE_LEFT:
-			System.err.printf("Left wisch.");
-
-			return true;
-		case MotionEvent.EDGE_RIGHT:
-			System.err.printf("Right wisch.");
-
-			return true;
-		}
-		// break;
-		// }
-
-		return false;
-	}
+// Only from API level 5 > 1.6
+//	@Override
+//	public void onBackPressed() {
+//		// TODO finish app after leaving view
+//		if (this.isTaskRoot()) {
+//			this.finish();
+//		}
+//	}
+//
+//	@Override
+//	// TODO Wechsele Tag mit links/rechts wisch.
+//	public boolean onTouchEvent(MotionEvent evt) {
+//		// switch (evt.getAction()) {
+//		// case MotionEvent.ACTION_MOVE:
+//		switch (evt.getEdgeFlags()) {
+//		case MotionEvent.EDGE_LEFT:
+//			System.err.printf("Left wisch.");
+//
+//			return true;
+//		case MotionEvent.EDGE_RIGHT:
+//			System.err.printf("Right wisch.");
+//
+//			return true;
+//		}
+//		// break;
+//		// }
+//
+//		return false;
+//	}
 
 	private void fillData() {
 		// prepare date string
