@@ -179,16 +179,9 @@ public class MensaMeals extends ExpandableListActivity {
 	}
 
 	@Override
-	public void onStop() {
-		// finish app after leaving view
-		super.onStop();
-		this.finish();
-	}
-
-	// onItemClicked show Type and legend information
-	@Override
 	public boolean onChildClick(ExpandableListView parent, View v,
 			int groupPosition, int childPosition, long id) {
+		// show Type and legend information
 		Cursor c = mDbHelper.fetchMeal(id);
 		startManagingCursor(c);
 
