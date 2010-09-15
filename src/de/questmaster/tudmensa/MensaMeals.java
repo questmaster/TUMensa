@@ -82,11 +82,10 @@ public class MensaMeals extends ExpandableListActivity {
 					.getColumnIndex(MealsDbAdapter.KEY_COUNTER));
 
 			Cursor c = mDbHelper.fetchMealsOfGroupDay(location, date, counter);
-			// Cursor c = mDbHelper.fetchAllMeals();
+
 			startManagingCursor(c);
 			return c;
 		}
-
 	}
 
 	/** Called when the activity is first created. */
@@ -94,7 +93,6 @@ public class MensaMeals extends ExpandableListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.meals_list);
-		// setTheme(android.R.style.Theme_Light);
 
 		// Settings
 		mSettings.ReadSettings(this);
@@ -116,9 +114,9 @@ public class MensaMeals extends ExpandableListActivity {
 		// mItem.setShortcut('3', 's');
 		mItem.setIcon(android.R.drawable.ic_menu_preferences);
 
-		// XXX DEBUG
-		mItem = menu.add(0, CLEAR_DB_ID, 2, R.string.delete_db);
-		mItem.setIcon(android.R.drawable.ic_menu_delete);
+//		// XXX DEBUG
+//		mItem = menu.add(0, CLEAR_DB_ID, 2, R.string.delete_db);
+//		mItem.setIcon(android.R.drawable.ic_menu_delete);
 
 		return result;
 	}
@@ -158,11 +156,13 @@ public class MensaMeals extends ExpandableListActivity {
 		}
 	}
 
-	// keep the Groups expanded
+	@Override
 	public void onGroupCollapse(int groupPosition) {
+		// keep the Groups expanded
 		getExpandableListView().expandGroup(groupPosition);
 	}
 
+	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 
@@ -176,6 +176,13 @@ public class MensaMeals extends ExpandableListActivity {
 
 		// expand groups
 		fillData();
+	}
+
+	@Override
+	public void onStop() {
+		// finish app after leaving view
+		super.onStop();
+		this.finish();
 	}
 
 	// onItemClicked show Type and legend information
@@ -196,32 +203,25 @@ public class MensaMeals extends ExpandableListActivity {
 	}
 
 	@Override
-	public void onStop() {
-		// finish app after leaving view
-		super.onStop();
-		this.finish();
-	}
+	// TODO Wechsele Tag mit links/rechts wisch.
+	public boolean onTouchEvent(MotionEvent evt) {
+		// switch (evt.getAction()) {
+		// case MotionEvent.ACTION_MOVE:
+		switch (evt.getEdgeFlags()) {
+		case MotionEvent.EDGE_LEFT:
+			System.err.printf("Left wisch.");
 
-//	@Override
-//	// TODO Wechsele Tag mit links/rechts wisch.
-//	public boolean onTouchEvent(MotionEvent evt) {
-//		// switch (evt.getAction()) {
-//		// case MotionEvent.ACTION_MOVE:
-//		switch (evt.getEdgeFlags()) {
-//		case MotionEvent.EDGE_LEFT:
-//			System.err.printf("Left wisch.");
-//
-//			return true;
-//		case MotionEvent.EDGE_RIGHT:
-//			System.err.printf("Right wisch.");
-//
-//			return true;
-//		}
-//		// break;
-//		// }
-//
-//		return false;
-//	}
+			return true;
+		case MotionEvent.EDGE_RIGHT:
+			System.err.printf("Right wisch.");
+
+			return true;
+		}
+		// break;
+		// }
+
+		return false;
+	}
 
 	private void fillData() {
 		// prepare date string
