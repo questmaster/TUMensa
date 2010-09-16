@@ -1,14 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-      android:layout_width="fill_parent"
-    android:layout_height="wrap_content">
+	android:layout_width="fill_parent" android:layout_height="wrap_content"
+	android:orientation="vertical">
 
-	<ExpandableListView android:id="@id/android:list"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:groupIndicator="@drawable/trans_pix"/>
-  	<TextView android:id="@id/android:empty"
-        android:layout_width="fill_parent"
-        android:text="@string/no_meals" android:layout_gravity="center_vertical|center_horizontal" android:layout_height="fill_parent"/>
-        
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_height="wrap_content" android:layout_width="fill_parent"
+		android:gravity="center_horizontal" android:id="@+id/list_header">
+
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/btn_prev"
+			android:layout_weight="0.2" android:width="0px" android:text="Prev">
+		</Button>
+		<TextView android:layout_height="fill_parent"
+			android:layout_width="wrap_content" android:id="@+id/txt_date"
+			android:gravity="center_vertical|center_horizontal"
+			android:layout_weight="0.6" android:text="Date" android:width="0px">
+		</TextView>
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/btn_next"
+			android:width="0px" android:layout_weight="0.2" android:text="Next">
+		</Button>
+
+	</LinearLayout>
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="fill_parent" android:layout_height="wrap_content">
+
+		<ExpandableListView android:id="@id/android:list"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:groupIndicator="@drawable/trans_pix" />
+		<TextView android:id="@id/android:empty"
+			android:layout_width="fill_parent" android:text="@string/no_meals"
+			android:layout_gravity="center_vertical|center_horizontal"
+			android:layout_height="fill_parent" />
+
+	</LinearLayout>
 </LinearLayout>
