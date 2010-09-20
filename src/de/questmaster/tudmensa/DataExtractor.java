@@ -14,7 +14,7 @@ public class DataExtractor implements Runnable {
 	private String firstDate = null;
 	private String location = null;
 	private boolean work_done = false;
-	
+
 	public DataExtractor(MensaMeals c, String location) {
 		this.cActivity = c;
 		this.mDbHelper = c.mDbHelper;
@@ -32,7 +32,7 @@ public class DataExtractor implements Runnable {
 	public boolean isAlive() {
 		return !work_done;
 	}
-	
+
 	/* parse Website and store in database */
 	private Vector<String> getWebPage(String task, String view) {
 		Vector<String> webTable = new Vector<String>();
@@ -181,62 +181,81 @@ public class DataExtractor implements Runnable {
 						String additions = meal.substring(
 								meal.indexOf("(") + 1, meal.indexOf(")"));
 						String[] splitAdditions = additions.split(",");
-						for (String s1 : splitAdditions) {
-							switch (Integer.parseInt(s1)) {
-							case 1:
-								info += "\n(1) "
-										+ cActivity.getResources().getString(
-												R.string.colorant);
-								break;
-							case 2:
-								info += "\n(2) "
-										+ cActivity.getResources().getString(
-												R.string.preservative);
-								break;
-							case 3:
-								info += "\n(3) "
-										+ cActivity.getResources().getString(
-												R.string.antioxidant);
-								break;
-							case 4:
-								info += "\n(4) "
-										+ cActivity.getResources().getString(
-												R.string.flavor_enhancer);
-								break;
-							case 5:
-								info += "\n(5) "
-										+ cActivity.getResources().getString(
-												R.string.sulphur_treated);
-								break;
-							case 6:
-								info += "\n(6) "
-										+ cActivity.getResources().getString(
-												R.string.blackened);
-								break;
-							case 7:
-								info += "\n(7) "
-										+ cActivity.getResources().getString(
-												R.string.waxed);
-								break;
-							case 8:
-								info += "\n(8) "
-										+ cActivity.getResources().getString(
-												R.string.phosphate);
-								break;
-							case 9:
-								info += "\n(9) "
-										+ cActivity.getResources().getString(
-												R.string.sweetening);
-								break;
-							case 11:
-								info += "\n(11) "
-										+ cActivity.getResources().getString(
-												R.string.phenylalanine_source);
-								break;
+						try {
+							for (String s1 : splitAdditions) {
+								switch (Integer.parseInt(s1)) {
+								case 1:
+									info += "\n(1) "
+											+ cActivity.getResources()
+													.getString(
+															R.string.colorant);
+									break;
+								case 2:
+									info += "\n(2) "
+											+ cActivity
+													.getResources()
+													.getString(
+															R.string.preservative);
+									break;
+								case 3:
+									info += "\n(3) "
+											+ cActivity
+													.getResources()
+													.getString(
+															R.string.antioxidant);
+									break;
+								case 4:
+									info += "\n(4) "
+											+ cActivity
+													.getResources()
+													.getString(
+															R.string.flavor_enhancer);
+									break;
+								case 5:
+									info += "\n(5) "
+											+ cActivity
+													.getResources()
+													.getString(
+															R.string.sulphur_treated);
+									break;
+								case 6:
+									info += "\n(6) "
+											+ cActivity.getResources()
+													.getString(
+															R.string.blackened);
+									break;
+								case 7:
+									info += "\n(7) "
+											+ cActivity.getResources()
+													.getString(R.string.waxed);
+									break;
+								case 8:
+									info += "\n(8) "
+											+ cActivity.getResources()
+													.getString(
+															R.string.phosphate);
+									break;
+								case 9:
+									info += "\n(9) "
+											+ cActivity
+													.getResources()
+													.getString(
+															R.string.sweetening);
+									break;
+								case 11:
+									info += "\n(11) "
+											+ cActivity
+													.getResources()
+													.getString(
+															R.string.phenylalanine_source);
+									break;
+								}
 							}
+
+						} catch (NumberFormatException e) {
+							// No number, so its nothing we care about
 						}
 					}
-
 					// Add table entry
 					String date = days.get(day_index);
 					long rowId = 0;
