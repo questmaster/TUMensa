@@ -327,7 +327,7 @@ public class MensaMeals extends ExpandableListActivity {
 			return;
 		}
 		startManagingCursor(c);
-		restart = false;
+//		restart = false; // Disabled, so that an autoupdate is only done once per runtime.
 
 		String[] group_from = new String[] { MealsDbAdapter.KEY_COUNTER };
 		int[] group_to = new int[] { R.id.counter };
