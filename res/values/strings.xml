@@ -33,4 +33,7 @@
     <string name="sweetening">sweetening</string>
 
 <string name="delete_db">Delete DB</string>
+<string name="pref_AutoUpdateLabel">Auto Update</string>
+    <string name="pref_AutoUpdateDescr">Enables automatic updates, if data is missing.</string>
+<string name="menu_for">Menu of</string>
 </resources>

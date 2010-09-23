@@ -33,8 +33,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.SimpleCursorTreeAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MensaMeals extends ExpandableListActivity {
@@ -61,7 +64,37 @@ public class MensaMeals extends ExpandableListActivity {
 		}
 	};
 
-	// private Calendar today = Calendar.getInstance();
+	// UI handling
+	private OnClickListener mNextDateListener = new OnClickListener() {
+	    public void onClick(View v) {
+			// Setup date
+			today.add(Calendar.DAY_OF_YEAR, 1);
+			if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+				today.add(Calendar.DAY_OF_YEAR, 2);
+			} else if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+				today.add(Calendar.DAY_OF_YEAR, 1);
+			}
+			updateButtonText();
+			
+			fillData();
+	    }
+	};
+	private OnClickListener mPrevDateListener = new OnClickListener() {
+	    public void onClick(View v) {
+	      // TODO do something when the button is clicked
+			today.add(Calendar.DAY_OF_YEAR, -1);
+			if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+				today.add(Calendar.DAY_OF_YEAR, -1);
+			} else if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+				today.add(Calendar.DAY_OF_YEAR, -2);
+			}
+			updateButtonText();
+			
+			fillData();
+	    }
+	};
+	
+	private Calendar today = Calendar.getInstance();
 
 	public class CustomCursorTreeAdapter extends SimpleCursorTreeAdapter {
 
@@ -94,10 +127,27 @@ public class MensaMeals extends ExpandableListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.meals_list);
 
+		// Setup date
+		Calendar today = Calendar.getInstance();
+		if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+			today.add(Calendar.DAY_OF_YEAR, 2);
+		} else if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+			today.add(Calendar.DAY_OF_YEAR, 1);
+		}
+		
+		// Capture our buttons from layout
+	    Button buttonPrev = (Button)findViewById(R.id.btn_prev);
+	    Button buttonNext = (Button)findViewById(R.id.btn_next);
+
+	    // Register the onClick listener with the implementation above
+	    buttonPrev.setOnClickListener(mPrevDateListener);
+	    buttonNext.setOnClickListener(mNextDateListener);
+	    updateButtonText();
+		
 		// Settings
 		mSettings.ReadSettings(this);
 
-		// Database
+		// Init Database
 		mDbHelper = new MealsDbAdapter(this);
 		mDbHelper.open();
 	}
@@ -216,14 +266,43 @@ public class MensaMeals extends ExpandableListActivity {
 //		return false;
 //	}
 
+	private void updateButtonText() {
+		// Prepare times
+		Calendar cPrev = (Calendar) today.clone();
+		Calendar cNext = (Calendar) today.clone();
+		cPrev.add(Calendar.DAY_OF_YEAR, -1);
+		cNext.add(Calendar.DAY_OF_YEAR, 1);
+		
+		// check weekends
+		if (cPrev.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+			cPrev.add(Calendar.DAY_OF_YEAR, -1);
+		} else if (cPrev.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+			cPrev.add(Calendar.DAY_OF_YEAR, -2);
+		}
+		if (cNext.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+			cNext.add(Calendar.DAY_OF_YEAR, 2);
+		} else if (cNext.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+			cNext.add(Calendar.DAY_OF_YEAR, 1);
+		}
+		
+		// Update Text Prev
+	    Button buttonPrev = (Button)findViewById(R.id.btn_prev);
+	    String textPrev = DateFormat.getDateFormat(this).format(cPrev.getTime());
+	    buttonPrev.setText(textPrev.substring(0, textPrev.length() - 5));
+		
+		// Update Text Next
+	    Button buttonNext = (Button)findViewById(R.id.btn_next);
+	    String textNext = DateFormat.getDateFormat(this).format(cNext.getTime());
+	    buttonNext.setText(textNext.substring(0, textNext.length() - 5));
+		
+	    // Update label
+	    TextView labelDay = (TextView)findViewById(R.id.txt_date);
+	    labelDay.setText(DateFormat.format("EEEE", today.getTime()) + ", " + DateFormat.getDateFormat(this).format(today.getTime()));
+//	    labelDay.setText(DateFormat.format("EEEE", today.getTime()));
+	}
+	
 	private void fillData() {
 		// prepare date string
-		Calendar today = Calendar.getInstance();
-		if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
-			today.add(Calendar.DAY_OF_YEAR, 2);
-		} else if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-			today.add(Calendar.DAY_OF_YEAR, 1);
-		}
 		String date = (String) DateFormat.format("yyyyMMdd", today);
 
 		// Set new title
@@ -235,14 +314,14 @@ public class MensaMeals extends ExpandableListActivity {
 			} else
 				pos++;
 		}
-		setTitle(getResources().getString(R.string.menu_of) + " "
-				+ DateFormat.getDateFormat(this).format(today.getTime()) + ", "
+		setTitle(getResources().getString(R.string.menu_for) + " "
+		//		+ DateFormat.getDateFormat(this).format(today.getTime()) + ", "
 				+ getResources().getStringArray(R.array.MensaLocations)[pos]);
 
 		// Get all of the notes from the database and create the item list
 		Cursor c = mDbHelper.fetchGroupsOfDay(mSettings.m_sMensaLocation, date);
 		// if none found start a new query automatically
-		if (c.getCount() == 0 && !restart) {
+		if (mSettings.m_bAutoUpdate && c.getCount() == 0 && !restart) {
 			restart = true;
 			getData();
 			return;

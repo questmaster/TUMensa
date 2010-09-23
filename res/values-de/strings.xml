@@ -35,4 +35,7 @@
     <string name="sweetening">Süssungsmittel</string>
 
 <string name="delete_db">Lösche DB</string>
+<string name="pref_AutoUpdateLabel">Automatisches Update</string>
+    <string name="pref_AutoUpdateDescr">Aktiviert das automatischen Update der Mensadaten.</string>
+<string name="menu_for">Speisekarte für</string>
 </resources>

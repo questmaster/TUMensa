@@ -3,7 +3,7 @@ package de.questmaster.tudmensa;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-//import android.preference.CheckBoxPreference;
+import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
@@ -11,7 +11,8 @@ import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 
 public class MensaMealsSettings extends PreferenceActivity {
-  public static final String PREF_KEY_MENSA_LOCATION    = "mensa_location";
+	  public static final String PREF_KEY_MENSA_LOCATION    = "mensa_location";
+	  public static final String PREF_KEY_AUTO_UPDATE    = "auto_update";
     
   // ----------------------------------------------------------------------------
   @Override protected void onCreate (Bundle savedInstanceState)
@@ -33,14 +34,14 @@ public class MensaMealsSettings extends PreferenceActivity {
     pcMensa.setTitle (R.string.pref_cat_mensa);
     root.addPreference (pcMensa);
 
-//    // Vise ikoner
-//    CheckBoxPreference cb = new CheckBoxPreference (this);
-//    cb.setDefaultValue  (true);
-//    cb.setKey     (__PREF_KEY_SHOW_ICONS);
-//    cb.setTitle   (R.string.prfShowIconsLabel);
-//    cb.setSummary (R.string.prfShowIconsDescr);
-//    
-//    ppcAppearance.addPreference (cb);
+    // Manual Update 
+    CheckBoxPreference cb = new CheckBoxPreference (this);
+    cb.setDefaultValue  (true);
+    cb.setKey     (PREF_KEY_AUTO_UPDATE);
+    cb.setTitle   (R.string.pref_AutoUpdateLabel);
+    cb.setSummary (R.string.pref_AutoUpdateDescr);
+    
+    pcMensa.addPreference (cb);
 
     
     // Sort order
@@ -166,6 +167,7 @@ public class MensaMealsSettings extends PreferenceActivity {
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   {
     public String  m_sMensaLocation;
+    public boolean  m_bAutoUpdate        = true;
 //    public boolean  m_bShowPriority    = true;
 //    public boolean  m_bExpandAll       = false;
 //    public boolean  m_bShowCreatedTime = true;
@@ -181,7 +183,7 @@ public class MensaMealsSettings extends PreferenceActivity {
       
       if (sharedPref != null)
       {
-//        m_bShowIcons       = sharedPref.getBoolean (MensaMealsSettings.__PREF_KEY_SHOW_ICONS, m_bShowIcons);
+    	  m_bAutoUpdate      = sharedPref.getBoolean (MensaMealsSettings.PREF_KEY_AUTO_UPDATE, m_bAutoUpdate);
 //        m_bShowPriority    = sharedPref.getBoolean (MensaMealsSettings.__PREF_KEY_SHOW_PRIORITY, m_bShowPriority);
 //        m_bExpandAll       = sharedPref.getBoolean (MensaMealsSettings.__PREF_KEY_EXPAND_ALL, m_bExpandAll);
 //        m_bShowCreatedTime = sharedPref.getBoolean (MensaMealsSettings.__PREF_KEY_SHOW_CREATED, m_bShowCreatedTime);

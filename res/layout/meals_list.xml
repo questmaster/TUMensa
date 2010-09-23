@@ -4,12 +4,12 @@
 	android:orientation="vertical">
 
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-		android:layout_height="wrap_content" android:layout_width="fill_parent"
-		android:gravity="center_horizontal" android:id="@+id/list_header">
+		android:layout_width="fill_parent"
+		android:gravity="center_horizontal" android:id="@+id/list_header" android:layout_height="40dp">
 
 		<Button android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:id="@+id/btn_prev"
-			android:layout_weight="0.2" android:width="0px" android:text="Prev">
+			android:id="@+id/btn_prev"
+			android:layout_weight="0.2" android:width="0px" android:text="Prev" android:layout_height="fill_parent">
 		</Button>
 		<TextView android:layout_height="fill_parent"
 			android:layout_width="wrap_content" android:id="@+id/txt_date"
@@ -17,8 +17,8 @@
 			android:layout_weight="0.6" android:text="Date" android:width="0px">
 		</TextView>
 		<Button android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:id="@+id/btn_next"
-			android:width="0px" android:layout_weight="0.2" android:text="Next">
+			android:id="@+id/btn_next"
+			android:width="0px" android:layout_weight="0.2" android:text="Next" android:layout_height="fill_parent">
 		</Button>
 
 	</LinearLayout>
