@@ -34,6 +34,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.SimpleCursorTreeAdapter;
@@ -125,16 +126,24 @@ public class MensaMeals extends ExpandableListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.meals_list);
-
+		
 		// Setup date
-		Calendar today = Calendar.getInstance();
+		today = Calendar.getInstance();
 		if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
 			today.add(Calendar.DAY_OF_YEAR, 2);
 		} else if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
 			today.add(Calendar.DAY_OF_YEAR, 1);
 		}
 		
+		// Settings
+		mSettings.ReadSettings(this);
+
+		// Init Database
+		mDbHelper = new MealsDbAdapter(this);
+		mDbHelper.open();
+
 		// Capture our buttons from layout
 	    Button buttonPrev = (Button)findViewById(R.id.btn_prev);
 	    Button buttonNext = (Button)findViewById(R.id.btn_next);
@@ -143,13 +152,6 @@ public class MensaMeals extends ExpandableListActivity {
 	    buttonPrev.setOnClickListener(mPrevDateListener);
 	    buttonNext.setOnClickListener(mNextDateListener);
 	    updateButtonText();
-		
-		// Settings
-		mSettings.ReadSettings(this);
-
-		// Init Database
-		mDbHelper = new MealsDbAdapter(this);
-		mDbHelper.open();
 	}
 
 	@Override
@@ -183,6 +185,10 @@ public class MensaMeals extends ExpandableListActivity {
 			Intent iSettings = new Intent();
 			iSettings.setClass(this, MensaMealsSettings.class);
 			startActivityForResult(iSettings, ON_SETTINGS_CHANGE);
+			
+			// To be able to check for new data if mensa changed. (FIXME also enables further auto-updates)
+			restart = false;
+			
 			break;
 
 		case CLEAR_DB_ID:
@@ -295,16 +301,6 @@ public class MensaMeals extends ExpandableListActivity {
 	    String textNext = DateFormat.getDateFormat(this).format(cNext.getTime());
 	    buttonNext.setText(textNext.substring(0, textNext.length() - 5));
 		
-	    // Update label
-	    TextView labelDay = (TextView)findViewById(R.id.txt_date);
-	    labelDay.setText(DateFormat.format("EEEE", today.getTime()) + ", " + DateFormat.getDateFormat(this).format(today.getTime()));
-//	    labelDay.setText(DateFormat.format("EEEE", today.getTime()));
-	}
-	
-	private void fillData() {
-		// prepare date string
-		String date = (String) DateFormat.format("yyyyMMdd", today);
-
 		// Set new title
 		int pos = 0;
 		for (String s : getResources().getStringArray(
@@ -314,9 +310,21 @@ public class MensaMeals extends ExpandableListActivity {
 			} else
 				pos++;
 		}
-		setTitle(getResources().getString(R.string.menu_for) + " "
-		//		+ DateFormat.getDateFormat(this).format(today.getTime()) + ", "
-				+ getResources().getStringArray(R.array.MensaLocations)[pos]);
+//		setTitle(getResources().getString(R.string.menu_for) + " "
+//				+ DateFormat.getDateFormat(this).format(today.getTime()) + ", "
+//				+ getResources().getStringArray(R.array.MensaLocations)[pos]);
+
+	    
+	    // Update label
+	    TextView labelDay = (TextView)findViewById(R.id.txt_date);
+	    labelDay.setText(getResources().getStringArray(R.array.MensaLocations)[pos] + "\n"
+	    		+ DateFormat.format("EEEE", today.getTime()) + ", " + DateFormat.getDateFormat(this).format(today.getTime()));
+//	    labelDay.setText(DateFormat.format("EEEE", today.getTime()));
+	}
+	
+	private void fillData() {
+		// prepare date string
+		String date = (String) DateFormat.format("yyyyMMdd", today);
 
 		// Get all of the notes from the database and create the item list
 		Cursor c = mDbHelper.fetchGroupsOfDay(mSettings.m_sMensaLocation, date);
