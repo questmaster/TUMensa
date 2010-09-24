@@ -15,7 +15,7 @@
 			android:layout_width="wrap_content" android:id="@+id/txt_date"
 			android:gravity="center_vertical|center_horizontal"
 			android:layout_weight="0.6" android:width="0px" android:text="Mensa
-Date" android:lineSpacingExtra="2dp">
+Date" android:lineSpacingExtra="2dp" android:textStyle="bold" android:textColor="#ffffff">
 		</TextView>
 		<Button android:layout_width="wrap_content"
 			android:id="@+id/btn_next"

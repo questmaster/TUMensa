@@ -31,7 +31,6 @@ import android.os.Message;
 import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -82,7 +81,7 @@ public class MensaMeals extends ExpandableListActivity {
 	};
 	private OnClickListener mPrevDateListener = new OnClickListener() {
 	    public void onClick(View v) {
-	      // TODO do something when the button is clicked
+	      // Setup date
 			today.add(Calendar.DAY_OF_YEAR, -1);
 			if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
 				today.add(Calendar.DAY_OF_YEAR, -1);
@@ -206,6 +205,7 @@ public class MensaMeals extends ExpandableListActivity {
 			mSettings.ReadSettings(this);
 
 			// Reread data and display it
+			updateButtonText();
 			fillData();
 
 			break;
