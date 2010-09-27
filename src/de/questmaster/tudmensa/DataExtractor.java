@@ -166,9 +166,11 @@ public class DataExtractor implements Runnable {
 						info = "";
 					}
 
-					// get additional information (extract from meal name) TODO more than one pair () possible
-					if (meal.contains("(") && meal.contains(")")) {
-						String additions = meal.substring(meal.indexOf("(") + 1, meal.indexOf(")"));
+					// get additional information (extract from meal name)
+					String mealInspect = meal;
+					while (mealInspect.contains("(") && mealInspect.contains(")")) {
+						String additions = mealInspect.substring(mealInspect.indexOf("(") + 1, mealInspect.indexOf(")"));
+						mealInspect = mealInspect.substring(mealInspect.indexOf(")") + 1); // skip current (...)
 						String[] splitAdditions = additions.split(",");
 						try {
 							for (String s1 : splitAdditions) {
@@ -211,6 +213,7 @@ public class DataExtractor implements Runnable {
 							// No number, so its nothing we care about
 						}
 					}
+					
 					// Add table entry
 					String date = days.get(day_index);
 					long rowId = 0;
