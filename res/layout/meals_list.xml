@@ -16,7 +16,7 @@
 			android:gravity="center_vertical|center_horizontal"
 			android:layout_weight="0.6" android:width="0px" android:text="Mensa
 Date"
-			style="@style/myHeaderTextViewStyle">
+			style="@style/myTextViewStyle_header">
 		</TextView>
 		<Button android:layout_width="wrap_content" android:id="@+id/btn_next"
 			android:width="0px" android:layout_weight="0.2" android:text="Next"
@@ -28,8 +28,7 @@ Date"
 		android:layout_width="fill_parent" android:layout_height="wrap_content">
 
 		<ExpandableListView android:id="@id/android:list"
-			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			style="@style/myExpandableListViewStyle" />
+			android:layout_width="fill_parent" android:layout_height="wrap_content" />
 		<TextView android:id="@id/android:empty"
 			android:layout_width="fill_parent" android:text="@string/no_meals"
 			android:layout_gravity="center_vertical|center_horizontal"

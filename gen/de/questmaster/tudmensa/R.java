@@ -78,11 +78,11 @@ public final class R {
     }
     public static final class style {
         public static final int Widget_myButton=0x7f060001;
-        public static final int myExpandableListViewItem1=0x7f060003;
+        public static final int Widget_myExpandableListViewStyle=0x7f060002;
+        public static final int myExpandableListViewItem1_counter=0x7f060003;
         public static final int myExpandableListViewItem2_meal=0x7f060004;
         public static final int myExpandableListViewItem2_price=0x7f060005;
-        public static final int myExpandableListViewStyle=0x7f060002;
-        public static final int myHeaderTextViewStyle=0x7f060006;
+        public static final int myTextViewStyle_header=0x7f060006;
         public static final int myTheme=0x7f060000;
     }
 }
