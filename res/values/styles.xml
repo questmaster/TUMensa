@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<style name="myTheme" parent="@android:style/Theme.NoTitleBar">
+	<item name="android:buttonStyle">@style/Widget.myButton</item>
+</style>
+
+<style name="Widget.myButton" parent="@android:style/Widget.Button">
+	<item name="android:background">@android:drawable/btn_default</item>
+	<item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
+ 	<item name="android:textColor">@android:color/primary_text_light</item>
+ </style>
+
+<style name="myExpandableListViewStyle" parent="@android:style/Widget.ExpandableListView">
+	<item name="android:groupIndicator">@drawable/trans_pix</item>
+</style>
+	
+<style name="myExpandableListViewItem1">
+	<item name="android:background">#6E6E6E</item>
+	<item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+</style>
+
+<style name="myExpandableListViewItem2_meal">
+	<item name="android:textSize">16sp</item>
+</style>
+<style name="myExpandableListViewItem2_price">
+</style>
+
+<style name="myHeaderTextViewStyle">
+	<item name="android:lineSpacingExtra">2dp</item>
+	<item name="android:textStyle">bold</item>
+	<item name="android:textColor">#ffffff</item>
+</style>
+
+</resources>

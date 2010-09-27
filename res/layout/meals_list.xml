@@ -4,22 +4,23 @@
 	android:orientation="vertical">
 
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-		android:layout_width="fill_parent"
-		android:gravity="center_horizontal" android:id="@+id/list_header" android:layout_height="wrap_content">
+		android:layout_width="fill_parent" android:gravity="center_horizontal"
+		android:id="@+id/list_header" android:layout_height="wrap_content">
 
-		<Button android:layout_width="wrap_content"
-			android:id="@+id/btn_prev"
-			android:layout_weight="0.2" android:width="0px" android:text="Prev" android:layout_height="fill_parent">
+		<Button android:layout_width="wrap_content" android:id="@+id/btn_prev"
+			android:layout_weight="0.2" android:width="0px" android:text="Prev"
+			android:layout_height="fill_parent">
 		</Button>
 		<TextView android:layout_height="fill_parent"
 			android:layout_width="wrap_content" android:id="@+id/txt_date"
 			android:gravity="center_vertical|center_horizontal"
 			android:layout_weight="0.6" android:width="0px" android:text="Mensa
-Date" android:lineSpacingExtra="2dp" android:textStyle="bold" android:textColor="#ffffff">
+Date"
+			style="@style/myHeaderTextViewStyle">
 		</TextView>
-		<Button android:layout_width="wrap_content"
-			android:id="@+id/btn_next"
-			android:width="0px" android:layout_weight="0.2" android:text="Next" android:layout_height="fill_parent">
+		<Button android:layout_width="wrap_content" android:id="@+id/btn_next"
+			android:width="0px" android:layout_weight="0.2" android:text="Next"
+			android:layout_height="fill_parent">
 		</Button>
 
 	</LinearLayout>
@@ -28,7 +29,7 @@ Date" android:lineSpacingExtra="2dp" android:textStyle="bold" android:textColor=
 
 		<ExpandableListView android:id="@id/android:list"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:groupIndicator="@drawable/trans_pix" />
+			style="@style/myExpandableListViewStyle" />
 		<TextView android:id="@id/android:empty"
 			android:layout_width="fill_parent" android:text="@string/no_meals"
 			android:layout_gravity="center_vertical|center_horizontal"

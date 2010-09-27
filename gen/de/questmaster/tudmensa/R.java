@@ -27,16 +27,16 @@ public final class R {
         public static final int trans_pix=0x7f020009;
     }
     public static final class id {
-        public static final int btn_next=0x7f060003;
-        public static final int btn_prev=0x7f060001;
-        public static final int counter=0x7f060004;
-        public static final int list_header=0x7f060000;
-        public static final int meal=0x7f060008;
-        public static final int meal_type=0x7f060006;
-        public static final int price=0x7f060009;
-        public static final int txt_date=0x7f060002;
-        public static final int widget35=0x7f060005;
-        public static final int widget37=0x7f060007;
+        public static final int btn_next=0x7f070003;
+        public static final int btn_prev=0x7f070001;
+        public static final int counter=0x7f070004;
+        public static final int list_header=0x7f070000;
+        public static final int meal=0x7f070008;
+        public static final int meal_type=0x7f070006;
+        public static final int price=0x7f070009;
+        public static final int txt_date=0x7f070002;
+        public static final int widget35=0x7f070005;
+        public static final int widget37=0x7f070007;
     }
     public static final class layout {
         public static final int meals_list=0x7f030000;
@@ -75,5 +75,14 @@ public final class R {
         public static final int sweetening=0x7f05001a;
         public static final int vegie=0x7f05000e;
         public static final int waxed=0x7f050016;
+    }
+    public static final class style {
+        public static final int Widget_myButton=0x7f060001;
+        public static final int myExpandableListViewItem1=0x7f060003;
+        public static final int myExpandableListViewItem2_meal=0x7f060004;
+        public static final int myExpandableListViewItem2_price=0x7f060005;
+        public static final int myExpandableListViewStyle=0x7f060002;
+        public static final int myHeaderTextViewStyle=0x7f060006;
+        public static final int myTheme=0x7f060000;
     }
 }
