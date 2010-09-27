@@ -17,17 +17,27 @@ public final class R {
     public static final class attr {
     }
     public static final class drawable {
-        public static final int essen_d=0x7f020000;
-        public static final int essenlogo=0x7f020001;
-        public static final int ic_menu_refresh=0x7f020002;
-        public static final int meal_f_d=0x7f020003;
-        public static final int meal_g_d=0x7f020004;
-        public static final int meal_k_d=0x7f020005;
-        public static final int meal_r_d=0x7f020006;
-        public static final int meal_rs_d=0x7f020007;
-        public static final int meal_s_d=0x7f020008;
-        public static final int meal_v_d=0x7f020009;
-        public static final int trans_pix=0x7f02000a;
+        public static final int essen=0x7f020000;
+        public static final int essen_d=0x7f020001;
+        public static final int essenlogo=0x7f020002;
+        public static final int ic_menu_back=0x7f020003;
+        public static final int ic_menu_forward=0x7f020004;
+        public static final int ic_menu_refresh=0x7f020005;
+        public static final int meal_f=0x7f020006;
+        public static final int meal_f_d=0x7f020007;
+        public static final int meal_g=0x7f020008;
+        public static final int meal_g_d=0x7f020009;
+        public static final int meal_k=0x7f02000a;
+        public static final int meal_k_d=0x7f02000b;
+        public static final int meal_r=0x7f02000c;
+        public static final int meal_r_d=0x7f02000d;
+        public static final int meal_rs=0x7f02000e;
+        public static final int meal_rs_d=0x7f02000f;
+        public static final int meal_s=0x7f020010;
+        public static final int meal_s_d=0x7f020011;
+        public static final int meal_v=0x7f020012;
+        public static final int meal_v_d=0x7f020013;
+        public static final int trans_pix=0x7f020014;
     }
     public static final class id {
         public static final int btn_next=0x7f070003;
@@ -91,6 +101,7 @@ public final class R {
         public static final int Widget_myButton=0x7f060002;
         public static final int Widget_myExpandableListViewStyle=0x7f060003;
         /**  Layout 
+ #00cc0a #6E6E6E 
          */
         public static final int myExpandableListViewItem1_counter=0x7f060004;
         public static final int myExpandableListViewItem2_meal=0x7f060005;

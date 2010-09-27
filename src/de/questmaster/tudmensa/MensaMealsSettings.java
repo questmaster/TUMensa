@@ -70,8 +70,8 @@ public class MensaMealsSettings extends PreferenceActivity {
     cb.setSummary (R.string.pref_DeleteOldDataDescr);
     
     pcDB.addPreference (cb);
-/*
-    // Gruppe Themes
+
+ /*   // Gruppe Themes
     PreferenceCategory pcTheme = new PreferenceCategory (this);
     pcTheme.setTitle (R.string.pref_cat_themes);
     root.addPreference (pcTheme);

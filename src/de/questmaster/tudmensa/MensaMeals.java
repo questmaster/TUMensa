@@ -156,7 +156,9 @@ public class MensaMeals extends ExpandableListActivity {
 
 	    // Register the onClick listener with the implementation above
 	    buttonPrev.setOnClickListener(mPrevDateListener);
+	    buttonPrev.setBackgroundResource(R.drawable.ic_menu_back);
 	    buttonNext.setOnClickListener(mNextDateListener);
+	    buttonNext.setBackgroundResource(R.drawable.ic_menu_forward);
 	    updateButtonText();
 	}
 
@@ -210,7 +212,7 @@ public class MensaMeals extends ExpandableListActivity {
 		switch (requestCode) {
 		case ON_SETTINGS_CHANGE:
 			mSettings.ReadSettings(this);
-
+			
 			// Reread data and display it
 			updateButtonText();
 			fillData();
@@ -317,16 +319,11 @@ public class MensaMeals extends ExpandableListActivity {
 			} else
 				pos++;
 		}
-//		setTitle(getResources().getString(R.string.menu_for) + " "
-//				+ DateFormat.getDateFormat(this).format(today.getTime()) + ", "
-//				+ getResources().getStringArray(R.array.MensaLocations)[pos]);
-
 	    
 	    // Update label
 	    TextView labelDay = (TextView)findViewById(R.id.txt_date);
 	    labelDay.setText(getResources().getStringArray(R.array.MensaLocations)[pos] + "\n"
 	    		+ DateFormat.format("EEEE", today.getTime()) + ", " + DateFormat.getDateFormat(this).format(today.getTime()));
-//	    labelDay.setText(DateFormat.format("EEEE", today.getTime()));
 	}
 	
 	private void fillData() {

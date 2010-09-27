@@ -4,7 +4,7 @@
 <!-- Themes -->
 
 <style name="myTheme" parent="@android:style/Theme.NoTitleBar">
-	<item name="android:buttonStyle">@style/Widget.myButton</item>
+	<item name="android:buttonStyle">@style/Widget.myButton</item> 
 	<item name="android:expandableListViewStyle">@style/Widget.myExpandableListViewStyle</item>
 </style>
 
@@ -14,11 +14,9 @@
 </style>
 
 <!-- Widgets -->
-
+ 
 <style name="Widget.myButton" parent="@android:style/Widget.Button">
-	<item name="android:background">@android:drawable/btn_default</item>
-	<item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
- 	<item name="android:textColor">@android:color/primary_text_light</item>
+ 	<item name="android:textColor">@android:color/transparent</item>
  </style>
 
 <style name="Widget.myExpandableListViewStyle" parent="@android:style/Widget.ExpandableListView">
@@ -29,7 +27,7 @@
 	
 <style name="myExpandableListViewItem1_counter" parent="@android:style/TextAppearance.Medium">
 	<item name="android:textColor">#FFFFFF</item>
-	<item name="android:background">#6E6E6E</item>
+	<item name="android:background">#00ae09</item> <!-- #00cc0a #6E6E6E -->
 </style>
 
 <style name="myExpandableListViewItem2_meal" parent="@android:style/TextAppearance.Widget.TextView">
