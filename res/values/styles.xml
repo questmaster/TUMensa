@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+<!-- Themes -->
+
 <style name="myTheme" parent="@android:style/Theme.NoTitleBar">
 	<item name="android:buttonStyle">@style/Widget.myButton</item>
 	<item name="android:expandableListViewStyle">@style/Widget.myExpandableListViewStyle</item>
 </style>
+
+<style name="myThemeLight" parent="@android:style/Theme.Light.NoTitleBar">
+	<item name="android:buttonStyle">@style/Widget.myButton</item>
+	<item name="android:expandableListViewStyle">@style/Widget.myExpandableListViewStyle</item>
+</style>
+
+<!-- Widgets -->
 
 <style name="Widget.myButton" parent="@android:style/Widget.Button">
 	<item name="android:background">@android:drawable/btn_default</item>
@@ -14,22 +24,25 @@
 <style name="Widget.myExpandableListViewStyle" parent="@android:style/Widget.ExpandableListView">
 	<item name="android:groupIndicator">@drawable/trans_pix</item>
 </style>
+
+<!-- Layout -->
 	
-<style name="myExpandableListViewItem1_counter">
+<style name="myExpandableListViewItem1_counter" parent="@android:style/TextAppearance.Medium">
+	<item name="android:textColor">#FFFFFF</item>
 	<item name="android:background">#6E6E6E</item>
-	<item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
 </style>
 
-<style name="myExpandableListViewItem2_meal">
-	<item name="android:textSize">16sp</item>
+<style name="myExpandableListViewItem2_meal" parent="@android:style/TextAppearance.Widget.TextView">
+	<item name="android:textColor">?android:textColorSecondary</item>
 </style>
-<style name="myExpandableListViewItem2_price">
+<style name="myExpandableListViewItem2_price" parent="@android:style/TextAppearance.Small">
+	<item name="android:textSize">12sp</item>
 </style>
 
-<style name="myTextViewStyle_header">
+<style name="myTextViewStyle_header" parent="@android:style/TextAppearance">
 	<item name="android:lineSpacingExtra">2dp</item>
 	<item name="android:textStyle">bold</item>
-	<item name="android:textColor">#ffffff</item>
+	<item name="android:textSize">14sp</item>
 </style>
 
 </resources>

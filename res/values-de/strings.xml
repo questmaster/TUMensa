@@ -36,6 +36,12 @@
 
 <string name="delete_db">Lösche DB</string>
 <string name="pref_AutoUpdateLabel">Automatisches Update</string>
-    <string name="pref_AutoUpdateDescr">Aktiviert das automatischen Update der Mensadaten.</string>
+    <string name="pref_AutoUpdateDescr">Aktiviert das automatische Update des Mensamenüs.</string>
 <string name="menu_for">Speisekarte für</string>
+<string name="pref_DeleteOldDataDescr">Löscht Menüs der letzten und vorherigen Wochen.</string>
+    <string name="pref_DeleteOldDataLabel">Alte Menüs löschen</string>
+    <string name="pref_cat_db">Datenbank</string>
+<string name="pref_cat_themes">Thema</string>
+    <string name="pref_ThemesLabel">Thema auswählen</string>
+    <string name="pref_ThemesSummary">Änderung wird nach Neustart wirksam.</string>
 </resources>

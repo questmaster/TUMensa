@@ -12,7 +12,9 @@ import android.preference.PreferenceScreen;
 
 public class MensaMealsSettings extends PreferenceActivity {
 	  public static final String PREF_KEY_MENSA_LOCATION    = "mensa_location";
-	  public static final String PREF_KEY_AUTO_UPDATE    = "auto_update";
+	  public static final String PREF_KEY_AUTO_UPDATE    	= "auto_update";
+	  public static final String PREF_KEY_DELETE_OLD_DATA	= "del_old_data";
+	  public static final String PREF_KEY_THEMES			= "themes";
     
   // ----------------------------------------------------------------------------
   @Override protected void onCreate (Bundle savedInstanceState)
@@ -29,7 +31,7 @@ public class MensaMealsSettings extends PreferenceActivity {
   {
     PreferenceScreen root = getPreferenceManager ().createPreferenceScreen (this);
 
-    // Gruppe
+    // Gruppe Mensa
     PreferenceCategory pcMensa = new PreferenceCategory (this);
     pcMensa.setTitle (R.string.pref_cat_mensa);
     root.addPreference (pcMensa);
@@ -42,9 +44,8 @@ public class MensaMealsSettings extends PreferenceActivity {
     cb.setSummary (R.string.pref_AutoUpdateDescr);
     
     pcMensa.addPreference (cb);
-
-    
-    // Sort order
+   
+    // Mensa Location
     ListPreference lst = new ListPreference (this);
     lst.setEntries (R.array.MensaLocations);
     lst.setEntryValues (R.array.MensaLocationsValues);
@@ -56,6 +57,37 @@ public class MensaMealsSettings extends PreferenceActivity {
 
     pcMensa.addPreference (lst);
 
+    // Gruppe Database
+    PreferenceCategory pcDB = new PreferenceCategory (this);
+    pcDB.setTitle (R.string.pref_cat_db);
+    root.addPreference (pcDB);
+
+    // Manual Update 
+    cb = new CheckBoxPreference (this);
+    cb.setDefaultValue  (true);
+    cb.setKey     (PREF_KEY_DELETE_OLD_DATA);
+    cb.setTitle   (R.string.pref_DeleteOldDataLabel);
+    cb.setSummary (R.string.pref_DeleteOldDataDescr);
+    
+    pcDB.addPreference (cb);
+/*
+    // Gruppe Themes
+    PreferenceCategory pcTheme = new PreferenceCategory (this);
+    pcTheme.setTitle (R.string.pref_cat_themes);
+    root.addPreference (pcTheme);
+
+    // Theme
+    lst = new ListPreference (this);
+    lst.setEntries (R.array.Themes);
+    lst.setEntryValues (R.array.ThemesValues);
+    lst.setDefaultValue  ("dark");
+    lst.setDialogTitle (R.string.pref_ThemesLabel);
+    lst.setTitle (R.string.pref_ThemesLabel);
+    lst.setKey (PREF_KEY_THEMES);
+    lst.setSummary (R.string.pref_ThemesSummary);
+
+    pcTheme.addPreference (lst);
+*/
 //    // Date format
 //    lst = new ListPreference (this);
 //    lst.setEntries (R.array.asDateFormatOptions);
@@ -166,13 +198,13 @@ public class MensaMealsSettings extends PreferenceActivity {
   public static class Settings
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   {
-    public String  m_sMensaLocation;
+    public String  m_sMensaLocation 	 = "stadtmitte";
     public boolean  m_bAutoUpdate        = true;
-//    public boolean  m_bShowPriority    = true;
+    public boolean  m_bDeleteOldData     = true;
 //    public boolean  m_bExpandAll       = false;
 //    public boolean  m_bShowCreatedTime = true;
 //    public int      m_iSortOrder;
-//    public String   m_sDateFormat;
+    public String   m_sThemes			 = "dark";
 //    public String   m_sTimeFormat;
 
     // ----------------------------------------------------------------------------
@@ -184,15 +216,15 @@ public class MensaMealsSettings extends PreferenceActivity {
       if (sharedPref != null)
       {
     	  m_bAutoUpdate      = sharedPref.getBoolean (MensaMealsSettings.PREF_KEY_AUTO_UPDATE, m_bAutoUpdate);
-//        m_bShowPriority    = sharedPref.getBoolean (MensaMealsSettings.__PREF_KEY_SHOW_PRIORITY, m_bShowPriority);
+          m_bDeleteOldData   = sharedPref.getBoolean (MensaMealsSettings.PREF_KEY_DELETE_OLD_DATA, m_bDeleteOldData);
 //        m_bExpandAll       = sharedPref.getBoolean (MensaMealsSettings.__PREF_KEY_EXPAND_ALL, m_bExpandAll);
 //        m_bShowCreatedTime = sharedPref.getBoolean (MensaMealsSettings.__PREF_KEY_SHOW_CREATED, m_bShowCreatedTime);
         
-    	  m_sMensaLocation = sharedPref.getString (MensaMealsSettings.PREF_KEY_MENSA_LOCATION, "stadtmitte"); 
+    	  m_sMensaLocation = sharedPref.getString (MensaMealsSettings.PREF_KEY_MENSA_LOCATION, m_sMensaLocation); 
         
 //        m_iSortOrder = Integer.parseInt (sSortOrder);
 //        
-//        m_sDateFormat = sharedPref.getString (MensaMealsSettings.__PREF_KEY_DATE_FORMAT, __DATE_FORMAT_DEFAULT);
+          m_sThemes = sharedPref.getString (MensaMealsSettings.PREF_KEY_THEMES, m_sThemes);
 //        m_sTimeFormat = sharedPref.getString (MensaMealsSettings.__PREF_KEY_TIME_FORMAT, __TIME_FORMAT_DEFAULT);
       }
     }

@@ -123,8 +123,21 @@ public class MensaMeals extends ExpandableListActivity {
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.meals_list);
+		super.onCreate(savedInstanceState);		
+
+		// Settings
+		mSettings.ReadSettings(this);
+
+		// Init Database
+		mDbHelper = new MealsDbAdapter(this);
+		mDbHelper.open();
+
+//		// TODO setup Theme
+//		if (mSettings.m_sThemes.equals("dark")) {
+//			this.setTheme(R.style.myTheme);
+//		} else if (mSettings.m_sThemes.equals("light")) {
+//			this.setTheme(R.style.myThemeLight);
+//		}
 		
 		// Setup date
 		today = Calendar.getInstance();
@@ -133,14 +146,10 @@ public class MensaMeals extends ExpandableListActivity {
 		} else if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
 			today.add(Calendar.DAY_OF_YEAR, 1);
 		}
+
+		// Set Content
+		setContentView(R.layout.meals_list);
 		
-		// Settings
-		mSettings.ReadSettings(this);
-
-		// Init Database
-		mDbHelper = new MealsDbAdapter(this);
-		mDbHelper.open();
-
 		// Capture our buttons from layout
 	    Button buttonPrev = (Button)findViewById(R.id.btn_prev);
 	    Button buttonNext = (Button)findViewById(R.id.btn_next);
@@ -157,7 +166,7 @@ public class MensaMeals extends ExpandableListActivity {
 		MenuItem mItem = null;
 
 		mItem = menu.add(0, UPDATE_ID, 0, R.string.menu_update);
-		mItem.setIcon(android.R.drawable.ic_menu_rotate/* ic_menu_refresh */);
+		mItem.setIcon(R.drawable.ic_menu_refresh);
 
 		mItem = menu.add(0, SETTINGS_ID, 1, R.string.menu_settings);
 		// mItem.setShortcut('3', 's');

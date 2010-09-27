@@ -33,7 +33,13 @@
     <string name="sweetening">sweetening</string>
 
 <string name="delete_db">Delete DB</string>
-<string name="pref_AutoUpdateLabel">Auto Update</string>
-    <string name="pref_AutoUpdateDescr">Enables automatic updates, if data is missing.</string>
+<string name="pref_AutoUpdateLabel">Auto update</string>
+    <string name="pref_AutoUpdateDescr">Enables automatic updates, if menus are missing.</string>
 <string name="menu_for">Menu of</string>
+<string name="pref_DeleteOldDataDescr">Deletes data from last week and before.</string>
+    <string name="pref_DeleteOldDataLabel">Delete old menus</string>
+    <string name="pref_cat_db">Database</string>
+<string name="pref_cat_themes">Themes</string>
+    <string name="pref_ThemesLabel">Select Theme</string>
+    <string name="pref_ThemesSummary">Changes are effective  after restart.</string>
 </resources>

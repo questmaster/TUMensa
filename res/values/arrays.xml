@@ -14,4 +14,12 @@
         <item>haardtring</item>
         <item>dieburg</item>  
     </string-array>
+    <string-array name="Themes">
+        <item>Dark</item>
+        <item>Light</item>
+    </string-array>
+    <string-array name="ThemesValues">
+        <item>dark</item>
+        <item>light</item>
+    </string-array>
 </resources>

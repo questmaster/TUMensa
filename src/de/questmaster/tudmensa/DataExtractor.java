@@ -14,6 +14,7 @@ public class DataExtractor implements Runnable {
 	private String firstDate = null;
 	private String location = null;
 	private boolean work_done = false;
+	private MensaMealsSettings.Settings mSettings = new MensaMealsSettings.Settings();
 
 	public DataExtractor(MensaMeals c, String location) {
 		this.cActivity = c;
@@ -23,8 +24,12 @@ public class DataExtractor implements Runnable {
 
 	public void run() {
 		work_done = false;
+
 		parseTable(getWebPage(location, "week"));
 		parseTable(getWebPage(location, "nextweek"));
+		if (mSettings.m_bDeleteOldData)
+			mDbHelper.deleteOldMeal(firstDate);
+		
 		work_done = true;
 		cActivity.handler.sendEmptyMessage(0);
 	}
@@ -277,7 +282,6 @@ public class DataExtractor implements Runnable {
 
 			// </table>: end -> clean old entries
 			if (s.equals("</table>")) {
-				mDbHelper.deleteOldMeal(firstDate);
 				break;
 			}
 		}

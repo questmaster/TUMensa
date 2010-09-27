@@ -11,20 +11,23 @@ public final class R {
     public static final class array {
         public static final int MensaLocations=0x7f040000;
         public static final int MensaLocationsValues=0x7f040001;
+        public static final int Themes=0x7f040002;
+        public static final int ThemesValues=0x7f040003;
     }
     public static final class attr {
     }
     public static final class drawable {
         public static final int essen_d=0x7f020000;
         public static final int essenlogo=0x7f020001;
-        public static final int meal_f_d=0x7f020002;
-        public static final int meal_g_d=0x7f020003;
-        public static final int meal_k_d=0x7f020004;
-        public static final int meal_r_d=0x7f020005;
-        public static final int meal_rs_d=0x7f020006;
-        public static final int meal_s_d=0x7f020007;
-        public static final int meal_v_d=0x7f020008;
-        public static final int trans_pix=0x7f020009;
+        public static final int ic_menu_refresh=0x7f020002;
+        public static final int meal_f_d=0x7f020003;
+        public static final int meal_g_d=0x7f020004;
+        public static final int meal_k_d=0x7f020005;
+        public static final int meal_r_d=0x7f020006;
+        public static final int meal_rs_d=0x7f020007;
+        public static final int meal_s_d=0x7f020008;
+        public static final int meal_v_d=0x7f020009;
+        public static final int trans_pix=0x7f02000a;
     }
     public static final class id {
         public static final int btn_next=0x7f070003;
@@ -66,9 +69,15 @@ public final class R {
         public static final int poultry=0x7f050009;
         public static final int pref_AutoUpdateDescr=0x7f05001d;
         public static final int pref_AutoUpdateLabel=0x7f05001c;
+        public static final int pref_DeleteOldDataDescr=0x7f05001f;
+        public static final int pref_DeleteOldDataLabel=0x7f050020;
         public static final int pref_MensaLocationLabel=0x7f050006;
         public static final int pref_MensaLocationSummary=0x7f050005;
+        public static final int pref_ThemesLabel=0x7f050023;
+        public static final int pref_ThemesSummary=0x7f050024;
+        public static final int pref_cat_db=0x7f050021;
         public static final int pref_cat_mensa=0x7f050004;
+        public static final int pref_cat_themes=0x7f050022;
         public static final int preservative=0x7f050012;
         public static final int settings_name=0x7f050000;
         public static final int sulphur_treated=0x7f050015;
@@ -77,12 +86,19 @@ public final class R {
         public static final int waxed=0x7f050016;
     }
     public static final class style {
-        public static final int Widget_myButton=0x7f060001;
-        public static final int Widget_myExpandableListViewStyle=0x7f060002;
-        public static final int myExpandableListViewItem1_counter=0x7f060003;
-        public static final int myExpandableListViewItem2_meal=0x7f060004;
-        public static final int myExpandableListViewItem2_price=0x7f060005;
-        public static final int myTextViewStyle_header=0x7f060006;
+        /**  Widgets 
+         */
+        public static final int Widget_myButton=0x7f060002;
+        public static final int Widget_myExpandableListViewStyle=0x7f060003;
+        /**  Layout 
+         */
+        public static final int myExpandableListViewItem1_counter=0x7f060004;
+        public static final int myExpandableListViewItem2_meal=0x7f060005;
+        public static final int myExpandableListViewItem2_price=0x7f060006;
+        public static final int myTextViewStyle_header=0x7f060007;
+        /**  Themes 
+         */
         public static final int myTheme=0x7f060000;
+        public static final int myThemeLight=0x7f060001;
     }
 }
