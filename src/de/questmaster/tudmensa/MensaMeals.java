@@ -47,7 +47,6 @@ public class MensaMeals extends ExpandableListActivity {
 	public static final int ON_SETTINGS_CHANGE = 0;
 
 	private MensaMealsSettings.Settings mSettings = new MensaMealsSettings.Settings();
-
 	protected MealsDbAdapter mDbHelper;
 
 	private ProgressDialog pd = null;
@@ -63,6 +62,7 @@ public class MensaMeals extends ExpandableListActivity {
 	};
 
 	private Calendar today = Calendar.getInstance();
+	private String oldTheme = "";
 
 	public class CustomCursorTreeAdapter extends SimpleCursorTreeAdapter {
 
@@ -87,9 +87,10 @@ public class MensaMeals extends ExpandableListActivity {
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		// Read settings
+		mSettings.ReadSettings(this);
 
-		// TODO setup Theme
+		// Setup Theme
 		if (mSettings.m_sThemes.equals("dark")) {
 			setTheme(R.style.myTheme);
 		} else if (mSettings.m_sThemes.equals("light")) {
@@ -97,11 +98,9 @@ public class MensaMeals extends ExpandableListActivity {
 		}
 		
 		// Set Content
+		super.onCreate(savedInstanceState);
 		setContentView(R.layout.meals_list);
-
-		// Settings
-		mSettings.ReadSettings(this);
-
+		
 		// Init Database
 		mDbHelper = new MealsDbAdapter(this);
 		mDbHelper.open();
@@ -131,7 +130,6 @@ public class MensaMeals extends ExpandableListActivity {
 		mItem.setIcon(R.drawable.ic_menu_refresh);
 
 		mItem = menu.add(0, SETTINGS_ID, 1, R.string.menu_settings);
-		// mItem.setShortcut('3', 's');
 		mItem.setIcon(android.R.drawable.ic_menu_preferences);
 
 		return result;
@@ -153,6 +151,8 @@ public class MensaMeals extends ExpandableListActivity {
 			// To be able to check for new data if mensa changed. 
 			restart = false;
 
+			// To be able to check Theme change
+			oldTheme = mSettings.m_sThemes;
 			break;
 		}
 
@@ -165,6 +165,10 @@ public class MensaMeals extends ExpandableListActivity {
 		case ON_SETTINGS_CHANGE:
 			mSettings.ReadSettings(this);
 
+			if (!mSettings.m_sThemes.equals(oldTheme)) {
+				// TODO Theme change -> change pictures
+			}
+			
 			// Reread data and display it
 			updateButtonText();
 			fillData();
@@ -214,8 +218,18 @@ public class MensaMeals extends ExpandableListActivity {
 	}
 
 	@Override
+	protected void onPause() {
+        super.onPause();
+		mDbHelper.close();
+    }
+	
+	@Override
 	protected void onResume() {
 		super.onResume();
+
+		// Init Database
+		mDbHelper = new MealsDbAdapter(this);
+		mDbHelper.open();
 
 		// expand groups
 		fillData();

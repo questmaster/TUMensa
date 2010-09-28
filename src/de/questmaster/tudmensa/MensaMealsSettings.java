@@ -24,7 +24,6 @@ public class MensaMealsSettings extends PreferenceActivity {
 		public String m_sMensaLocation = "stadtmitte";
 		public boolean m_bAutoUpdate = true;
 		public boolean m_bDeleteOldData = true;
-// 		public int m_iSortOrder;
 		public String m_sThemes = "dark";
 
 
@@ -38,8 +37,6 @@ public class MensaMealsSettings extends PreferenceActivity {
 				m_bDeleteOldData = sharedPref.getBoolean(res.getString(R.string.PREF_KEY_DELETE_OLD_DATA), m_bDeleteOldData);
 
 				m_sMensaLocation = sharedPref.getString(res.getString(R.string.PREF_KEY_MENSA_LOCATION), m_sMensaLocation);
-
-// 				m_iSortOrder = Integer.parseInt (sSortOrder);
 
 				m_sThemes = sharedPref.getString(res.getString(R.string.PREF_KEY_THEMES), m_sThemes);
 			}

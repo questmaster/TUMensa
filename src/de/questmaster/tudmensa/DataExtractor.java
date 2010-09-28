@@ -139,7 +139,7 @@ public class DataExtractor implements Runnable {
 					meal = htmlDecode(meal);
 
 					String info;
-					// create type drawable
+					// create type drawable TODO select pic depending on theme
 					if (type.equals("F")) {
 						type = String.valueOf(R.drawable.meal_f_d);
 						info = cActivity.getResources().getString(R.string.fish);
@@ -250,6 +250,7 @@ public class DataExtractor implements Runnable {
 		out = out.replaceAll("&amp;", "&");
 		out = out.replaceAll("&quot;", "\"");
 		out = out.replaceAll("&acute;", "\'");
+		out = out.replaceAll("&egrave;", "é");
 
 		return out;
 	}
