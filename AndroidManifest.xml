@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.questmaster.tudmensa" android:versionCode="12" android:versionName="0.6">
-    <application android:icon="@drawable/essenlogo" android:label="@string/app_name" android:allowClearUserData="true" android:theme="@style/myTheme">
+    <application android:icon="@drawable/essenlogo" android:label="@string/app_name" android:allowClearUserData="true">
         <activity android:name=".MensaMeals" android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

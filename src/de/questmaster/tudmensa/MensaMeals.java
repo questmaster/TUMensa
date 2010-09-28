@@ -32,7 +32,6 @@ import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.SimpleCursorTreeAdapter;
@@ -59,36 +58,6 @@ public class MensaMeals extends ExpandableListActivity {
 			pd.dismiss();
 			// updateView after update. Don't do it for an update after startup
 			restart = true;
-			fillData();
-		}
-	};
-
-	// UI handling
-	private OnClickListener mNextDateListener = new OnClickListener() {
-		public void onClick(View v) {
-			// Setup date
-			today.add(Calendar.DAY_OF_YEAR, 1);
-			if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
-				today.add(Calendar.DAY_OF_YEAR, 2);
-			} else if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-				today.add(Calendar.DAY_OF_YEAR, 1);
-			}
-			updateButtonText();
-
-			fillData();
-		}
-	};
-	private OnClickListener mPrevDateListener = new OnClickListener() {
-		public void onClick(View v) {
-			// Setup date
-			today.add(Calendar.DAY_OF_YEAR, -1);
-			if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
-				today.add(Calendar.DAY_OF_YEAR, -1);
-			} else if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-				today.add(Calendar.DAY_OF_YEAR, -2);
-			}
-			updateButtonText();
-
 			fillData();
 		}
 	};
@@ -120,15 +89,18 @@ public class MensaMeals extends ExpandableListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// Settings
-		mSettings.ReadSettings(this);
-
 		// TODO setup Theme
 		if (mSettings.m_sThemes.equals("dark")) {
-			this.setTheme(R.style.myTheme);
+			setTheme(R.style.myTheme);
 		} else if (mSettings.m_sThemes.equals("light")) {
-			this.setTheme(R.style.myThemeLight);
+			setTheme(R.style.myThemeLight);
 		}
+		
+		// Set Content
+		setContentView(R.layout.meals_list);
+
+		// Settings
+		mSettings.ReadSettings(this);
 
 		// Init Database
 		mDbHelper = new MealsDbAdapter(this);
@@ -142,17 +114,10 @@ public class MensaMeals extends ExpandableListActivity {
 			today.add(Calendar.DAY_OF_YEAR, 1);
 		}
 
-		// Set Content
-		setContentView(R.layout.meals_list);
-
-		// Capture our buttons from layout
+		// Capture our buttons from layout and set them up
 		Button buttonPrev = (Button) findViewById(R.id.btn_prev);
 		Button buttonNext = (Button) findViewById(R.id.btn_next);
-
-		// Register the onClick listener with the implementation above
-		buttonPrev.setOnClickListener(mPrevDateListener);
 		buttonPrev.setBackgroundResource(R.drawable.ic_menu_back);
-		buttonNext.setOnClickListener(mNextDateListener);
 		buttonNext.setBackgroundResource(R.drawable.ic_menu_forward);
 		updateButtonText();
 	}
@@ -168,10 +133,6 @@ public class MensaMeals extends ExpandableListActivity {
 		mItem = menu.add(0, SETTINGS_ID, 1, R.string.menu_settings);
 		// mItem.setShortcut('3', 's');
 		mItem.setIcon(android.R.drawable.ic_menu_preferences);
-
-		// // XXX DEBUG
-		// mItem = menu.add(0, CLEAR_DB_ID, 2, R.string.delete_db);
-		// mItem.setIcon(android.R.drawable.ic_menu_delete);
 
 		return result;
 	}
@@ -189,14 +150,9 @@ public class MensaMeals extends ExpandableListActivity {
 			iSettings.setClass(this, MensaMealsSettings.class);
 			startActivityForResult(iSettings, ON_SETTINGS_CHANGE);
 
-			// To be able to check for new data if mensa changed. (FIXME also
-			// enables further auto-updates)
+			// To be able to check for new data if mensa changed. 
 			restart = false;
 
-			break;
-
-		case CLEAR_DB_ID:
-			mDbHelper.deleteAllMeal();
 			break;
 		}
 
@@ -221,6 +177,32 @@ public class MensaMeals extends ExpandableListActivity {
 	public void onGroupCollapse(int groupPosition) {
 		// keep the Groups expanded
 		getExpandableListView().expandGroup(groupPosition);
+	}
+
+	public void onClickNextButton(View v) {
+		// Setup date
+		today.add(Calendar.DAY_OF_YEAR, 1);
+		if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+			today.add(Calendar.DAY_OF_YEAR, 2);
+		} else if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+			today.add(Calendar.DAY_OF_YEAR, 1);
+		}
+		updateButtonText();
+
+		fillData();
+	}
+
+	public void onClickPrevButton(View v) {
+		// Setup date
+		today.add(Calendar.DAY_OF_YEAR, -1);
+		if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+			today.add(Calendar.DAY_OF_YEAR, -1);
+		} else if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+			today.add(Calendar.DAY_OF_YEAR, -2);
+		}
+		updateButtonText();
+
+		fillData();
 	}
 
 	@Override
@@ -255,26 +237,26 @@ public class MensaMeals extends ExpandableListActivity {
 		return false;
 	}
 
-	// @Override
-	// // TODO Wechsele Tag mit links/rechts wisch.
-	// public boolean onTouchEvent(MotionEvent evt) {
-	// // switch (evt.getAction()) {
-	// // case MotionEvent.ACTION_MOVE:
-	// switch (evt.getEdgeFlags()) {
-	// case MotionEvent.EDGE_LEFT:
-	// System.err.printf("Left wisch.");
-	//
-	// return true;
-	// case MotionEvent.EDGE_RIGHT:
-	// System.err.printf("Right wisch.");
-	//
-	// return true;
-	// }
-	// // break;
-	// // }
-	//
-	// return false;
-	// }
+//	 @Override
+//	 // TODO Wechsele Tag mit links/rechts wisch.
+//	 public boolean onTouchEvent(MotionEvent evt) {
+//	 // switch (evt.getAction()) {
+//	 // case MotionEvent.ACTION_MOVE:
+//	 switch (evt.getEdgeFlags()) {
+//	 case MotionEvent.EDGE_LEFT:
+//	 System.err.printf("Left wisch.");
+//	
+//	 return true;
+//	 case MotionEvent.EDGE_RIGHT:
+//	 System.err.printf("Right wisch.");
+//	
+//	 return true;
+//	 }
+//	 // break;
+//	 // }
+//	
+//	 return false;
+//	 }
 
 	private void updateButtonText() {
 		// Prepare times
