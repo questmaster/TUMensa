@@ -24,6 +24,7 @@ import android.app.ExpandableListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
@@ -62,7 +63,6 @@ public class MensaMeals extends ExpandableListActivity {
 	};
 
 	private Calendar mToday = Calendar.getInstance();
-	private String mOldTheme = "";
 	protected Context mContext = this;
 
 	public class CustomCursorTreeAdapter extends SimpleCursorTreeAdapter {
@@ -152,8 +152,6 @@ public class MensaMeals extends ExpandableListActivity {
 			// To be able to check for new data if mensa changed. 
 			mRestart = false;
 
-			// To be able to check Theme change
-			mOldTheme = mSettings.m_sThemes;
 			break;
 		}
 
@@ -166,9 +164,10 @@ public class MensaMeals extends ExpandableListActivity {
 		case ON_SETTINGS_CHANGE:
 			mSettings.ReadSettings(this);
 
-			if (!mSettings.m_sThemes.equals(mOldTheme)) {
-				// TODO Theme change -> change pictures
-			}
+			// WORKAROUND: restart activity
+				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 			
 			// Reread data and display it
 			updateButtonText();

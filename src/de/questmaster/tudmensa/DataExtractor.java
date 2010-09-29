@@ -20,6 +20,9 @@ public class DataExtractor implements Runnable {
 		this.mActivity = c;
 		this.mDbHelper = c.mDbHelper;
 		this.mLocation = location;
+
+		// Read settings
+		mSettings.ReadSettings(c);
 	}
 
 	public void run() {

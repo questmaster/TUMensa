@@ -41,7 +41,7 @@
     <string name="pref_cat_db">Database</string>
 <string name="pref_cat_themes">Themes</string>
     <string name="pref_ThemesLabel">Select Theme</string>
-    <string name="pref_ThemesSummary">Changes are effective  after restart.</string>
+    <string name="pref_ThemesSummary">Select a theme.</string>
 <string name="PREF_KEY_DELETE_OLD_DATA">del_old_data</string>
     <string name="PREF_KEY_MENSA_LOCATION">mensa_location</string>
     <string name="PREF_KEY_THEMES">themes</string>

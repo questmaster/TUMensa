@@ -213,7 +213,7 @@ public class MealCursorWrapper implements Cursor {
 		String result = mCursor.getString(columnIndex);
 
 		if (columnIndex == this.getColumnIndex(MealsDbAdapter.KEY_TYPE)) {
-			// Setup Theme
+			// Theme support
 			if (mSettings.m_sThemes.equals("dark")) {
 				// create type drawable
 				if (result.equals("F")) {
