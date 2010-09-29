@@ -83,8 +83,10 @@ public final class R {
         public static final int pig=0x7f06000d;
         public static final int poultry=0x7f060009;
         public static final int pref_AutoUpdateDescr=0x7f06001d;
+        public static final int pref_AutoUpdateDescrOff=0x7f06002a;
         public static final int pref_AutoUpdateLabel=0x7f06001c;
         public static final int pref_DeleteOldDataDescr=0x7f06001f;
+        public static final int pref_DeleteOldDataDescrOff=0x7f060029;
         public static final int pref_DeleteOldDataLabel=0x7f060020;
         public static final int pref_MensaLocationLabel=0x7f060006;
         public static final int pref_MensaLocationSummary=0x7f060005;

@@ -34,9 +34,9 @@
 
 <string name="delete_db">Delete DB</string>
 <string name="pref_AutoUpdateLabel">Auto update</string>
-    <string name="pref_AutoUpdateDescr">Enables automatic updates, if menus are missing.</string>
+    <string name="pref_AutoUpdateDescr">Updates meals automatically.</string>
 <string name="menu_for">Menu of</string>
-<string name="pref_DeleteOldDataDescr">Deletes data from last week and before.</string>
+<string name="pref_DeleteOldDataDescr">Deletes meals from last week and before.</string>
     <string name="pref_DeleteOldDataLabel">Delete old menus</string>
     <string name="pref_cat_db">Database</string>
 <string name="pref_cat_themes">Themes</string>
@@ -46,4 +46,6 @@
     <string name="PREF_KEY_MENSA_LOCATION">mensa_location</string>
     <string name="PREF_KEY_THEMES">themes</string>
     <string name="PREF_KEY_AUTO_UPDATE">auto_update</string>
+<string name="pref_DeleteOldDataDescrOff">Keeps all meals in Database.</string>
+    <string name="pref_AutoUpdateDescrOff">Only manual updates.</string>
 </resources>
