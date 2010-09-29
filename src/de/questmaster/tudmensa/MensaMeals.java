@@ -64,6 +64,7 @@ public class MensaMeals extends ExpandableListActivity {
 
 	private Calendar mToday = Calendar.getInstance();
 	protected Context mContext = this;
+	private String mOldTheme;
 
 	public class CustomCursorTreeAdapter extends SimpleCursorTreeAdapter {
 
@@ -158,7 +159,9 @@ public class MensaMeals extends ExpandableListActivity {
 
 			// To be able to check for new data if mensa changed. 
 			mRestart = false;
-
+			
+			// Store old theme
+			mOldTheme = mSettings.m_sThemes;
 			break;
 		}
 
@@ -171,11 +174,13 @@ public class MensaMeals extends ExpandableListActivity {
 		case ON_SETTINGS_CHANGE:
 			mSettings.ReadSettings(this);
 
-			// WORKAROUND: restart activity
+			// WORKAROUND: restart activity FIXME may have side-effects in froyo
+			if (!mOldTheme.equals(mSettings.m_sThemes)) {
 				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-			
+			}
+				
 			// Reread data and display it
 			updateButtonText();
 			fillData();
@@ -300,15 +305,15 @@ public class MensaMeals extends ExpandableListActivity {
 			cNext.add(Calendar.DAY_OF_YEAR, 1);
 		}
 
-		// Update Text Prev
-		Button buttonPrev = (Button) findViewById(R.id.btn_prev);
-		String textPrev = DateFormat.getDateFormat(this).format(cPrev.getTime());
-		buttonPrev.setText(textPrev.substring(0, textPrev.length() - 5));
-
-		// Update Text Next
-		Button buttonNext = (Button) findViewById(R.id.btn_next);
-		String textNext = DateFormat.getDateFormat(this).format(cNext.getTime());
-		buttonNext.setText(textNext.substring(0, textNext.length() - 5));
+//		// Update Text Prev
+//		Button buttonPrev = (Button) findViewById(R.id.btn_prev);
+//		String textPrev = DateFormat.getDateFormat(this).format(cPrev.getTime());
+//		buttonPrev.setText(textPrev.substring(0, textPrev.length() - 5));
+//
+//		// Update Text Next
+//		Button buttonNext = (Button) findViewById(R.id.btn_next);
+//		String textNext = DateFormat.getDateFormat(this).format(cNext.getTime());
+//		buttonNext.setText(textNext.substring(0, textNext.length() - 5));
 
 		// Set new title
 		int pos = 0;

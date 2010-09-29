@@ -4,20 +4,20 @@
 <!-- Themes -->
 
 <style name="myTheme" parent="@android:style/Theme.NoTitleBar">
-	<item name="android:buttonStyle">@style/Widget.myButton</item> 
+<!-- <item name="android:buttonStyle">@style/Widget.myButton</item> -->
 	<item name="android:expandableListViewStyle">@style/Widget.myExpandableListViewStyle</item>
 </style>
 
 <style name="myThemeLight" parent="@android:style/Theme.Light.NoTitleBar">
-	<item name="android:buttonStyle">@style/Widget.myButton</item>
+<!-- <item name="android:buttonStyle">@style/Widget.myButton</item> -->
 	<item name="android:expandableListViewStyle">@style/Widget.myExpandableListViewStyle</item>
 </style>
 
 <!-- Widgets -->
- 
-<style name="Widget.myButton" parent="@android:style/Widget.Button">
- 	<item name="android:textColor">@android:color/transparent</item>
- </style>
+<!-- parent="@android:style/Widget.Button"  	<item name="android:textColor">@android:color/transparent</item>
+-->
+<style name="Widget.myButton" parent="@android:style/Widget.TextView">
+</style>
 
 <style name="Widget.myExpandableListViewStyle" parent="@android:style/Widget.ExpandableListView">
 	<item name="android:groupIndicator">@drawable/trans_pix</item>

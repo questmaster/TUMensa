@@ -8,19 +8,17 @@
 		android:id="@+id/list_header" android:layout_height="wrap_content">
 
 		<Button android:layout_width="wrap_content" android:id="@+id/btn_prev"
-			android:layout_weight="0.2" android:width="0px" android:text="Prev"
-			android:layout_height="fill_parent" android:onClick="onClickPrevButton">
+			android:layout_weight="0.2" android:width="0px" android:layout_height="fill_parent" android:onClick="onClickPrevButton">
 		</Button>
-		<TextView android:layout_height="fill_parent"
+		<Button android:layout_height="fill_parent"
 			android:layout_width="wrap_content" android:id="@+id/txt_date"
 			android:gravity="center_vertical|center_horizontal" android:width="0px"
 			android:text="Mensa
 Date" style="@style/myTextViewStyle_header"
-			android:maxLines="2" android:layout_weight="0.8" android:onClick="onClickTodayButton">
-		</TextView>
+			android:maxLines="2" android:layout_weight="0.8" android:onClick="onClickTodayButton" android:background="@android:color/transparent">
+		</Button>
 		<Button android:layout_width="wrap_content" android:id="@+id/btn_next"
-			android:width="0px" android:layout_weight="0.2" android:text="Next"
-			android:layout_height="fill_parent" android:onClick="onClickNextButton">
+			android:width="0px" android:layout_weight="0.2" android:layout_height="fill_parent" android:onClick="onClickNextButton">
 		</Button>
 
 	</LinearLayout>

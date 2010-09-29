@@ -105,6 +105,8 @@ public final class R {
     }
     public static final class style {
         /**  Widgets 
+ parent="@android:style/Widget.Button"  	<item name="android:textColor">@android:color/transparent</item>
+
          */
         public static final int Widget_myButton=0x7f070002;
         public static final int Widget_myExpandableListViewStyle=0x7f070003;
