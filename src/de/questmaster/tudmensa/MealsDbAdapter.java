@@ -58,8 +58,8 @@ public class MealsDbAdapter {
 			+ "name text not null, type text not null," + "price text not null, info text);";
 
 	private static final String DATABASE_NAME = "data";
-	static final String DATABASE_TABLE = "meals";
-	private static final int DATABASE_VERSION = 6;
+	private static final String DATABASE_TABLE = "meals";
+	private static final int DATABASE_VERSION = 7;
 
 	private final Context mCtx;
 

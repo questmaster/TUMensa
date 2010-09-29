@@ -9,33 +9,33 @@ import java.util.Vector;
 
 public class DataExtractor implements Runnable {
 
-	private MensaMeals cActivity = null;
+	private MensaMeals mActivity = null;
 	private MealsDbAdapter mDbHelper = null;
-	private String firstDate = null;
-	private String location = null;
-	private boolean work_done = false;
+	private String mFirstDate = null;
+	private String mLocation = null;
+	private boolean mWork_done = false;
 	private MensaMealsSettings.Settings mSettings = new MensaMealsSettings.Settings();
 
 	public DataExtractor(MensaMeals c, String location) {
-		this.cActivity = c;
+		this.mActivity = c;
 		this.mDbHelper = c.mDbHelper;
-		this.location = location;
+		this.mLocation = location;
 	}
 
 	public void run() {
-		work_done = false;
+		mWork_done = false;
 
-		parseTable(getWebPage(location, "week"));
-		parseTable(getWebPage(location, "nextweek"));
+		parseTable(getWebPage(mLocation, "week"));
+		parseTable(getWebPage(mLocation, "nextweek"));
 		if (mSettings.m_bDeleteOldData)
-			mDbHelper.deleteOldMeal(firstDate);
+			mDbHelper.deleteOldMeal(mFirstDate);
 
-		work_done = true;
-		cActivity.handler.sendEmptyMessage(0);
+		mWork_done = true;
+		mActivity.mHandler.sendEmptyMessage(0);
 	}
 
 	public boolean isAlive() {
-		return !work_done;
+		return !mWork_done;
 	}
 
 	/* parse Website and store in database */
@@ -111,8 +111,8 @@ public class DataExtractor implements Runnable {
 					tmp = tmp.substring(6, 10) + tmp.substring(3, 5) + tmp.substring(0, 2);
 					days.add(tmp);
 
-					if (firstDate == null) {
-						firstDate = tmp;
+					if (mFirstDate == null) {
+						mFirstDate = tmp;
 					}
 
 					// €-sign unfortunately not encoded, so checking price-tag
@@ -138,31 +138,23 @@ public class DataExtractor implements Runnable {
 					String meal = tmp.substring(0, tmp.length() - type.length()).trim();
 					meal = htmlDecode(meal);
 
+					// create detail information
 					String info;
-					// create type drawable TODO select pic depending on theme
 					if (type.equals("F")) {
-						type = String.valueOf(R.drawable.meal_f_d);
-						info = cActivity.getResources().getString(R.string.fish);
+						info = mActivity.getResources().getString(R.string.fish);
 					} else if (type.equals("G")) {
-						type = String.valueOf(R.drawable.meal_g_d);
-						info = cActivity.getResources().getString(R.string.poultry);
+						info = mActivity.getResources().getString(R.string.poultry);
 					} else if (type.equals("K")) {
-						type = String.valueOf(R.drawable.meal_k_d);
-						info = cActivity.getResources().getString(R.string.calf);
+						info = mActivity.getResources().getString(R.string.calf);
 					} else if (type.equals("R")) {
-						type = String.valueOf(R.drawable.meal_r_d);
-						info = cActivity.getResources().getString(R.string.beef);
+						info = mActivity.getResources().getString(R.string.beef);
 					} else if (type.equals("RS")) {
-						type = String.valueOf(R.drawable.meal_rs_d);
-						info = cActivity.getResources().getString(R.string.beefpig);
+						info = mActivity.getResources().getString(R.string.beefpig);
 					} else if (type.equals("S")) {
-						type = String.valueOf(R.drawable.meal_s_d);
-						info = cActivity.getResources().getString(R.string.pig);
+						info = mActivity.getResources().getString(R.string.pig);
 					} else if (type.equals("V")) {
-						type = String.valueOf(R.drawable.meal_v_d);
-						info = cActivity.getResources().getString(R.string.vegie);
+						info = mActivity.getResources().getString(R.string.vegie);
 					} else {
-						type = String.valueOf(R.drawable.essen_d);
 						info = "";
 					}
 
@@ -176,35 +168,35 @@ public class DataExtractor implements Runnable {
 							for (String s1 : splitAdditions) {
 								switch (Integer.parseInt(s1)) {
 								case 1:
-									info += "\n(1) " + cActivity.getResources().getString(R.string.colorant);
+									info += "\n(1) " + mActivity.getResources().getString(R.string.colorant);
 									break;
 								case 2:
-									info += "\n(2) " + cActivity.getResources().getString(R.string.preservative);
+									info += "\n(2) " + mActivity.getResources().getString(R.string.preservative);
 									break;
 								case 3:
-									info += "\n(3) " + cActivity.getResources().getString(R.string.antioxidant);
+									info += "\n(3) " + mActivity.getResources().getString(R.string.antioxidant);
 									break;
 								case 4:
-									info += "\n(4) " + cActivity.getResources().getString(R.string.flavor_enhancer);
+									info += "\n(4) " + mActivity.getResources().getString(R.string.flavor_enhancer);
 									break;
 								case 5:
-									info += "\n(5) " + cActivity.getResources().getString(R.string.sulphur_treated);
+									info += "\n(5) " + mActivity.getResources().getString(R.string.sulphur_treated);
 									break;
 								case 6:
-									info += "\n(6) " + cActivity.getResources().getString(R.string.blackened);
+									info += "\n(6) " + mActivity.getResources().getString(R.string.blackened);
 									break;
 								case 7:
-									info += "\n(7) " + cActivity.getResources().getString(R.string.waxed);
+									info += "\n(7) " + mActivity.getResources().getString(R.string.waxed);
 									break;
 								case 8:
-									info += "\n(8) " + cActivity.getResources().getString(R.string.phosphate);
+									info += "\n(8) " + mActivity.getResources().getString(R.string.phosphate);
 									break;
 								case 9:
-									info += "\n(9) " + cActivity.getResources().getString(R.string.sweetening);
+									info += "\n(9) " + mActivity.getResources().getString(R.string.sweetening);
 									break;
 								case 11:
 									info += "\n(11) "
-											+ cActivity.getResources().getString(R.string.phenylalanine_source);
+											+ mActivity.getResources().getString(R.string.phenylalanine_source);
 									break;
 								}
 							}
@@ -217,10 +209,10 @@ public class DataExtractor implements Runnable {
 					// Add table entry
 					String date = days.get(day_index);
 					long rowId = 0;
-					if ((rowId = mDbHelper.fetchMealId(location, date, curCounter, meal_num)) >= 0) {
-						mDbHelper.updateMeal(rowId, location, date, meal_num, curCounter, meal, type, price, info);
+					if ((rowId = mDbHelper.fetchMealId(mLocation, date, curCounter, meal_num)) >= 0) {
+						mDbHelper.updateMeal(rowId, mLocation, date, meal_num, curCounter, meal, type, price, info);
 					} else
-						mDbHelper.createMeal(location, date, meal_num, curCounter, meal, type, price, info);
+						mDbHelper.createMeal(mLocation, date, meal_num, curCounter, meal, type, price, info);
 				}
 
 				day_index++;

@@ -9,11 +9,22 @@ import android.preference.PreferenceManager;
 
 public class MensaMealsSettings extends PreferenceActivity {
 
+	private MensaMealsSettings.Settings mSettings = new MensaMealsSettings.Settings();
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
-		super.onCreate(savedInstanceState);
+		// Read settings
+		mSettings.ReadSettings(this);
 
+		// Setup Theme
+		if (mSettings.m_sThemes.equals("dark")) {
+			setTheme(android.R.style.Theme_Black_NoTitleBar);
+		} else if (mSettings.m_sThemes.equals("light")) {
+			setTheme(android.R.style.Theme_Light_NoTitleBar);
+		}
+
+		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.preferences);
 	}
 

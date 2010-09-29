@@ -49,20 +49,21 @@ public class MensaMeals extends ExpandableListActivity {
 	private MensaMealsSettings.Settings mSettings = new MensaMealsSettings.Settings();
 	protected MealsDbAdapter mDbHelper;
 
-	private ProgressDialog pd = null;
-	private boolean restart = false;
-	protected Handler handler = new Handler() {
+	private ProgressDialog mPDialog = null;
+	private boolean mRestart = false;
+	protected Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
-			pd.dismiss();
+			mPDialog.dismiss();
 			// updateView after update. Don't do it for an update after startup
-			restart = true;
+			mRestart = true;
 			fillData();
 		}
 	};
 
-	private Calendar today = Calendar.getInstance();
-	private String oldTheme = "";
+	private Calendar mToday = Calendar.getInstance();
+	private String mOldTheme = "";
+	protected Context mContext = this;
 
 	public class CustomCursorTreeAdapter extends SimpleCursorTreeAdapter {
 
@@ -77,7 +78,7 @@ public class MensaMeals extends ExpandableListActivity {
 			String date = groupCursor.getString(groupCursor.getColumnIndex(MealsDbAdapter.KEY_DATE));
 			String counter = groupCursor.getString(groupCursor.getColumnIndex(MealsDbAdapter.KEY_COUNTER));
 
-			Cursor c = mDbHelper.fetchMealsOfGroupDay(location, date, counter);
+			Cursor c = new MealCursorWrapper(mDbHelper.fetchMealsOfGroupDay(location, date, counter), mContext);
 
 			startManagingCursor(c);
 			return c;
@@ -106,11 +107,11 @@ public class MensaMeals extends ExpandableListActivity {
 		mDbHelper.open();
 
 		// Setup date
-		today = Calendar.getInstance();
-		if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
-			today.add(Calendar.DAY_OF_YEAR, 2);
-		} else if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-			today.add(Calendar.DAY_OF_YEAR, 1);
+		mToday = Calendar.getInstance();
+		if (mToday.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+			mToday.add(Calendar.DAY_OF_YEAR, 2);
+		} else if (mToday.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+			mToday.add(Calendar.DAY_OF_YEAR, 1);
 		}
 
 		// Capture our buttons from layout and set them up
@@ -149,10 +150,10 @@ public class MensaMeals extends ExpandableListActivity {
 			startActivityForResult(iSettings, ON_SETTINGS_CHANGE);
 
 			// To be able to check for new data if mensa changed. 
-			restart = false;
+			mRestart = false;
 
 			// To be able to check Theme change
-			oldTheme = mSettings.m_sThemes;
+			mOldTheme = mSettings.m_sThemes;
 			break;
 		}
 
@@ -165,7 +166,7 @@ public class MensaMeals extends ExpandableListActivity {
 		case ON_SETTINGS_CHANGE:
 			mSettings.ReadSettings(this);
 
-			if (!mSettings.m_sThemes.equals(oldTheme)) {
+			if (!mSettings.m_sThemes.equals(mOldTheme)) {
 				// TODO Theme change -> change pictures
 			}
 			
@@ -185,11 +186,11 @@ public class MensaMeals extends ExpandableListActivity {
 
 	public void onClickNextButton(View v) {
 		// Setup date
-		today.add(Calendar.DAY_OF_YEAR, 1);
-		if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
-			today.add(Calendar.DAY_OF_YEAR, 2);
-		} else if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-			today.add(Calendar.DAY_OF_YEAR, 1);
+		mToday.add(Calendar.DAY_OF_YEAR, 1);
+		if (mToday.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+			mToday.add(Calendar.DAY_OF_YEAR, 2);
+		} else if (mToday.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+			mToday.add(Calendar.DAY_OF_YEAR, 1);
 		}
 		updateButtonText();
 
@@ -198,11 +199,11 @@ public class MensaMeals extends ExpandableListActivity {
 
 	public void onClickPrevButton(View v) {
 		// Setup date
-		today.add(Calendar.DAY_OF_YEAR, -1);
-		if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
-			today.add(Calendar.DAY_OF_YEAR, -1);
-		} else if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-			today.add(Calendar.DAY_OF_YEAR, -2);
+		mToday.add(Calendar.DAY_OF_YEAR, -1);
+		if (mToday.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+			mToday.add(Calendar.DAY_OF_YEAR, -1);
+		} else if (mToday.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+			mToday.add(Calendar.DAY_OF_YEAR, -2);
 		}
 		updateButtonText();
 
@@ -218,18 +219,8 @@ public class MensaMeals extends ExpandableListActivity {
 	}
 
 	@Override
-	protected void onPause() {
-        super.onPause();
-		mDbHelper.close();
-    }
-	
-	@Override
 	protected void onResume() {
 		super.onResume();
-
-		// Init Database
-		mDbHelper = new MealsDbAdapter(this);
-		mDbHelper.open();
 
 		// expand groups
 		fillData();
@@ -274,8 +265,8 @@ public class MensaMeals extends ExpandableListActivity {
 
 	private void updateButtonText() {
 		// Prepare times
-		Calendar cPrev = (Calendar) today.clone();
-		Calendar cNext = (Calendar) today.clone();
+		Calendar cPrev = (Calendar) mToday.clone();
+		Calendar cNext = (Calendar) mToday.clone();
 		cPrev.add(Calendar.DAY_OF_YEAR, -1);
 		cNext.add(Calendar.DAY_OF_YEAR, 1);
 
@@ -313,25 +304,23 @@ public class MensaMeals extends ExpandableListActivity {
 		// Update label
 		TextView labelDay = (TextView) findViewById(R.id.txt_date);
 		labelDay.setText(getResources().getStringArray(R.array.MensaLocations)[pos] + "\n"
-				+ DateFormat.format("EEEE", today.getTime()) + ", "
-				+ DateFormat.getDateFormat(this).format(today.getTime()));
+				+ DateFormat.format("EEEE", mToday.getTime()) + ", "
+				+ DateFormat.getDateFormat(this).format(mToday.getTime()));
 	}
 
 	private void fillData() {
 		// prepare date string
-		String date = (String) DateFormat.format("yyyyMMdd", today);
+		String date = (String) DateFormat.format("yyyyMMdd", mToday);
 
 		// Get all of the notes from the database and create the item list
 		Cursor c = mDbHelper.fetchGroupsOfDay(mSettings.m_sMensaLocation, date);
 		// if none found start a new query automatically
-		if (mSettings.m_bAutoUpdate && c.getCount() == 0 && !restart) {
-			restart = true;
+		if (mSettings.m_bAutoUpdate && c.getCount() == 0 && !mRestart) {
+			mRestart = true;
 			getData();
 			return;
 		}
 		startManagingCursor(c);
-		// restart = false; // Disabled, so that an autoupdate is only done once
-		// per runtime.
 
 		String[] group_from = new String[] { MealsDbAdapter.KEY_COUNTER };
 		int[] group_to = new int[] { R.id.counter };
@@ -350,7 +339,7 @@ public class MensaMeals extends ExpandableListActivity {
 	}
 
 	private void getData() {
-		pd = ProgressDialog.show(this, null, getResources().getString(R.string.dialog_updating_text), true, true);
+		mPDialog = ProgressDialog.show(this, null, getResources().getString(R.string.dialog_updating_text), true, true);
 
 		// get data
 		DataExtractor de = new DataExtractor(this, mSettings.m_sMensaLocation);
