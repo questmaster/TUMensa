@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-  xmlns:android="http://schemas.android.com/apk/res/android">
-<PreferenceCategory android:title="@string/pref_cat_mensa"><CheckBoxPreference android:defaultValue="true" android:title="@string/pref_AutoUpdateLabel" android:key="@string/PREF_KEY_AUTO_UPDATE" android:summaryOn="@string/pref_AutoUpdateDescr" android:summaryOff="@string/pref_AutoUpdateDescrOff"></CheckBoxPreference>
-<ListPreference android:dialogTitle="@string/pref_MensaLocationLabel" android:summary="@string/pref_MensaLocationSummary" android:entries="@array/MensaLocations" android:defaultValue="stadtmitte" android:entryValues="@array/MensaLocationsValues" android:title="@string/pref_MensaLocationLabel" android:key="@string/PREF_KEY_MENSA_LOCATION"></ListPreference>
-</PreferenceCategory>
-<PreferenceCategory android:title="@string/pref_cat_db"><CheckBoxPreference android:defaultValue="true" android:title="@string/pref_DeleteOldDataLabel" android:key="@string/PREF_KEY_DELETE_OLD_DATA" android:summaryOn="@string/pref_DeleteOldDataDescr" android:summaryOff="@string/pref_DeleteOldDataDescrOff"></CheckBoxPreference>
-</PreferenceCategory>
-<PreferenceCategory android:title="@string/pref_cat_themes"><ListPreference android:dialogTitle="@string/pref_ThemesLabel" android:summary="@string/pref_ThemesSummary" android:entries="@array/Themes" android:defaultValue="dark" android:entryValues="@array/ThemesValues" android:title="@string/pref_ThemesLabel" android:key="@string/PREF_KEY_THEMES"></ListPreference>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<PreferenceCategory android:title="@string/pref_cat_mensa">
+		<CheckBoxPreference android:defaultValue="true"
+			android:title="@string/pref_AutoUpdateLabel" android:key="@string/PREF_KEY_AUTO_UPDATE"
+			android:summaryOn="@string/pref_AutoUpdateDescr" android:summaryOff="@string/pref_AutoUpdateDescrOff"></CheckBoxPreference>
+		<ListPreference android:dialogTitle="@string/pref_MensaLocationLabel"
+			android:summary="@string/pref_MensaLocationSummary" android:entries="@array/MensaLocations"
+			android:defaultValue="stadtmitte" android:entryValues="@array/MensaLocationsValues"
+			android:title="@string/pref_MensaLocationLabel" android:key="@string/PREF_KEY_MENSA_LOCATION"></ListPreference>
+	</PreferenceCategory>
+	<PreferenceCategory android:title="@string/pref_cat_app">
+		
+		<CheckBoxPreference android:key="@string/PREF_KEY_GESTURES" android:title="@string/pref_GesturesLabel" android:summaryOn="@string/pref_GesturesDescr" android:summaryOff="@string/pref_GesturesDescrOff" android:defaultValue="true"></CheckBoxPreference><CheckBoxPreference android:defaultValue="true"
+			android:title="@string/pref_DeleteOldDataLabel" android:key="@string/PREF_KEY_DELETE_OLD_DATA"
+			android:summaryOn="@string/pref_DeleteOldDataDescr"
+			android:summaryOff="@string/pref_DeleteOldDataDescrOff"></CheckBoxPreference><ListPreference android:dialogTitle="@string/pref_ThemesLabel" android:summary="@string/pref_ThemesSummary" android:entries="@array/Themes" android:defaultValue="dark" android:entryValues="@array/ThemesValues" android:title="@string/pref_ThemesLabel" android:key="@string/PREF_KEY_THEMES"></ListPreference>
+	
 </PreferenceCategory>
 </PreferenceScreen>

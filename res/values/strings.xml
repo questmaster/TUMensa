@@ -38,8 +38,8 @@
 <string name="menu_for">Menu of</string>
 <string name="pref_DeleteOldDataDescr">Deletes meals from last week and before.</string>
     <string name="pref_DeleteOldDataLabel">Delete old menus</string>
-    <string name="pref_cat_db">Database</string>
-<string name="pref_cat_themes">Themes</string>
+    
+
     <string name="pref_ThemesLabel">Select Theme</string>
     <string name="pref_ThemesSummary">Select a theme.</string>
 <string name="PREF_KEY_DELETE_OLD_DATA">del_old_data</string>
@@ -49,4 +49,9 @@
 <string name="pref_DeleteOldDataDescrOff">Keeps all meals in Database.</string>
     <string name="pref_AutoUpdateDescrOff">Only manual updates.</string>
 <string name="menu_today">Today</string>
+<string name="pref_cat_app">Application</string>
+    <string name="PREF_KEY_GESTURES">gestures</string>
+    <string name="pref_GesturesDescr">Swipe and double tap activated.</string>
+    <string name="pref_GesturesDescrOff">Gestures disabled.</string>
+    <string name="pref_GesturesLabel">Enable gestures</string>
 </resources>

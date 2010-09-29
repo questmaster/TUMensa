@@ -58,10 +58,11 @@ public final class R {
         public static final int simple_expandable_list_item_2=0x7f030002;
     }
     public static final class string {
-        public static final int PREF_KEY_AUTO_UPDATE=0x7f060028;
-        public static final int PREF_KEY_DELETE_OLD_DATA=0x7f060025;
-        public static final int PREF_KEY_MENSA_LOCATION=0x7f060026;
-        public static final int PREF_KEY_THEMES=0x7f060027;
+        public static final int PREF_KEY_AUTO_UPDATE=0x7f060026;
+        public static final int PREF_KEY_DELETE_OLD_DATA=0x7f060023;
+        public static final int PREF_KEY_GESTURES=0x7f06002b;
+        public static final int PREF_KEY_MENSA_LOCATION=0x7f060024;
+        public static final int PREF_KEY_THEMES=0x7f060025;
         public static final int antioxidant=0x7f060013;
         public static final int app_name=0x7f060001;
         public static final int beef=0x7f06000a;
@@ -76,7 +77,7 @@ public final class R {
         public static final int menu_for=0x7f06001e;
         public static final int menu_of=0x7f060010;
         public static final int menu_settings=0x7f060007;
-        public static final int menu_today=0x7f06002b;
+        public static final int menu_today=0x7f060029;
         public static final int menu_update=0x7f060008;
         public static final int no_meals=0x7f060002;
         public static final int phenylalanine_source=0x7f060019;
@@ -84,18 +85,20 @@ public final class R {
         public static final int pig=0x7f06000d;
         public static final int poultry=0x7f060009;
         public static final int pref_AutoUpdateDescr=0x7f06001d;
-        public static final int pref_AutoUpdateDescrOff=0x7f06002a;
+        public static final int pref_AutoUpdateDescrOff=0x7f060028;
         public static final int pref_AutoUpdateLabel=0x7f06001c;
         public static final int pref_DeleteOldDataDescr=0x7f06001f;
-        public static final int pref_DeleteOldDataDescrOff=0x7f060029;
+        public static final int pref_DeleteOldDataDescrOff=0x7f060027;
         public static final int pref_DeleteOldDataLabel=0x7f060020;
+        public static final int pref_GesturesDescr=0x7f06002c;
+        public static final int pref_GesturesDescrOff=0x7f06002d;
+        public static final int pref_GesturesLabel=0x7f06002e;
         public static final int pref_MensaLocationLabel=0x7f060006;
         public static final int pref_MensaLocationSummary=0x7f060005;
-        public static final int pref_ThemesLabel=0x7f060023;
-        public static final int pref_ThemesSummary=0x7f060024;
-        public static final int pref_cat_db=0x7f060021;
+        public static final int pref_ThemesLabel=0x7f060021;
+        public static final int pref_ThemesSummary=0x7f060022;
+        public static final int pref_cat_app=0x7f06002a;
         public static final int pref_cat_mensa=0x7f060004;
-        public static final int pref_cat_themes=0x7f060022;
         public static final int preservative=0x7f060012;
         public static final int settings_name=0x7f060000;
         public static final int sulphur_treated=0x7f060015;

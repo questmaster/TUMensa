@@ -30,8 +30,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.format.DateFormat;
+import android.view.GestureDetector;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListView;
@@ -66,6 +69,54 @@ public class MensaMeals extends ExpandableListActivity {
 	protected Context mContext = this;
 	private String mOldTheme;
 
+	private GestureDetector gestureDetector;
+
+	/**
+	 * Copied from K9mail.
+	 * 
+	 * 
+	 */
+	public class MyGestureDetector extends SimpleOnGestureListener {
+		private static final float SWIPE_MIN_DISTANCE_DIP = 130.0f;
+		private static final float SWIPE_MAX_OFF_PATH_DIP = 250f;
+		private static final float SWIPE_THRESHOLD_VELOCITY_DIP = 325f;
+
+		@Override
+		public boolean onDoubleTap(MotionEvent ev) {
+			super.onDoubleTap(ev);
+
+			if (mSettings.m_bGestures) {
+				onClickTodayButton(null);
+			}
+			return false;
+		}
+
+		@Override
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+			if (mSettings.m_bGestures) {
+				// Convert the dips to pixels
+				final float mGestureScale = getResources().getDisplayMetrics().density;
+				int min_distance = (int) (SWIPE_MIN_DISTANCE_DIP * mGestureScale + 0.5f);
+				int min_velocity = (int) (SWIPE_THRESHOLD_VELOCITY_DIP * mGestureScale + 0.5f);
+				int max_off_path = (int) (SWIPE_MAX_OFF_PATH_DIP * mGestureScale + 0.5f);
+
+				try {
+					if (Math.abs(e1.getY() - e2.getY()) > max_off_path)
+						return false;
+					// right to left swipe
+					if (e1.getX() - e2.getX() > min_distance && Math.abs(velocityX) > min_velocity) {
+						onClickNextButton(null);
+					} else if (e2.getX() - e1.getX() > min_distance && Math.abs(velocityX) > min_velocity) {
+						onClickPrevButton(null);
+					}
+				} catch (Exception e) {
+					// nothing
+				}
+			}
+			return false;
+		}
+	}
+
 	public class CustomCursorTreeAdapter extends SimpleCursorTreeAdapter {
 
 		public CustomCursorTreeAdapter(Context context, Cursor cursor, int groupLayout, String[] groupFrom,
@@ -98,11 +149,11 @@ public class MensaMeals extends ExpandableListActivity {
 		} else if (mSettings.m_sThemes.equals("light")) {
 			setTheme(R.style.myThemeLight);
 		}
-		
+
 		// Set Content
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.meals_list);
-		
+
 		// Init Database
 		mDbHelper = new MealsDbAdapter(this);
 		mDbHelper.open();
@@ -121,6 +172,16 @@ public class MensaMeals extends ExpandableListActivity {
 		buttonPrev.setBackgroundResource(R.drawable.ic_menu_back);
 		buttonNext.setBackgroundResource(R.drawable.ic_menu_forward);
 		updateButtonText();
+
+		// Gesture detection
+		gestureDetector = new GestureDetector(new MyGestureDetector());
+
+	}
+
+	@Override
+	public boolean dispatchTouchEvent(MotionEvent ev) {
+		super.dispatchTouchEvent(ev);
+		return gestureDetector.onTouchEvent(ev);
 	}
 
 	@Override
@@ -151,15 +212,15 @@ public class MensaMeals extends ExpandableListActivity {
 		case TODAY_ID:
 			onClickTodayButton(null);
 			break;
-			
+
 		case SETTINGS_ID:
 			Intent iSettings = new Intent();
 			iSettings.setClass(this, MensaMealsSettings.class);
 			startActivityForResult(iSettings, ON_SETTINGS_CHANGE);
 
-			// To be able to check for new data if mensa changed. 
+			// To be able to check for new data if mensa changed.
 			mRestart = false;
-			
+
 			// Store old theme
 			mOldTheme = mSettings.m_sThemes;
 			break;
@@ -180,7 +241,7 @@ public class MensaMeals extends ExpandableListActivity {
 				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 			}
-				
+
 			// Reread data and display it
 			updateButtonText();
 			fillData();
@@ -206,7 +267,7 @@ public class MensaMeals extends ExpandableListActivity {
 
 		fillData();
 	}
-	
+
 	public void onClickNextButton(View v) {
 		// Setup date
 		mToday.add(Calendar.DAY_OF_YEAR, 1);
@@ -265,26 +326,26 @@ public class MensaMeals extends ExpandableListActivity {
 		return false;
 	}
 
-//	 @Override
-//	 // TODO Wechsele Tag mit links/rechts wisch.
-//	 public boolean onTouchEvent(MotionEvent evt) {
-//	 // switch (evt.getAction()) {
-//	 // case MotionEvent.ACTION_MOVE:
-//	 switch (evt.getEdgeFlags()) {
-//	 case MotionEvent.EDGE_LEFT:
-//	 System.err.printf("Left wisch.");
-//	
-//	 return true;
-//	 case MotionEvent.EDGE_RIGHT:
-//	 System.err.printf("Right wisch.");
-//	
-//	 return true;
-//	 }
-//	 // break;
-//	 // }
-//	
-//	 return false;
-//	 }
+	// @Override
+	// // TODO Wechsele Tag mit links/rechts wisch.
+	// public boolean onTouchEvent(MotionEvent evt) {
+	// // switch (evt.getAction()) {
+	// // case MotionEvent.ACTION_MOVE:
+	// switch (evt.getEdgeFlags()) {
+	// case MotionEvent.EDGE_LEFT:
+	// System.err.printf("Left wisch.");
+	//
+	// return true;
+	// case MotionEvent.EDGE_RIGHT:
+	// System.err.printf("Right wisch.");
+	//
+	// return true;
+	// }
+	// // break;
+	// // }
+	//
+	// return false;
+	// }
 
 	private void updateButtonText() {
 		// Prepare times
@@ -305,15 +366,17 @@ public class MensaMeals extends ExpandableListActivity {
 			cNext.add(Calendar.DAY_OF_YEAR, 1);
 		}
 
-//		// Update Text Prev
-//		Button buttonPrev = (Button) findViewById(R.id.btn_prev);
-//		String textPrev = DateFormat.getDateFormat(this).format(cPrev.getTime());
-//		buttonPrev.setText(textPrev.substring(0, textPrev.length() - 5));
-//
-//		// Update Text Next
-//		Button buttonNext = (Button) findViewById(R.id.btn_next);
-//		String textNext = DateFormat.getDateFormat(this).format(cNext.getTime());
-//		buttonNext.setText(textNext.substring(0, textNext.length() - 5));
+		// // Update Text Prev
+		// Button buttonPrev = (Button) findViewById(R.id.btn_prev);
+		// String textPrev =
+		// DateFormat.getDateFormat(this).format(cPrev.getTime());
+		// buttonPrev.setText(textPrev.substring(0, textPrev.length() - 5));
+		//
+		// // Update Text Next
+		// Button buttonNext = (Button) findViewById(R.id.btn_next);
+		// String textNext =
+		// DateFormat.getDateFormat(this).format(cNext.getTime());
+		// buttonNext.setText(textNext.substring(0, textNext.length() - 5));
 
 		// Set new title
 		int pos = 0;

@@ -40,12 +40,16 @@
 <string name="menu_for">Speisekarte für</string>
 <string name="pref_DeleteOldDataDescr">Löscht Essen der letzten Woche und älter.</string>
     <string name="pref_DeleteOldDataLabel">Alte Essen löschen</string>
-    <string name="pref_cat_db">Datenbank</string>
-<string name="pref_cat_themes">Thema</string>
+    
+
     <string name="pref_ThemesLabel">Thema auswählen</string>
     <string name="pref_ThemesSummary">Wähle ein Thema.</string>
 <string name="pref_cat_mensa">Mensa</string>
 <string name="pref_DeleteOldDataDescrOff">Behält alle Einträge in der Datenbank.</string>
     <string name="pref_AutoUpdateDescrOff">Nur manuelle Updates.</string>
 <string name="menu_today">Heute</string>
+<string name="pref_cat_app">Anwendung</string>
+    <string name="pref_GesturesDescr">Wischen und doppel-tippen aktiviert.</string>
+    <string name="pref_GesturesDescrOff">Gesten ausgeschaltet.</string>
+    <string name="pref_GesturesLabel">Aktiviere Gesten</string>
 </resources>
