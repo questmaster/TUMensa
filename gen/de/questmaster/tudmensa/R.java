@@ -76,6 +76,7 @@ public final class R {
         public static final int menu_for=0x7f06001e;
         public static final int menu_of=0x7f060010;
         public static final int menu_settings=0x7f060007;
+        public static final int menu_today=0x7f06002b;
         public static final int menu_update=0x7f060008;
         public static final int no_meals=0x7f060002;
         public static final int phenylalanine_source=0x7f060019;

@@ -41,9 +41,9 @@ import android.widget.Toast;
 
 public class MensaMeals extends ExpandableListActivity {
 
-	public static final int UPDATE_ID = Menu.FIRST;
-	public static final int SETTINGS_ID = Menu.FIRST + 1;
-	public static final int CLEAR_DB_ID = Menu.FIRST + 2;
+	private static final int UPDATE_ID = Menu.FIRST;
+	private static final int TODAY_ID = Menu.FIRST + 1;
+	private static final int SETTINGS_ID = Menu.FIRST + 2;
 
 	public static final int ON_SETTINGS_CHANGE = 0;
 
@@ -130,7 +130,10 @@ public class MensaMeals extends ExpandableListActivity {
 		mItem = menu.add(0, UPDATE_ID, 0, R.string.menu_update);
 		mItem.setIcon(R.drawable.ic_menu_refresh);
 
-		mItem = menu.add(0, SETTINGS_ID, 1, R.string.menu_settings);
+		mItem = menu.add(0, TODAY_ID, 1, R.string.menu_today);
+		mItem.setIcon(android.R.drawable.ic_menu_today);
+
+		mItem = menu.add(0, SETTINGS_ID, 2, R.string.menu_settings);
 		mItem.setIcon(android.R.drawable.ic_menu_preferences);
 
 		return result;
@@ -144,6 +147,10 @@ public class MensaMeals extends ExpandableListActivity {
 			fillData();
 			break;
 
+		case TODAY_ID:
+			onClickTodayButton(null);
+			break;
+			
 		case SETTINGS_ID:
 			Intent iSettings = new Intent();
 			iSettings.setClass(this, MensaMealsSettings.class);
@@ -183,6 +190,18 @@ public class MensaMeals extends ExpandableListActivity {
 		getExpandableListView().expandGroup(groupPosition);
 	}
 
+	public void onClickTodayButton(View v) {
+		mToday = Calendar.getInstance();
+		if (mToday.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+			mToday.add(Calendar.DAY_OF_YEAR, 2);
+		} else if (mToday.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+			mToday.add(Calendar.DAY_OF_YEAR, 1);
+		}
+		updateButtonText();
+
+		fillData();
+	}
+	
 	public void onClickNextButton(View v) {
 		// Setup date
 		mToday.add(Calendar.DAY_OF_YEAR, 1);
