@@ -17,7 +17,7 @@ import android.os.Bundle;
  * 
  * @author Daniel
  */
-public class MealCursorWrapper implements Cursor {
+public class MealsDbCursorWrapper implements Cursor {
 
 	private Cursor mCursor;
 	private MensaMealsSettings.Settings mSettings = new MensaMealsSettings.Settings();
@@ -25,7 +25,7 @@ public class MealCursorWrapper implements Cursor {
 	/**
 	 * 
 	 */
-	public MealCursorWrapper(Cursor c, Context ct) {
+	public MealsDbCursorWrapper(Cursor c, Context ct) {
 		mCursor = c;
 
 		// Read settings
