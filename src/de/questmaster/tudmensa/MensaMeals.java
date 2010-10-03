@@ -130,7 +130,7 @@ public class MensaMeals extends ExpandableListActivity {
 			String date = groupCursor.getString(groupCursor.getColumnIndex(MealsDbAdapter.KEY_DATE));
 			String counter = groupCursor.getString(groupCursor.getColumnIndex(MealsDbAdapter.KEY_COUNTER));
 
-			Cursor c = new MealCursorWrapper(mDbHelper.fetchMealsOfGroupDay(location, date, counter), mContext);
+			Cursor c = new MealsDbCursorWrapper(mDbHelper.fetchMealsOfGroupDay(location, date, counter), mContext);
 
 			startManagingCursor(c);
 			return c;
