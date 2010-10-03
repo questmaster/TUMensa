@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="de.questmaster.tudmensa" android:versionCode="13" android:versionName="0.6.1">
+    package="de.questmaster.tudmensa" android:versionName="0.6.2" android:versionCode="14">
     <application android:icon="@drawable/essenlogo" android:label="@string/app_name" android:allowClearUserData="true">
         <activity android:name=".MensaMeals" android:label="@string/app_name">
             <intent-filter>
@@ -9,6 +9,9 @@
             </intent-filter>
         </activity>
     <activity android:name=".MensaMealsSettings" android:label="@string/settings_name"></activity>
+<!-- The application's publisher ID assigned by AdMob -->
+<meta-data android:value="a14ca85aa979557" android:name="ADMOB_PUBLISHER_ID"
+/>
 </application>
 
 <uses-permission android:name="android.permission.INTERNET"></uses-permission>

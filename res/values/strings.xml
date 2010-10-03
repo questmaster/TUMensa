@@ -54,4 +54,9 @@
     <string name="pref_GesturesDescr">Swipe and double tap activated.</string>
     <string name="pref_GesturesDescrOff">Gestures disabled.</string>
     <string name="pref_GesturesLabel">Enable gestures</string>
+<string name="pref_cat_ad">Ads</string>
+    <string name="pref_AdsDescr">Ads are shown to support developer of app.</string>
+    <string name="pref_AdsDescrOff">No support for developer.</string>
+    <string name="PREF_KEY_ADS">ads</string>
+    <string name="pref_AdsLabel">Support developer</string>
 </resources>

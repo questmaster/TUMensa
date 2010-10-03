@@ -18,6 +18,9 @@ package de.questmaster.tudmensa;
 
 import java.util.Calendar;
 
+import com.admob.android.ads.AdManager;
+import com.admob.android.ads.AdView;
+
 import de.questmaster.tudmensa.R;
 
 import android.app.ExpandableListActivity;
@@ -36,6 +39,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.SimpleCursorTreeAdapter;
@@ -176,6 +181,28 @@ public class MensaMeals extends ExpandableListActivity {
 		// Gesture detection
 		gestureDetector = new GestureDetector(new MyGestureDetector());
 
+		// Init Ads
+		AdView av = (AdView) findViewById(R.id.ad);
+
+		// Fade the ad in over 4/10 of a second.
+		AlphaAnimation animation = new AlphaAnimation(0.0f, 1.0f);
+		animation.setDuration(400);
+		animation.setFillAfter(true);
+		animation.setInterpolator(new AccelerateInterpolator());
+		av.startAnimation(animation);
+
+		if (mSettings.m_bAds) {
+			av.setVisibility(View.VISIBLE);
+		} else {
+			av.setVisibility(View.GONE);
+		}
+
+		AdManager.setTestDevices(new String[] { AdManager.TEST_EMULATOR, // Android
+																			// emulator
+				// "E83D20734F72FB3108F104ABC0FFC738", // My T-Mobile G1 Test
+				// Phone
+				});
+
 	}
 
 	@Override
@@ -240,6 +267,14 @@ public class MensaMeals extends ExpandableListActivity {
 				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+			}
+
+			// (un)hide Ads
+			AdView av = (AdView) findViewById(R.id.ad);
+			if (mSettings.m_bAds) {
+				av.setVisibility(View.VISIBLE);
+			} else {
+				av.setVisibility(View.GONE);
 			}
 
 			// Reread data and display it

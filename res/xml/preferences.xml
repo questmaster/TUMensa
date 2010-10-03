@@ -10,11 +10,24 @@
 			android:title="@string/pref_MensaLocationLabel" android:key="@string/PREF_KEY_MENSA_LOCATION"></ListPreference>
 	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/pref_cat_app">
-		
-		<CheckBoxPreference android:key="@string/PREF_KEY_GESTURES" android:title="@string/pref_GesturesLabel" android:summaryOn="@string/pref_GesturesDescr" android:summaryOff="@string/pref_GesturesDescrOff" android:defaultValue="true"></CheckBoxPreference><CheckBoxPreference android:defaultValue="true"
+
+		<CheckBoxPreference android:key="@string/PREF_KEY_GESTURES"
+			android:title="@string/pref_GesturesLabel" android:summaryOn="@string/pref_GesturesDescr"
+			android:summaryOff="@string/pref_GesturesDescrOff"
+			android:defaultValue="true"></CheckBoxPreference>
+		<CheckBoxPreference android:defaultValue="true"
 			android:title="@string/pref_DeleteOldDataLabel" android:key="@string/PREF_KEY_DELETE_OLD_DATA"
 			android:summaryOn="@string/pref_DeleteOldDataDescr"
-			android:summaryOff="@string/pref_DeleteOldDataDescrOff"></CheckBoxPreference><ListPreference android:dialogTitle="@string/pref_ThemesLabel" android:summary="@string/pref_ThemesSummary" android:entries="@array/Themes" android:defaultValue="dark" android:entryValues="@array/ThemesValues" android:title="@string/pref_ThemesLabel" android:key="@string/PREF_KEY_THEMES"></ListPreference>
-	
-</PreferenceCategory>
+			android:summaryOff="@string/pref_DeleteOldDataDescrOff"></CheckBoxPreference>
+		<ListPreference android:dialogTitle="@string/pref_ThemesLabel"
+			android:summary="@string/pref_ThemesSummary" android:entries="@array/Themes"
+			android:defaultValue="dark" android:entryValues="@array/ThemesValues"
+			android:title="@string/pref_ThemesLabel" android:key="@string/PREF_KEY_THEMES"></ListPreference>
+
+	</PreferenceCategory>
+	<PreferenceCategory android:title="@string/pref_cat_ad">
+		<CheckBoxPreference android:key="@string/PREF_KEY_ADS"
+			android:summaryOn="@string/pref_AdsDescr" android:title="@string/pref_AdsLabel"
+			android:summaryOff="@string/pref_AdsDescrOff" android:defaultValue="true"></CheckBoxPreference>
+	</PreferenceCategory>
 </PreferenceScreen>

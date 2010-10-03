@@ -52,4 +52,8 @@
     <string name="pref_GesturesDescr">Wischen und doppel-tippen aktiviert.</string>
     <string name="pref_GesturesDescrOff">Gesten ausgeschaltet.</string>
     <string name="pref_GesturesLabel">Aktiviere Gesten</string>
+<string name="pref_cat_ad">Werbung</string>
+    <string name="pref_AdsDescr">Werbung wird gezeigt, um Entwickler zu unterstützen.</string>
+    <string name="pref_AdsDescrOff">Keine Unterstützung für Entwickler.</string>
+    <string name="pref_AdsLabel">Unterstütze Entwickler</string>
 </resources>
