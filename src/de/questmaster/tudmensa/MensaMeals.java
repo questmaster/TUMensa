@@ -326,27 +326,6 @@ public class MensaMeals extends ExpandableListActivity {
 		return false;
 	}
 
-	// @Override
-	// // TODO Wechsele Tag mit links/rechts wisch.
-	// public boolean onTouchEvent(MotionEvent evt) {
-	// // switch (evt.getAction()) {
-	// // case MotionEvent.ACTION_MOVE:
-	// switch (evt.getEdgeFlags()) {
-	// case MotionEvent.EDGE_LEFT:
-	// System.err.printf("Left wisch.");
-	//
-	// return true;
-	// case MotionEvent.EDGE_RIGHT:
-	// System.err.printf("Right wisch.");
-	//
-	// return true;
-	// }
-	// // break;
-	// // }
-	//
-	// return false;
-	// }
-
 	private void updateButtonText() {
 		// Prepare times
 		Calendar cPrev = (Calendar) mToday.clone();
