@@ -183,11 +183,11 @@ public class MensaMeals extends ExpandableListActivity {
 
 		// Init Ads + hide them after 7 secs
 		mAdView = (AdView) findViewById(R.id.ad);
+		if (!mSettings.m_bAds) {
 		mAdView.setAdListener( new SimpleAdListener()
         {
             public void onReceiveAd(com.admob.android.ads.AdView adView)
             {
-            	System.out.println("done.\n");
             	adView.postDelayed(new Runnable() {
 					@Override
 					public void run() {
@@ -198,15 +198,14 @@ public class MensaMeals extends ExpandableListActivity {
 //						animation.setInterpolator(new AccelerateInterpolator());
 //						mAdView.startAnimation(animation);
 						
-						if (!mSettings.m_bAds) {
 							mAdView.setVisibility(View.GONE);
-						}
 					}
             	}, 7000);
                 super.onReceiveAd(adView);
             }
         } );
-        mAdView.setKeywords("mensa menu meals");
+		}
+		mAdView.setKeywords("mensa menu meals");
         mAdView.setRequestInterval(15);
         mAdView.requestFreshAd();
         
@@ -219,7 +218,7 @@ public class MensaMeals extends ExpandableListActivity {
 
 //		// hide ads if deactivated
 //		if (mSettings.m_bAds) {
-//			mAdView.setVisibility(View.VISIBLE);
+			mAdView.setVisibility(View.VISIBLE);
 //		} else {
 //			mAdView.setVisibility(View.GONE);
 //		}
