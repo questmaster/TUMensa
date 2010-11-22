@@ -200,7 +200,7 @@ public class MensaMeals extends ExpandableListActivity {
 						
 							mAdView.setVisibility(View.GONE);
 					}
-            	}, 7000);
+            	}, 5000);
                 super.onReceiveAd(adView);
             }
         } );
