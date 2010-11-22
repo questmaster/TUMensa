@@ -36,6 +36,7 @@ public class MensaMealsSettings extends PreferenceActivity {
 		public boolean m_bAutoUpdate = true;
 		public boolean m_bDeleteOldData = true;
 		public boolean m_bGestures = true;
+		public boolean m_bAds = true;
 		public String m_sThemes = "dark";
 
 
@@ -48,6 +49,7 @@ public class MensaMealsSettings extends PreferenceActivity {
 				m_bAutoUpdate = sharedPref.getBoolean(res.getString(R.string.PREF_KEY_AUTO_UPDATE), m_bAutoUpdate);
 				m_bDeleteOldData = sharedPref.getBoolean(res.getString(R.string.PREF_KEY_DELETE_OLD_DATA), m_bDeleteOldData);
 				m_bGestures = sharedPref.getBoolean(res.getString(R.string.PREF_KEY_GESTURES), m_bGestures);
+				m_bAds = sharedPref.getBoolean(res.getString(R.string.PREF_KEY_ADS), m_bAds);
 
 				m_sMensaLocation = sharedPref.getString(res.getString(R.string.PREF_KEY_MENSA_LOCATION), m_sMensaLocation);
 

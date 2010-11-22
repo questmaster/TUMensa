@@ -18,8 +18,11 @@ package de.questmaster.tudmensa;
 
 import java.util.Calendar;
 
-import de.questmaster.tudmensa.R;
+import com.admob.android.ads.AdManager;
+import com.admob.android.ads.AdView;
+import com.admob.android.ads.SimpleAdListener;
 
+import de.questmaster.tudmensa.R;
 import android.app.ExpandableListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -36,6 +39,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.SimpleCursorTreeAdapter;
@@ -68,7 +73,7 @@ public class MensaMeals extends ExpandableListActivity {
 	private Calendar mToday = Calendar.getInstance();
 	protected Context mContext = this;
 	private String mOldTheme;
-
+	private AdView mAdView = null;
 	private GestureDetector gestureDetector;
 
 	/**
@@ -176,6 +181,53 @@ public class MensaMeals extends ExpandableListActivity {
 		// Gesture detection
 		gestureDetector = new GestureDetector(new MyGestureDetector());
 
+		// Init Ads + hide them after 7 secs
+		mAdView = (AdView) findViewById(R.id.ad);
+		mAdView.setAdListener( new SimpleAdListener()
+        {
+            public void onReceiveAd(com.admob.android.ads.AdView adView)
+            {
+            	System.out.println("done.\n");
+            	adView.postDelayed(new Runnable() {
+					@Override
+					public void run() {
+//						ScaleAnimation animation = new ScaleAnimation (1.0f, 0.0f, 1.0f, 0.0f, 
+//								Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 1.0f);
+//						animation.setDuration(400);
+//						animation.setFillAfter(true);
+//						animation.setInterpolator(new AccelerateInterpolator());
+//						mAdView.startAnimation(animation);
+						
+						if (!mSettings.m_bAds) {
+							mAdView.setVisibility(View.GONE);
+						}
+					}
+            	}, 7000);
+                super.onReceiveAd(adView);
+            }
+        } );
+        mAdView.setKeywords("mensa menu meals");
+        mAdView.setRequestInterval(15);
+        mAdView.requestFreshAd();
+        
+		// Fade the ad in over 4/10 of a second.
+		AlphaAnimation animation = new AlphaAnimation(0.0f, 1.0f);
+		animation.setDuration(400);
+		animation.setFillAfter(true);
+		animation.setInterpolator(new AccelerateInterpolator());
+		mAdView.startAnimation(animation);
+
+//		// hide ads if deactivated
+//		if (mSettings.m_bAds) {
+//			mAdView.setVisibility(View.VISIBLE);
+//		} else {
+//			mAdView.setVisibility(View.GONE);
+//		}
+
+		AdManager.setTestDevices(new String[] { AdManager.TEST_EMULATOR, // Android emulator
+				// "E83D20734F72FB3108F104ABC0FFC738", // My T-Mobile G1 Test Phone
+				});
+
 	}
 
 	@Override
@@ -240,6 +292,14 @@ public class MensaMeals extends ExpandableListActivity {
 				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+			}
+
+			// (un)hide Ads
+			AdView av = (AdView) findViewById(R.id.ad);
+			if (mSettings.m_bAds) {
+				av.setVisibility(View.VISIBLE);
+			} else {
+				av.setVisibility(View.GONE);
 			}
 
 			// Reread data and display it

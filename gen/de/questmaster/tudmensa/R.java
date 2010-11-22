@@ -15,6 +15,49 @@ public final class R {
         public static final int ThemesValues=0x7f050003;
     }
     public static final class attr {
+        /** <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int backgroundColor=0x7f010000;
+        /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int keywords=0x7f010003;
+        /** <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int primaryTextColor=0x7f010001;
+        /** <p>Must be an integer value, such as "<code>100</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int refreshInterval=0x7f010004;
+        /** <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int secondaryTextColor=0x7f010002;
     }
     public static final class drawable {
         public static final int essen=0x7f020000;
@@ -40,18 +83,19 @@ public final class R {
         public static final int trans_pix=0x7f020014;
     }
     public static final class id {
+        public static final int ad=0x7f080006;
         public static final int btn_next=0x7f080004;
         public static final int btn_prev=0x7f080002;
         public static final int content=0x7f080005;
-        public static final int counter=0x7f080006;
+        public static final int counter=0x7f080007;
         public static final int documentroot=0x7f080000;
         public static final int list_header=0x7f080001;
-        public static final int meal=0x7f08000a;
-        public static final int meal_type=0x7f080008;
-        public static final int price=0x7f08000b;
+        public static final int meal=0x7f08000b;
+        public static final int meal_type=0x7f080009;
+        public static final int price=0x7f08000c;
         public static final int txt_date=0x7f080003;
-        public static final int widget35=0x7f080007;
-        public static final int widget37=0x7f080009;
+        public static final int widget35=0x7f080008;
+        public static final int widget37=0x7f08000a;
     }
     public static final class layout {
         public static final int meals_list=0x7f030000;
@@ -59,6 +103,7 @@ public final class R {
         public static final int simple_expandable_list_item_2=0x7f030002;
     }
     public static final class string {
+        public static final int PREF_KEY_ADS=0x7f060032;
         public static final int PREF_KEY_AUTO_UPDATE=0x7f060026;
         public static final int PREF_KEY_DELETE_OLD_DATA=0x7f060023;
         public static final int PREF_KEY_GESTURES=0x7f06002b;
@@ -85,6 +130,9 @@ public final class R {
         public static final int phosphate=0x7f060018;
         public static final int pig=0x7f06000d;
         public static final int poultry=0x7f060009;
+        public static final int pref_AdsDescr=0x7f060030;
+        public static final int pref_AdsDescrOff=0x7f060031;
+        public static final int pref_AdsLabel=0x7f060033;
         public static final int pref_AutoUpdateDescr=0x7f06001d;
         public static final int pref_AutoUpdateDescrOff=0x7f060028;
         public static final int pref_AutoUpdateLabel=0x7f06001c;
@@ -98,6 +146,7 @@ public final class R {
         public static final int pref_MensaLocationSummary=0x7f060005;
         public static final int pref_ThemesLabel=0x7f060021;
         public static final int pref_ThemesSummary=0x7f060022;
+        public static final int pref_cat_ad=0x7f06002f;
         public static final int pref_cat_app=0x7f06002a;
         public static final int pref_cat_mensa=0x7f060004;
         public static final int preservative=0x7f060012;
@@ -129,4 +178,101 @@ public final class R {
     public static final class xml {
         public static final int preferences=0x7f040000;
     }
+    public static final class styleable {
+        /** Attributes that can be used with a com_admob_android_ads_AdView.
+           <p>Includes the following attributes:</p>
+           <table>
+           <colgroup align="left" />
+           <colgroup align="left" />
+           <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #com_admob_android_ads_AdView_backgroundColor de.questmaster.tudmensa:backgroundColor}</code></td><td></td></tr>
+           <tr><td><code>{@link #com_admob_android_ads_AdView_keywords de.questmaster.tudmensa:keywords}</code></td><td></td></tr>
+           <tr><td><code>{@link #com_admob_android_ads_AdView_primaryTextColor de.questmaster.tudmensa:primaryTextColor}</code></td><td></td></tr>
+           <tr><td><code>{@link #com_admob_android_ads_AdView_refreshInterval de.questmaster.tudmensa:refreshInterval}</code></td><td></td></tr>
+           <tr><td><code>{@link #com_admob_android_ads_AdView_secondaryTextColor de.questmaster.tudmensa:secondaryTextColor}</code></td><td></td></tr>
+           </table>
+           @see #com_admob_android_ads_AdView_backgroundColor
+           @see #com_admob_android_ads_AdView_keywords
+           @see #com_admob_android_ads_AdView_primaryTextColor
+           @see #com_admob_android_ads_AdView_refreshInterval
+           @see #com_admob_android_ads_AdView_secondaryTextColor
+         */
+        public static final int[] com_admob_android_ads_AdView = {
+            0x7f010000, 0x7f010001, 0x7f010002, 0x7f010003,
+            0x7f010004
+        };
+        /**
+          <p>This symbol is the offset where the {@link de.questmaster.tudmensa.R.attr#backgroundColor}
+          attribute's value can be found in the {@link #com_admob_android_ads_AdView} array.
+
+
+          <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name android:backgroundColor
+        */
+        public static final int com_admob_android_ads_AdView_backgroundColor = 0;
+        /**
+          <p>This symbol is the offset where the {@link de.questmaster.tudmensa.R.attr#keywords}
+          attribute's value can be found in the {@link #com_admob_android_ads_AdView} array.
+
+
+          <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name android:keywords
+        */
+        public static final int com_admob_android_ads_AdView_keywords = 3;
+        /**
+          <p>This symbol is the offset where the {@link de.questmaster.tudmensa.R.attr#primaryTextColor}
+          attribute's value can be found in the {@link #com_admob_android_ads_AdView} array.
+
+
+          <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name android:primaryTextColor
+        */
+        public static final int com_admob_android_ads_AdView_primaryTextColor = 1;
+        /**
+          <p>This symbol is the offset where the {@link de.questmaster.tudmensa.R.attr#refreshInterval}
+          attribute's value can be found in the {@link #com_admob_android_ads_AdView} array.
+
+
+          <p>Must be an integer value, such as "<code>100</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name android:refreshInterval
+        */
+        public static final int com_admob_android_ads_AdView_refreshInterval = 4;
+        /**
+          <p>This symbol is the offset where the {@link de.questmaster.tudmensa.R.attr#secondaryTextColor}
+          attribute's value can be found in the {@link #com_admob_android_ads_AdView} array.
+
+
+          <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name android:secondaryTextColor
+        */
+        public static final int com_admob_android_ads_AdView_secondaryTextColor = 2;
+    };
 }

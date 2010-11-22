@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tudmensa="http://schemas.android.com/apk/res/de.questmaster.tudmensa"
 	android:layout_width="fill_parent" android:orientation="vertical"
 	android:id="@+id/documentroot" android:layout_height="fill_parent">
 
@@ -14,7 +15,7 @@
 			android:layout_width="wrap_content" android:id="@+id/txt_date"
 			android:gravity="center_vertical|center_horizontal" android:width="0px"
 			android:text="Mensa
-	Date" style="@style/myTextViewStyle_header"
+Date" style="@style/myTextViewStyle_header"
 			android:maxLines="2" android:layout_weight="0.8" android:onClick="onClickTodayButton"
 			android:background="@android:color/transparent" />
 		<Button android:layout_width="wrap_content" android:id="@+id/btn_next"
@@ -22,9 +23,8 @@
 			android:layout_height="fill_parent" android:onClick="onClickNextButton" />
 	</LinearLayout>
 
-	<LinearLayout android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:id="@+id/content"
-		android:layout_below="@+id/list_header">
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/content" android:layout_below="@+id/list_header" android:layout_above="@+id/ad">
 
 		<ExpandableListView android:id="@id/android:list"
 			android:layout_width="fill_parent" android:layout_height="fill_parent" />
@@ -33,4 +33,9 @@
 			android:layout_gravity="center_vertical|center_horizontal"
 			android:layout_height="fill_parent" android:gravity="center_vertical|center_horizontal" />
 	</LinearLayout>
+
+	<com.admob.android.ads.AdView android:id="@+id/ad"
+		android:layout_width="fill_parent" tudmensa:backgroundColor="#000000"
+		tudmensa:primaryTextColor="#FFFFFF" tudmensa:secondaryTextColor="#CCCCCC"
+		android:layout_height="wrap_content" android:layout_alignParentBottom="true"/>	
 </RelativeLayout>
