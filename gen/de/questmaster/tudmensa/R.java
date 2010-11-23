@@ -107,6 +107,7 @@ containing a value of this type.
         public static final int PREF_KEY_AUTO_UPDATE=0x7f060026;
         public static final int PREF_KEY_DELETE_OLD_DATA=0x7f060023;
         public static final int PREF_KEY_GESTURES=0x7f06002b;
+        public static final int PREF_KEY_LAST_UPDATE=0x7f060035;
         public static final int PREF_KEY_MENSA_LOCATION=0x7f060024;
         public static final int PREF_KEY_THEMES=0x7f060025;
         public static final int antioxidant=0x7f060013;
@@ -142,6 +143,7 @@ containing a value of this type.
         public static final int pref_GesturesDescr=0x7f06002c;
         public static final int pref_GesturesDescrOff=0x7f06002d;
         public static final int pref_GesturesLabel=0x7f06002e;
+        public static final int pref_LastUpdateLabel=0x7f060034;
         public static final int pref_MensaLocationLabel=0x7f060006;
         public static final int pref_MensaLocationSummary=0x7f060005;
         public static final int pref_ThemesLabel=0x7f060021;

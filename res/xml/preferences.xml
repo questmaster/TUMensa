@@ -5,15 +5,12 @@
 			android:summary="@string/pref_MensaLocationSummary" android:entries="@array/MensaLocations"
 			android:defaultValue="stadtmitte" android:entryValues="@array/MensaLocationsValues"
 			android:title="@string/pref_MensaLocationLabel" android:key="@string/PREF_KEY_MENSA_LOCATION" />
-		<CheckBoxPreference android:defaultValue="true"
+		<CheckBoxPreference android:defaultValue="true" android:title="@string/pref_DeleteOldDataLabel" android:key="@string/PREF_KEY_DELETE_OLD_DATA" android:summaryOn="@string/pref_DeleteOldDataDescr" android:summaryOff="@string/pref_DeleteOldDataDescrOff" /><CheckBoxPreference android:defaultValue="true"
 			android:title="@string/pref_AutoUpdateLabel" android:key="@string/PREF_KEY_AUTO_UPDATE"
 			android:summaryOn="@string/pref_AutoUpdateDescr" android:summaryOff="@string/pref_AutoUpdateDescrOff" />
 		<Preference android:key="@string/PREF_KEY_LAST_UPDATE"
 			android:title="@string/pref_LastUpdateLabel"/>
-		<CheckBoxPreference android:defaultValue="true"
-			android:title="@string/pref_DeleteOldDataLabel" android:key="@string/PREF_KEY_DELETE_OLD_DATA"
-			android:summaryOn="@string/pref_DeleteOldDataDescr"
-			android:summaryOff="@string/pref_DeleteOldDataDescrOff" />
+		
 	</PreferenceCategory>
 	
 	<PreferenceCategory android:title="@string/pref_cat_app">	

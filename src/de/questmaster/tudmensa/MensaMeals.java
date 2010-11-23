@@ -439,7 +439,7 @@ public class MensaMeals extends ExpandableListActivity {
 	}
 
 	private boolean doMondayUpdate() {
-		// TODO: time till last monday
+		// TODO: time till last Monday
 		Calendar oNow = Calendar.getInstance();
 		
 		// time till last update
