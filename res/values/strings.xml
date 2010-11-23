@@ -59,4 +59,6 @@
     <string name="pref_AdsDescrOff">No support for developer.</string>
     <string name="PREF_KEY_ADS">ads</string>
     <string name="pref_AdsLabel">Support developer</string>
+<string name="pref_LastUpdateLabel">Last Update</string>
+    <string name="PREF_KEY_LAST_UPDATE">last_update</string>
 </resources>

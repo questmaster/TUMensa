@@ -5,29 +5,31 @@
 			android:summary="@string/pref_MensaLocationSummary" android:entries="@array/MensaLocations"
 			android:defaultValue="stadtmitte" android:entryValues="@array/MensaLocationsValues"
 			android:title="@string/pref_MensaLocationLabel" android:key="@string/PREF_KEY_MENSA_LOCATION" />
-	</PreferenceCategory>
-	<PreferenceCategory android:title="@string/pref_cat_app">
-
 		<CheckBoxPreference android:defaultValue="true"
 			android:title="@string/pref_AutoUpdateLabel" android:key="@string/PREF_KEY_AUTO_UPDATE"
 			android:summaryOn="@string/pref_AutoUpdateDescr" android:summaryOff="@string/pref_AutoUpdateDescrOff" />
-		<CheckBoxPreference android:key="@string/PREF_KEY_GESTURES"
-			android:title="@string/pref_GesturesLabel" android:summaryOn="@string/pref_GesturesDescr"
-			android:summaryOff="@string/pref_GesturesDescrOff"
-			android:defaultValue="true" />
+		<Preference android:key="@string/PREF_KEY_LAST_UPDATE"
+			android:title="@string/pref_LastUpdateLabel"/>
 		<CheckBoxPreference android:defaultValue="true"
 			android:title="@string/pref_DeleteOldDataLabel" android:key="@string/PREF_KEY_DELETE_OLD_DATA"
 			android:summaryOn="@string/pref_DeleteOldDataDescr"
 			android:summaryOff="@string/pref_DeleteOldDataDescrOff" />
+	</PreferenceCategory>
+	
+	<PreferenceCategory android:title="@string/pref_cat_app">	
+		<CheckBoxPreference android:key="@string/PREF_KEY_GESTURES"
+			android:title="@string/pref_GesturesLabel" android:summaryOn="@string/pref_GesturesDescr"
+			android:summaryOff="@string/pref_GesturesDescrOff"
+			android:defaultValue="true" />
 		<ListPreference android:dialogTitle="@string/pref_ThemesLabel"
 			android:summary="@string/pref_ThemesSummary" android:entries="@array/Themes"
 			android:defaultValue="dark" android:entryValues="@array/ThemesValues"
 			android:title="@string/pref_ThemesLabel" android:key="@string/PREF_KEY_THEMES" />
-
 	</PreferenceCategory>
+	
 	<PreferenceCategory android:title="@string/pref_cat_ad">
 		<CheckBoxPreference android:key="@string/PREF_KEY_ADS"
 			android:summaryOn="@string/pref_AdsDescr" android:title="@string/pref_AdsLabel"
-			android:summaryOff="@string/pref_AdsDescrOff" android:defaultValue="true"></CheckBoxPreference>
+			android:summaryOff="@string/pref_AdsDescrOff" android:defaultValue="true" />
 	</PreferenceCategory>
 </PreferenceScreen>

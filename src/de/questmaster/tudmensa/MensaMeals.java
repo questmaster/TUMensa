@@ -66,6 +66,8 @@ public class MensaMeals extends ExpandableListActivity {
 			mPDialog.dismiss();
 			// updateView after update. Don't do it for an update after startup
 			mRestart = true;
+			//  set update time
+			mSettings.setLastUpdate(mContext);
 			fillData();
 		}
 	};
@@ -418,12 +420,16 @@ public class MensaMeals extends ExpandableListActivity {
 
 		// Set new title
 		int pos = 0;
+		boolean found = false;
 		for (String s : getResources().getStringArray(R.array.MensaLocationsValues)) {
 			if (s.equals(mSettings.m_sMensaLocation)) {
+				found = true;
 				break;
 			} else
 				pos++;
 		}
+		if (!found)
+			pos = 0;
 
 		// Update label
 		TextView labelDay = (TextView) findViewById(R.id.txt_date);
@@ -432,19 +438,34 @@ public class MensaMeals extends ExpandableListActivity {
 				+ DateFormat.getDateFormat(this).format(mToday.getTime()));
 	}
 
+	private boolean doMondayUpdate() {
+		// TODO: time till last monday
+		Calendar oNow = Calendar.getInstance();
+		
+		// time till last update
+		long lDiff = oNow.getTimeInMillis() - mSettings.m_lLastUpdate;
+		
+		// Update is older then a week
+		if (lDiff / 86400000.0 > 7.0)
+			return true;
+		
+		return false;
+	}
+	
 	private void fillData() {
 		// prepare date string
 		String date = (String) DateFormat.format("yyyyMMdd", mToday);
 
 		// Get all of the notes from the database and create the item list
 		Cursor c = mDbHelper.fetchGroupsOfDay(mSettings.m_sMensaLocation, date);
-		// if none found start a new query automatically
-		if (mSettings.m_bAutoUpdate && c.getCount() == 0 && !mRestart) {
+		startManagingCursor(c);
+		// if none found start a new query automatically, also on each monday
+		if (mSettings.m_bAutoUpdate && !mRestart && (c.getCount() == 0 || doMondayUpdate()) ) {
 			mRestart = true;
 			getData();
 			return;
 		}
-		startManagingCursor(c);
+//		startManagingCursor(c);
 
 		String[] group_from = new String[] { MealsDbAdapter.KEY_COUNTER };
 		int[] group_to = new int[] { R.id.counter };
