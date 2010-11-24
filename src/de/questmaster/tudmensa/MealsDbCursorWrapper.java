@@ -37,7 +37,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * 
 	 * @see android.database.Cursor#close()
 	 */
-	@Override
 	public void close() {
 		mCursor.close();
 	}
@@ -48,7 +47,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * @see android.database.Cursor#copyStringToBuffer(int,
 	 * android.database.CharArrayBuffer)
 	 */
-	@Override
 	public void copyStringToBuffer(int columnIndex, CharArrayBuffer buffer) {
 		mCursor.copyStringToBuffer(columnIndex, buffer);
 	}
@@ -58,7 +56,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * 
 	 * @see android.database.Cursor#deactivate()
 	 */
-	@Override
 	public void deactivate() {
 		mCursor.deactivate();
 	}
@@ -68,7 +65,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * 
 	 * @see android.database.Cursor#getBlob(int)
 	 */
-	@Override
 	public byte[] getBlob(int columnIndex) {
 		return mCursor.getBlob(columnIndex);
 	}
@@ -78,7 +74,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * 
 	 * @see android.database.Cursor#getColumnCount()
 	 */
-	@Override
 	public int getColumnCount() {
 		return mCursor.getColumnCount();
 	}
@@ -88,7 +83,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * 
 	 * @see android.database.Cursor#getColumnIndex(java.lang.String)
 	 */
-	@Override
 	public int getColumnIndex(String columnName) {
 		return mCursor.getColumnIndex(columnName);
 	}
@@ -98,7 +92,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * 
 	 * @see android.database.Cursor#getColumnIndexOrThrow(java.lang.String)
 	 */
-	@Override
 	public int getColumnIndexOrThrow(String columnName) throws IllegalArgumentException {
 		return mCursor.getColumnIndexOrThrow(columnName);
 	}
@@ -108,7 +101,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * 
 	 * @see android.database.Cursor#getColumnName(int)
 	 */
-	@Override
 	public String getColumnName(int columnIndex) {
 		return mCursor.getColumnName(columnIndex);
 	}
@@ -118,7 +110,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * 
 	 * @see android.database.Cursor#getColumnNames()
 	 */
-	@Override
 	public String[] getColumnNames() {
 		return mCursor.getColumnNames();
 	}
@@ -128,7 +119,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * 
 	 * @see android.database.Cursor#getCount()
 	 */
-	@Override
 	public int getCount() {
 		return mCursor.getCount();
 	}
@@ -138,7 +128,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * 
 	 * @see android.database.Cursor#getDouble(int)
 	 */
-	@Override
 	public double getDouble(int columnIndex) {
 		return mCursor.getDouble(columnIndex);
 	}
@@ -148,7 +137,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * 
 	 * @see android.database.Cursor#getExtras()
 	 */
-	@Override
 	public Bundle getExtras() {
 		return mCursor.getExtras();
 	}
@@ -158,7 +146,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * 
 	 * @see android.database.Cursor#getFloat(int)
 	 */
-	@Override
 	public float getFloat(int columnIndex) {
 		return mCursor.getFloat(columnIndex);
 	}
@@ -168,7 +155,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * 
 	 * @see android.database.Cursor#getInt(int)
 	 */
-	@Override
 	public int getInt(int columnIndex) {
 		return mCursor.getInt(columnIndex);
 	}
@@ -178,7 +164,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * 
 	 * @see android.database.Cursor#getLong(int)
 	 */
-	@Override
 	public long getLong(int columnIndex) {
 		return mCursor.getLong(columnIndex);
 	}
@@ -188,7 +173,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * 
 	 * @see android.database.Cursor#getPosition()
 	 */
-	@Override
 	public int getPosition() {
 		return mCursor.getPosition();
 	}
@@ -198,7 +182,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * 
 	 * @see android.database.Cursor#getShort(int)
 	 */
-	@Override
 	public short getShort(int columnIndex) {
 		return mCursor.getShort(columnIndex);
 	}
@@ -208,7 +191,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * 
 	 * @see android.database.Cursor#getString(int)
 	 */
-	@Override
 	public String getString(int columnIndex) {
 		String result = mCursor.getString(columnIndex);
 
@@ -264,7 +246,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * 
 	 * @see android.database.Cursor#getWantsAllOnMoveCalls()
 	 */
-	@Override
 	public boolean getWantsAllOnMoveCalls() {
 		return mCursor.getWantsAllOnMoveCalls();
 	}
@@ -274,7 +255,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * 
 	 * @see android.database.Cursor#isAfterLast()
 	 */
-	@Override
 	public boolean isAfterLast() {
 		return mCursor.isAfterLast();
 	}
@@ -284,7 +264,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * 
 	 * @see android.database.Cursor#isBeforeFirst()
 	 */
-	@Override
 	public boolean isBeforeFirst() {
 		return mCursor.isBeforeFirst();
 	}
@@ -294,7 +273,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * 
 	 * @see android.database.Cursor#isClosed()
 	 */
-	@Override
 	public boolean isClosed() {
 		return mCursor.isClosed();
 	}
@@ -304,7 +282,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * 
 	 * @see android.database.Cursor#isFirst()
 	 */
-	@Override
 	public boolean isFirst() {
 		return mCursor.isFirst();
 	}
@@ -314,7 +291,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * 
 	 * @see android.database.Cursor#isLast()
 	 */
-	@Override
 	public boolean isLast() {
 		return mCursor.isLast();
 	}
@@ -324,7 +300,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * 
 	 * @see android.database.Cursor#isNull(int)
 	 */
-	@Override
 	public boolean isNull(int columnIndex) {
 		return mCursor.isNull(columnIndex);
 	}
@@ -334,7 +309,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * 
 	 * @see android.database.Cursor#move(int)
 	 */
-	@Override
 	public boolean move(int offset) {
 		return mCursor.move(offset);
 	}
@@ -344,7 +318,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * 
 	 * @see android.database.Cursor#moveToFirst()
 	 */
-	@Override
 	public boolean moveToFirst() {
 		return mCursor.moveToFirst();
 	}
@@ -354,7 +327,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * 
 	 * @see android.database.Cursor#moveToLast()
 	 */
-	@Override
 	public boolean moveToLast() {
 		return mCursor.moveToLast();
 	}
@@ -364,7 +336,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * 
 	 * @see android.database.Cursor#moveToNext()
 	 */
-	@Override
 	public boolean moveToNext() {
 		return mCursor.moveToNext();
 	}
@@ -374,7 +345,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * 
 	 * @see android.database.Cursor#moveToPosition(int)
 	 */
-	@Override
 	public boolean moveToPosition(int position) {
 		return mCursor.moveToPosition(position);
 	}
@@ -384,7 +354,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * 
 	 * @see android.database.Cursor#moveToPrevious()
 	 */
-	@Override
 	public boolean moveToPrevious() {
 		return mCursor.moveToPrevious();
 	}
@@ -395,7 +364,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * @see android.database.Cursor#registerContentObserver(android.database.
 	 * ContentObserver)
 	 */
-	@Override
 	public void registerContentObserver(ContentObserver observer) {
 		mCursor.registerContentObserver(observer);
 	}
@@ -406,7 +374,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * @see android.database.Cursor#registerDataSetObserver(android.database.
 	 * DataSetObserver)
 	 */
-	@Override
 	public void registerDataSetObserver(DataSetObserver observer) {
 		mCursor.registerDataSetObserver(observer);
 	}
@@ -416,7 +383,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * 
 	 * @see android.database.Cursor#requery()
 	 */
-	@Override
 	public boolean requery() {
 		return mCursor.requery();
 	}
@@ -426,7 +392,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * 
 	 * @see android.database.Cursor#respond(android.os.Bundle)
 	 */
-	@Override
 	public Bundle respond(Bundle extras) {
 		return mCursor.respond(extras);
 	}
@@ -438,7 +403,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * android.database.Cursor#setNotificationUri(android.content.ContentResolver
 	 * , android.net.Uri)
 	 */
-	@Override
 	public void setNotificationUri(ContentResolver cr, Uri uri) {
 		mCursor.setNotificationUri(cr, uri);
 	}
@@ -449,7 +413,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * @see android.database.Cursor#unregisterContentObserver(android.database.
 	 * ContentObserver)
 	 */
-	@Override
 	public void unregisterContentObserver(ContentObserver observer) {
 		mCursor.unregisterContentObserver(observer);
 	}
@@ -460,7 +423,6 @@ public class MealsDbCursorWrapper implements Cursor {
 	 * @see android.database.Cursor#unregisterDataSetObserver(android.database.
 	 * DataSetObserver)
 	 */
-	@Override
 	public void unregisterDataSetObserver(DataSetObserver observer) {
 		mCursor.unregisterDataSetObserver(observer);
 	}

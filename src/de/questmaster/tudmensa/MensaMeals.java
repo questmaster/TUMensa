@@ -191,7 +191,6 @@ public class MensaMeals extends ExpandableListActivity {
             public void onReceiveAd(com.admob.android.ads.AdView adView)
             {
             	adView.postDelayed(new Runnable() {
-					@Override
 					public void run() {
 //						ScaleAnimation animation = new ScaleAnimation (1.0f, 0.0f, 1.0f, 0.0f, 
 //								Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 1.0f);
@@ -202,7 +201,7 @@ public class MensaMeals extends ExpandableListActivity {
 						
 							mAdView.setVisibility(View.GONE);
 					}
-            	}, 5000);
+            	}, 7000);
                 super.onReceiveAd(adView);
             }
         } );
