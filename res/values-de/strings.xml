@@ -55,6 +55,6 @@
 <string name="pref_cat_ad">Werbung</string>
     <string name="pref_AdsDescr">Werbung wird gezeigt, um den Entwickler (mich ;) ) zu unterstützen. Danke!</string>
     <string name="pref_AdsDescrOff">Keine Unterstützung für Entwickler.</string>
-    <string name="pref_AdsLabel">Unterstütze Entwickler</string>
+    <string name="pref_AdsLabel">Entwickler unterstützen</string>
 <string name="pref_LastUpdateLabel">Letztes Update</string>
 </resources>
