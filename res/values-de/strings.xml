@@ -21,7 +21,7 @@
     <string name="pig">Schwein</string>
     <string name="vegie">Vegetarisch</string>
     <string name="beefpig">Rind und Schwein</string>
-    <string name="menu_of">Menü vom </string>
+    
     
 <string name="colorant">Farbstoff</string>
     <string name="preservative">Konservierungsmittel</string>
@@ -34,12 +34,12 @@
     <string name="phenylalanine_source">Phenylalaninquelle</string>
     <string name="sweetening">Süssungsmittel</string>
 
-<string name="delete_db">Lösche DB</string>
+
 <string name="pref_AutoUpdateLabel">Automatisches Update</string>
     <string name="pref_AutoUpdateDescr">Lädt automatisch das aktuelle Mensamenü.</string>
-<string name="menu_for">Speisekarte für</string>
-<string name="pref_DeleteOldDataDescr">Löscht Essen der letzten Woche und davor.</string>
-    <string name="pref_DeleteOldDataLabel">Alte Essen löschen</string>
+
+<string name="pref_DeleteOldDataDescr">Löscht Einträge der letzten Woche und davor.</string>
+    <string name="pref_DeleteOldDataLabel">Alte Essenseinträge löschen</string>
     
 
     <string name="pref_ThemesLabel">Thema auswählen</string>
