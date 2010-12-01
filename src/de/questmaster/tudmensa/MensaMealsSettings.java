@@ -48,7 +48,7 @@ public class MensaMealsSettings extends PreferenceActivity {
 		public boolean m_bAutoUpdate = true;
 		public boolean m_bDeleteOldData = true;
 		public boolean m_bGestures = true;
-		public boolean m_bAds = true;
+		public boolean m_bAds = false;
 		public String m_sThemes = "dark";
 
 

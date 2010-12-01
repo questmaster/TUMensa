@@ -438,8 +438,13 @@ public class MensaMeals extends ExpandableListActivity {
 	}
 
 	private boolean doMondayUpdate() {
-		// TODO: time till last Monday
 		Calendar oNow = Calendar.getInstance();
+
+		// if Monday later than 8
+		if (oNow.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY &&
+				oNow.get(Calendar.HOUR) > 7) {
+			return true;
+		}
 		
 		// time till last update
 		long lDiff = oNow.getTimeInMillis() - mSettings.m_lLastUpdate;
