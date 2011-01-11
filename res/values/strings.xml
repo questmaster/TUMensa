@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <resources>
     <string name="settings_name">Mensa Settings</string>
-    <string name="app_name">Mensen - TU Darmstadt</string>
+    <string name="app_name">Mensen - TU/HS Darmstadt</string>
     <string name="no_meals">No data for todays menu available.</string>
     
 
@@ -19,7 +19,7 @@
     <string name="pig">pig</string>
     <string name="vegie">vegetarian</string>
     <string name="beefpig">Beef and pig</string>
-    <string name="menu_of">Menu of </string>
+    
     
 <string name="colorant">colorant</string>
     <string name="preservative">preservative</string>
@@ -32,12 +32,12 @@
     <string name="phenylalanine_source">phenylalanine source</string>
     <string name="sweetening">sweetening</string>
 
-<string name="delete_db">Delete DB</string>
+
 <string name="pref_AutoUpdateLabel">Auto update</string>
     <string name="pref_AutoUpdateDescr">Updates meals automatically.</string>
-<string name="menu_for">Menu of</string>
+
 <string name="pref_DeleteOldDataDescr">Deletes meals from last week and before.</string>
-    <string name="pref_DeleteOldDataLabel">Delete old menus</string>
+    <string name="pref_DeleteOldDataLabel">Delete old menu entries</string>
     
 
     <string name="pref_ThemesLabel">Select Theme</string>

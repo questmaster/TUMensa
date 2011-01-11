@@ -32,14 +32,14 @@
     <string name="pref_cat_mensa">Mensa</string>
     <string name="flavor_enhancer">Reforzante de sabor</string>
     <string name="phosphate">fosfato</string>
-    <string name="menu_for">Menú de</string>
+    
     <string name="pref_DeleteOldDataDescrOff">Retiene todas las entradas en la base de datos.</string>
     <string name="menu_update">Actualizar</string>
     <string name="pig">carne de cerdo</string>
     <string name="pref_AutoUpdateDescrOff">Solo actualizaciones manuales.</string>
     <string name="beefpig">carne vacuna y de cerdo</string>
     <string name="menu_settings">Propiedades</string>
-    <string name="menu_of">Menú de</string>
+    
     <string name="colorant">colorante</string>
     <string name="pref_AdsLabel">Apoyar al desarrollador</string>
     <string name="pref_AutoUpdateDescr">Descarga el menú actual automáticamente.</string>

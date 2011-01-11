@@ -378,7 +378,7 @@ public class MensaMeals extends ExpandableListActivity {
 
 	private boolean doMondayUpdate() {
 		Calendar oNow = Calendar.getInstance();
-		
+
 		// time till last update
 		long lDiff = oNow.getTimeInMillis() - mSettings.m_lLastUpdate;
 		
