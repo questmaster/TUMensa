@@ -12,8 +12,6 @@
 			</intent-filter>
 		</activity>
 		<activity android:name=".MensaMealsSettings" android:label="@string/settings_name"></activity>
-		<!-- The application's publisher ID assigned by AdMob -->
-		<meta-data android:value="a14ca85aa979557" android:name="ADMOB_PUBLISHER_ID" />
 	</application>
 
 	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
