@@ -34,8 +34,4 @@ Date" style="@style/myTextViewStyle_header"
 			android:layout_height="fill_parent" android:gravity="center_vertical|center_horizontal" />
 	</LinearLayout>
 
-	<com.admob.android.ads.AdView android:id="@+id/ad"
-		android:layout_width="fill_parent" tudmensa:backgroundColor="#000000"
-		tudmensa:primaryTextColor="#FFFFFF" tudmensa:secondaryTextColor="#CCCCCC"
-		android:layout_height="wrap_content" android:layout_alignParentBottom="true"/>	
 </RelativeLayout>

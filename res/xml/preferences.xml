@@ -24,9 +24,4 @@
 			android:title="@string/pref_ThemesLabel" android:key="@string/PREF_KEY_THEMES" />
 	</PreferenceCategory>
 	
-	<PreferenceCategory android:title="@string/pref_cat_ad">
-		<CheckBoxPreference android:key="@string/PREF_KEY_ADS"
-			android:summaryOn="@string/pref_AdsDescr" android:title="@string/pref_AdsLabel"
-			android:summaryOff="@string/pref_AdsDescrOff" android:defaultValue="false"/>
-	</PreferenceCategory>
 </PreferenceScreen>
