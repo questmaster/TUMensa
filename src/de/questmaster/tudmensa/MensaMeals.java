@@ -18,6 +18,7 @@ package de.questmaster.tudmensa;
 
 import java.util.Calendar;
 import de.questmaster.tudmensa.R;
+import android.app.Activity;
 import android.app.ExpandableListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -34,6 +35,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.SimpleCursorTreeAdapter;
@@ -67,6 +71,7 @@ public class MensaMeals extends ExpandableListActivity {
 
 	private Calendar mToday = Calendar.getInstance();
 	protected Context mContext = this;
+	protected Activity mActivity = this;
 	private String mOldTheme;
 	private GestureDetector gestureDetector;
 
@@ -275,9 +280,31 @@ public class MensaMeals extends ExpandableListActivity {
 		} else if (mToday.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
 			mToday.add(Calendar.DAY_OF_YEAR, 1);
 		}
-		updateButtonText();
+		
+		// animation
+		Animation anim = AnimationUtils.makeOutAnimation(this, false);
+		anim.setAnimationListener( new AnimationListener() {
 
-		fillData();
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				// next screen
+				updateButtonText();
+				fillData();
+
+				// animation
+				Animation anim = AnimationUtils.makeInAnimation(mContext, false);
+				mActivity.getCurrentFocus().startAnimation(anim);
+			}
+
+			@Override
+			public void onAnimationRepeat(Animation animation) {}
+
+			@Override
+			public void onAnimationStart(Animation animation) {}
+			
+		});
+		this.getCurrentFocus().startAnimation(anim);
+				
 	}
 
 	public void onClickPrevButton(View v) {
@@ -288,9 +315,31 @@ public class MensaMeals extends ExpandableListActivity {
 		} else if (mToday.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
 			mToday.add(Calendar.DAY_OF_YEAR, -2);
 		}
-		updateButtonText();
 
-		fillData();
+		// animation
+		Animation anim = AnimationUtils.makeOutAnimation(this, true);
+		this.getCurrentFocus().startAnimation(anim);
+
+		anim.setAnimationListener( new AnimationListener() {
+
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				// next screen
+				updateButtonText();
+				fillData();
+
+				// animation
+				Animation anim = AnimationUtils.makeInAnimation(mContext, true);
+				mActivity.getCurrentFocus().startAnimation(anim);
+			}
+
+			@Override
+			public void onAnimationRepeat(Animation animation) {}
+
+			@Override
+			public void onAnimationStart(Animation animation) {}
+			
+		});
 	}
 
 	@Override
