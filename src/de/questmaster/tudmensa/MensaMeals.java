@@ -35,9 +35,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.SimpleCursorTreeAdapter;
@@ -281,30 +278,9 @@ public class MensaMeals extends ExpandableListActivity {
 			mToday.add(Calendar.DAY_OF_YEAR, 1);
 		}
 		
-		// animation
-		Animation anim = AnimationUtils.makeOutAnimation(this, false);
-		anim.setAnimationListener( new AnimationListener() {
-
-			@Override
-			public void onAnimationEnd(Animation animation) {
-				// next screen
-				updateButtonText();
-				fillData();
-
-				// animation
-				Animation anim = AnimationUtils.makeInAnimation(mContext, false);
-				mActivity.getCurrentFocus().startAnimation(anim);
-			}
-
-			@Override
-			public void onAnimationRepeat(Animation animation) {}
-
-			@Override
-			public void onAnimationStart(Animation animation) {}
-			
-		});
-		this.getCurrentFocus().startAnimation(anim);
-				
+		// next screen
+		updateButtonText();
+		fillData();
 	}
 
 	public void onClickPrevButton(View v) {
@@ -316,30 +292,9 @@ public class MensaMeals extends ExpandableListActivity {
 			mToday.add(Calendar.DAY_OF_YEAR, -2);
 		}
 
-		// animation
-		Animation anim = AnimationUtils.makeOutAnimation(this, true);
-		this.getCurrentFocus().startAnimation(anim);
-
-		anim.setAnimationListener( new AnimationListener() {
-
-			@Override
-			public void onAnimationEnd(Animation animation) {
-				// next screen
-				updateButtonText();
-				fillData();
-
-				// animation
-				Animation anim = AnimationUtils.makeInAnimation(mContext, true);
-				mActivity.getCurrentFocus().startAnimation(anim);
-			}
-
-			@Override
-			public void onAnimationRepeat(Animation animation) {}
-
-			@Override
-			public void onAnimationStart(Animation animation) {}
-			
-		});
+		// next screen
+		updateButtonText();
+		fillData();
 	}
 
 	@Override
