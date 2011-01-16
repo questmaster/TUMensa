@@ -111,6 +111,13 @@ public class MealsDbAdapter {
 		return this;
 	}
 
+	public boolean isOpen() {
+		if (mDb != null)
+			return mDb.isOpen();
+		
+		return false;
+	}
+	
 	public void close() {
 		mDbHelper.close();
 	}

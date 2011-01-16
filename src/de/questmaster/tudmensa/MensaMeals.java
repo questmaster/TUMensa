@@ -364,6 +364,13 @@ public class MensaMeals extends ExpandableListActivity {
 	protected void onResume() {
 		super.onResume();
 
+		// check for database connection
+		// maybe canceled due to low memory, etc.
+		if (mDbHelper == null || !mDbHelper.isOpen()) {
+			mDbHelper = new MealsDbAdapter(this);
+			mDbHelper.open();
+		}
+		
 		// expand groups
 		fillData();
 	}
