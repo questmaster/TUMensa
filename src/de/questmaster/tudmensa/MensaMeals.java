@@ -29,6 +29,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.format.DateFormat;
+import android.view.ContextMenu;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.Menu;
@@ -37,6 +38,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.ExpandableListContextMenuInfo;
 import android.widget.SimpleCursorTreeAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,6 +48,9 @@ public class MensaMeals extends ExpandableListActivity {
 	private static final int UPDATE_ID = Menu.FIRST;
 	private static final int TODAY_ID = Menu.FIRST + 1;
 	private static final int SETTINGS_ID = Menu.FIRST + 2;
+
+	private static final int MENU_SHARE_ID = ContextMenu.FIRST;
+	private static final int MENU_VOTE_ID = ContextMenu.FIRST + 1;
 
 	public static final int ON_SETTINGS_CHANGE = 0;
 
@@ -60,7 +65,7 @@ public class MensaMeals extends ExpandableListActivity {
 			mPDialog.dismiss();
 			// updateView after update. Don't do it for an update after startup
 			mRestart = true;
-			//  set update time
+			// set update time
 			mSettings.setLastUpdate(mContext);
 			fillData();
 		}
@@ -154,6 +159,7 @@ public class MensaMeals extends ExpandableListActivity {
 		// Set Content
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.meals_list);
+		registerForContextMenu(getExpandableListView());
 
 		// Init Database
 		mDbHelper = new MealsDbAdapter(this);
@@ -252,6 +258,51 @@ public class MensaMeals extends ExpandableListActivity {
 	}
 
 	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+
+		ExpandableListView.ExpandableListContextMenuInfo info = (ExpandableListView.ExpandableListContextMenuInfo) menuInfo;
+		int type = ExpandableListView.getPackedPositionType(info.packedPosition);
+		
+		// Only create a context menu for child items
+		if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+			 menu.setHeaderTitle("Meals");// TODO: I18N
+			 menu.add(0, MENU_SHARE_ID, 0, "Share with Friends");// TODO: I18N
+//TODO:			 menu.add(0, MENU_VOTE_ID, 1, "Vote"); // TODO: I18N
+		}
+	}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+
+		ExpandableListContextMenuInfo info = (ExpandableListContextMenuInfo) item.getMenuInfo();
+
+		// Pull values from the array we built when we created the list String
+		Cursor c = mDbHelper.fetchMeal(info.id);
+		startManagingCursor(c);
+
+		// get info
+		String meal = c.getString(c.getColumnIndex(MealsDbAdapter.KEY_NAME));
+		String mensa = c.getString(c.getColumnIndex(MealsDbAdapter.KEY_LOCATION));
+
+		switch (item.getItemId()) {
+		case MENU_SHARE_ID:
+			Intent share = new Intent(Intent.ACTION_SEND);
+			share.setType("text/plain");
+			share.putExtra(Intent.EXTRA_SUBJECT, "Mensa meal on " + DateFormat.getDateFormat(this).format(mToday.getTime())); // TODO: I18N
+			share.putExtra(Intent.EXTRA_TEXT, "Checkout \"" + meal + "\", on " + DateFormat.getDateFormat(this).format(mToday.getTime()) + " at " + getMensaLocationString(mensa));// TODO: I18N
+
+			startActivity(Intent.createChooser(share, "Where to share?"));// TODO: I18N
+			return true;
+		case MENU_VOTE_ID:
+			// TODO: code missing
+			return true;
+		default:
+			return super.onContextItemSelected(item);
+		}
+	}
+
+	@Override
 	public void onGroupCollapse(int groupPosition) {
 		// keep the Groups expanded
 		getExpandableListView().expandGroup(groupPosition);
@@ -277,7 +328,7 @@ public class MensaMeals extends ExpandableListActivity {
 		} else if (mToday.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
 			mToday.add(Calendar.DAY_OF_YEAR, 1);
 		}
-		
+
 		// next screen
 		updateButtonText();
 		fillData();
@@ -326,9 +377,28 @@ public class MensaMeals extends ExpandableListActivity {
 			// Display Toast message
 			Toast.makeText(this, info, Toast.LENGTH_SHORT).show();
 
-		return false;
+		return true;
 	}
 
+	/*
+	 * Returns Mensa Location String, if id not found in Values, the first Location is returned.s
+	 */
+	private String getMensaLocationString(String id) {
+		int pos = 0;
+		boolean found = false;
+		for (String s : getResources().getStringArray(R.array.MensaLocationsValues)) {
+			if (s.equals(id)) {
+				found = true;
+				break;
+			} else
+				pos++;
+		}
+		if (!found)
+			pos = 0;
+
+		return getResources().getStringArray(R.array.MensaLocations)[pos];
+	}
+	
 	private void updateButtonText() {
 		// Prepare times
 		Calendar cPrev = (Calendar) mToday.clone();
@@ -360,22 +430,9 @@ public class MensaMeals extends ExpandableListActivity {
 		// DateFormat.getDateFormat(this).format(cNext.getTime());
 		// buttonNext.setText(textNext.substring(0, textNext.length() - 5));
 
-		// Set new title
-		int pos = 0;
-		boolean found = false;
-		for (String s : getResources().getStringArray(R.array.MensaLocationsValues)) {
-			if (s.equals(mSettings.m_sMensaLocation)) {
-				found = true;
-				break;
-			} else
-				pos++;
-		}
-		if (!found)
-			pos = 0;
-
-		// Update label
+		// Set new title + Update label
 		TextView labelDay = (TextView) findViewById(R.id.txt_date);
-		labelDay.setText(getResources().getStringArray(R.array.MensaLocations)[pos] + "\n"
+		labelDay.setText(getMensaLocationString(mSettings.m_sMensaLocation) + "\n"
 				+ DateFormat.format("EEEE", mToday.getTime()) + ", "
 				+ DateFormat.getDateFormat(this).format(mToday.getTime()));
 	}
@@ -385,25 +442,25 @@ public class MensaMeals extends ExpandableListActivity {
 
 		// time till last update
 		long lDiff = oNow.getTimeInMillis() - mSettings.m_lLastUpdate;
-		
+
 		// Update is older then a week
 		if (lDiff / 86400000.0 > 7.0)
 			return true;
-		
+
 		// get last Monday
 		Calendar oLastMonday = Calendar.getInstance();
 		while (oLastMonday.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
 			oLastMonday.add(Calendar.DAY_OF_MONTH, -1);
 		}
-		
+
 		// lastUpdate is older than last monday
 		if (mSettings.m_lLastUpdate < oLastMonday.getTimeInMillis()) {
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	private void fillData() {
 		// prepare date string
 		String date = (String) DateFormat.format("yyyyMMdd", mToday);
@@ -412,12 +469,12 @@ public class MensaMeals extends ExpandableListActivity {
 		Cursor c = mDbHelper.fetchGroupsOfDay(mSettings.m_sMensaLocation, date);
 		startManagingCursor(c);
 		// if none found start a new query automatically, also on each monday
-		if (mSettings.m_bAutoUpdate && !mRestart && (c.getCount() == 0 || doMondayUpdate()) ) {
+		if (mSettings.m_bAutoUpdate && !mRestart && (c.getCount() == 0 || doMondayUpdate())) {
 			mRestart = true;
 			getData();
 			return;
 		}
-//		startManagingCursor(c);
+		// startManagingCursor(c);
 
 		String[] group_from = new String[] { MealsDbAdapter.KEY_COUNTER };
 		int[] group_to = new int[] { R.id.counter };
