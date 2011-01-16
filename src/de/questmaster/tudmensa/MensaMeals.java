@@ -49,6 +49,9 @@ public class MensaMeals extends ExpandableListActivity {
 	private static final int TODAY_ID = Menu.FIRST + 1;
 	private static final int SETTINGS_ID = Menu.FIRST + 2;
 
+	private static final int MENU_GROUP_MEAL_ID = 1;
+	private static final int MENU_GROUP_MENSA_ID = 2;
+
 	private static final int MENU_SHARE_ID = ContextMenu.FIRST;
 	private static final int MENU_VOTE_ID = ContextMenu.FIRST + 1;
 
@@ -178,6 +181,10 @@ public class MensaMeals extends ExpandableListActivity {
 		Button buttonNext = (Button) findViewById(R.id.btn_next);
 		buttonPrev.setBackgroundResource(R.drawable.ic_menu_back);
 		buttonNext.setBackgroundResource(R.drawable.ic_menu_forward);
+
+		Button buttonDate = (Button) findViewById(R.id.txt_date);
+		registerForContextMenu(buttonDate);
+
 		updateButtonText();
 
 		// Gesture detection
@@ -261,49 +268,73 @@ public class MensaMeals extends ExpandableListActivity {
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 
-		ExpandableListView.ExpandableListContextMenuInfo info = (ExpandableListView.ExpandableListContextMenuInfo) menuInfo;
-		int type = ExpandableListView.getPackedPositionType(info.packedPosition);
-		
-		// Only create a context menu for child items
-		if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
-			 menu.setHeaderTitle(getResources().getString(R.string.meals));
-			 menu.add(0, MENU_SHARE_ID, 0, getResources().getString(R.string.share_with_friends));
-//TODO:			 menu.add(0, MENU_VOTE_ID, 1, getResources().getString(R.string.vote));
+		if (v instanceof ExpandableListView) {
+			ExpandableListView.ExpandableListContextMenuInfo info = (ExpandableListView.ExpandableListContextMenuInfo) menuInfo;
+			int type = ExpandableListView.getPackedPositionType(info.packedPosition);
+
+			// Only create a context menu for child items
+			if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+				menu.setHeaderTitle(getResources().getString(R.string.meals));
+				menu.add(MENU_GROUP_MEAL_ID, MENU_SHARE_ID, 0, getResources().getString(R.string.share_with_friends));
+				// TODO: menu.add(MENU_GROUP_MEAL_ID, MENU_VOTE_ID, 1,
+				// getResources().getString(R.string.vote));
+			}
+		} else if (v instanceof Button) {
+
+			menu.setHeaderTitle(getResources().getString(R.string.pref_MensaLocationLabel));
+			int pos = 0;
+			for (String loc : getResources().getStringArray(R.array.MensaLocations)) {
+				menu.add(MENU_GROUP_MENSA_ID, pos, pos, loc);
+				pos++;
+			}
 		}
 	}
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 
-		ExpandableListContextMenuInfo info = (ExpandableListContextMenuInfo) item.getMenuInfo();
+		if (item.getGroupId() == MENU_GROUP_MEAL_ID) {
+			ExpandableListContextMenuInfo info = (ExpandableListContextMenuInfo) item.getMenuInfo();
 
-		// Pull values from the array we built when we created the list String
-		Cursor c = mDbHelper.fetchMeal(info.id);
-		startManagingCursor(c);
+			// Pull values from the array we built when we created the list
+			// String
+			Cursor c = mDbHelper.fetchMeal(info.id);
+			startManagingCursor(c);
 
-		// get info
-		String meal = c.getString(c.getColumnIndex(MealsDbAdapter.KEY_NAME));
-		String mensa = c.getString(c.getColumnIndex(MealsDbAdapter.KEY_LOCATION));
+			// get info
+			String meal = c.getString(c.getColumnIndex(MealsDbAdapter.KEY_NAME));
+			String mensa = c.getString(c.getColumnIndex(MealsDbAdapter.KEY_LOCATION));
 
-		switch (item.getItemId()) {
-		case MENU_SHARE_ID:
-			Intent share = new Intent(Intent.ACTION_SEND);
-			share.setType("text/plain");
-			share.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.mensa_meal_on) + " " + DateFormat.getDateFormat(this).format(mToday.getTime())); 
-			share.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.checkout_1) + " \"" 
-					+ meal + "\" " + getResources().getString(R.string.checkout_2_on) + " " 
-					+ DateFormat.getDateFormat(this).format(mToday.getTime()) + " " 
-					+ getResources().getString(R.string.checkout_3_at) + " \"" 
-					+ getMensaLocationString(mensa) + "\"");
+			switch (item.getItemId()) {
+			case MENU_SHARE_ID:
+				Intent share = new Intent(Intent.ACTION_SEND);
+				share.setType("text/plain");
+				share.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.mensa_meal_on) + " "
+						+ DateFormat.getDateFormat(this).format(mToday.getTime()));
+				share.putExtra(
+						Intent.EXTRA_TEXT,
+						getResources().getString(R.string.checkout_1) + " \"" + meal + "\" "
+								+ getResources().getString(R.string.checkout_2_on) + " "
+								+ DateFormat.getDateFormat(this).format(mToday.getTime()) + " "
+								+ getResources().getString(R.string.checkout_3_at) + " \""
+								+ getMensaLocationString(mensa) + "\"");
 
-			startActivity(Intent.createChooser(share, getResources().getString(R.string.where_to_share)));
-			return true;
-		case MENU_VOTE_ID:
-			// TODO: code missing
-			return true;
-		default:
-			return super.onContextItemSelected(item);
+				startActivity(Intent.createChooser(share, getResources().getString(R.string.where_to_share)));
+				return true;
+			case MENU_VOTE_ID:
+				// TODO: code missing
+				return true;
+			}
+		} else if (item.getGroupId() == MENU_GROUP_MENSA_ID) {
+			// set Mensa location
+			mSettings.setMensaLocation(mContext, getResources().getStringArray(R.array.MensaLocationsValues)[item.getItemId()]);
+			
+			// Reread data and display it
+			updateButtonText();
+			fillData();
 		}
+
+		return super.onContextItemSelected(item);
 	}
 
 	@Override
@@ -367,10 +398,13 @@ public class MensaMeals extends ExpandableListActivity {
 		// check for database connection
 		// maybe canceled due to low memory, etc.
 		if (mDbHelper == null || !mDbHelper.isOpen()) {
+			if (!mDbHelper.isOpen()) {
+				mDbHelper.close();
+			}
 			mDbHelper = new MealsDbAdapter(this);
 			mDbHelper.open();
 		}
-		
+
 		// expand groups
 		fillData();
 	}
@@ -392,7 +426,8 @@ public class MensaMeals extends ExpandableListActivity {
 	}
 
 	/*
-	 * Returns Mensa Location String, if id not found in Values, the first Location is returned.s
+	 * Returns Mensa Location String, if id not found in Values, the first
+	 * Location is returned.s
 	 */
 	private String getMensaLocationString(String id) {
 		int pos = 0;
@@ -409,7 +444,7 @@ public class MensaMeals extends ExpandableListActivity {
 
 		return getResources().getStringArray(R.array.MensaLocations)[pos];
 	}
-	
+
 	private void updateButtonText() {
 		// Prepare times
 		Calendar cPrev = (Calendar) mToday.clone();

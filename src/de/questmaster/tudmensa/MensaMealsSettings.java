@@ -78,5 +78,15 @@ public class MensaMealsSettings extends PreferenceActivity {
 			
 			sharedPref.commit();
 		}
-	}
+
+		public void setMensaLocation(Context p_oContext, String loc_id) {
+			Editor sharedPref = PreferenceManager.getDefaultSharedPreferences(p_oContext).edit();
+			Resources res = p_oContext.getResources();
+			
+			m_sMensaLocation = loc_id;
+			sharedPref.putString(res.getString(R.string.PREF_KEY_MENSA_LOCATION), m_sMensaLocation);
+			
+			sharedPref.commit();
+		}
+}
 }
