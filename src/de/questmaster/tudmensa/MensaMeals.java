@@ -266,9 +266,9 @@ public class MensaMeals extends ExpandableListActivity {
 		
 		// Only create a context menu for child items
 		if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
-			 menu.setHeaderTitle("Meals");// TODO: I18N
-			 menu.add(0, MENU_SHARE_ID, 0, "Share with Friends");// TODO: I18N
-//TODO:			 menu.add(0, MENU_VOTE_ID, 1, "Vote"); // TODO: I18N
+			 menu.setHeaderTitle(getResources().getString(R.string.meals));
+			 menu.add(0, MENU_SHARE_ID, 0, getResources().getString(R.string.share_with_friends));
+//TODO:			 menu.add(0, MENU_VOTE_ID, 1, getResources().getString(R.string.vote));
 		}
 	}
 
@@ -289,10 +289,14 @@ public class MensaMeals extends ExpandableListActivity {
 		case MENU_SHARE_ID:
 			Intent share = new Intent(Intent.ACTION_SEND);
 			share.setType("text/plain");
-			share.putExtra(Intent.EXTRA_SUBJECT, "Mensa meal on " + DateFormat.getDateFormat(this).format(mToday.getTime())); // TODO: I18N
-			share.putExtra(Intent.EXTRA_TEXT, "Checkout \"" + meal + "\", on " + DateFormat.getDateFormat(this).format(mToday.getTime()) + " at " + getMensaLocationString(mensa));// TODO: I18N
+			share.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.mensa_meal_on) + " " + DateFormat.getDateFormat(this).format(mToday.getTime())); 
+			share.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.checkout_1) + " \"" 
+					+ meal + "\" " + getResources().getString(R.string.checkout_2_on) + " " 
+					+ DateFormat.getDateFormat(this).format(mToday.getTime()) + " " 
+					+ getResources().getString(R.string.checkout_3_at) + " \"" 
+					+ getMensaLocationString(mensa) + "\"");
 
-			startActivity(Intent.createChooser(share, "Where to share?"));// TODO: I18N
+			startActivity(Intent.createChooser(share, getResources().getString(R.string.where_to_share)));
 			return true;
 		case MENU_VOTE_ID:
 			// TODO: code missing

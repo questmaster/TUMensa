@@ -61,4 +61,12 @@
     <string name="pref_AdsLabel">Support developer</string>
 <string name="pref_LastUpdateLabel">Last Update</string>
     <string name="PREF_KEY_LAST_UPDATE">last_update</string>
+<string name="mensa_meal_on">Mensa meal on</string>
+    <string name="vote">Vote</string>
+    <string name="share_with_friends">Share with friends</string>
+    <string name="where_to_share">Where to share?</string>
+    <string name="meals">Meals</string>
+    <string name="checkout_3_at">at</string>
+    <string name="checkout_1">Checkout</string>
+    <string name="checkout_2_on">on</string>
 </resources>
