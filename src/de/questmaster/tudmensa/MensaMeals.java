@@ -19,6 +19,7 @@ package de.questmaster.tudmensa;
 import java.util.Calendar;
 import de.questmaster.tudmensa.R;
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ExpandableListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -276,8 +277,7 @@ public class MensaMeals extends ExpandableListActivity {
 			if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
 				menu.setHeaderTitle(getResources().getString(R.string.meals));
 				menu.add(MENU_GROUP_MEAL_ID, MENU_SHARE_ID, 0, getResources().getString(R.string.share_with_friends));
-				// TODO: menu.add(MENU_GROUP_MEAL_ID, MENU_VOTE_ID, 1,
-				// getResources().getString(R.string.vote));
+				menu.add(MENU_GROUP_MEAL_ID, MENU_VOTE_ID, 1, getResources().getString(R.string.vote));
 			}
 		} else if (v instanceof Button) {
 
@@ -323,6 +323,8 @@ public class MensaMeals extends ExpandableListActivity {
 				return true;
 			case MENU_VOTE_ID:
 				// TODO: code missing
+				showDialog(R.layout.rating_dialog);
+				
 				return true;
 			}
 		} else if (item.getGroupId() == MENU_GROUP_MENSA_ID) {
@@ -337,6 +339,13 @@ public class MensaMeals extends ExpandableListActivity {
 		return super.onContextItemSelected(item);
 	}
 
+	protected Dialog onCreateDialog (int id) {
+		Dialog d = new Dialog(mContext);
+		d.setTitle("Voting Dialog"); // TODO: I18N
+		d.setContentView(id);
+		return d;
+	}
+	
 	@Override
 	public void onGroupCollapse(int groupPosition) {
 		// keep the Groups expanded
@@ -495,6 +504,7 @@ public class MensaMeals extends ExpandableListActivity {
 
 		// get last Monday
 		Calendar oLastMonday = Calendar.getInstance();
+		oLastMonday.add(Calendar.DAY_OF_MONTH, -1);
 		while (oLastMonday.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
 			oLastMonday.add(Calendar.DAY_OF_MONTH, -1);
 		}
