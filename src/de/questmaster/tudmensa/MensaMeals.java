@@ -19,10 +19,12 @@ package de.questmaster.tudmensa;
 import java.util.Calendar;
 import de.questmaster.tudmensa.R;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ExpandableListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
@@ -33,6 +35,7 @@ import android.text.format.DateFormat;
 import android.view.ContextMenu;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -40,6 +43,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.ExpandableListContextMenuInfo;
+import android.widget.RatingBar;
 import android.widget.SimpleCursorTreeAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -277,6 +281,7 @@ public class MensaMeals extends ExpandableListActivity {
 			if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
 				menu.setHeaderTitle(getResources().getString(R.string.meals));
 				menu.add(MENU_GROUP_MEAL_ID, MENU_SHARE_ID, 0, getResources().getString(R.string.share_with_friends));
+				// TODO: add entry only if voting enabled
 				menu.add(MENU_GROUP_MEAL_ID, MENU_VOTE_ID, 1, getResources().getString(R.string.vote));
 			}
 		} else if (v instanceof Button) {
@@ -322,15 +327,16 @@ public class MensaMeals extends ExpandableListActivity {
 				startActivity(Intent.createChooser(share, getResources().getString(R.string.where_to_share)));
 				return true;
 			case MENU_VOTE_ID:
-				// TODO: code missing
+				// TODO: code missing?
 				showDialog(R.layout.rating_dialog);
-				
+
 				return true;
 			}
 		} else if (item.getGroupId() == MENU_GROUP_MENSA_ID) {
 			// set Mensa location
-			mSettings.setMensaLocation(mContext, getResources().getStringArray(R.array.MensaLocationsValues)[item.getItemId()]);
-			
+			mSettings.setMensaLocation(mContext,
+					getResources().getStringArray(R.array.MensaLocationsValues)[item.getItemId()]);
+
 			// Reread data and display it
 			updateButtonText();
 			fillData();
@@ -339,13 +345,58 @@ public class MensaMeals extends ExpandableListActivity {
 		return super.onContextItemSelected(item);
 	}
 
-	protected Dialog onCreateDialog (int id) {
-		Dialog d = new Dialog(mContext);
-		d.setTitle("Voting Dialog"); // TODO: I18N
-		d.setContentView(id);
-		return d;
+	protected Dialog onCreateDialog(int id, Bundle b) {
+		Dialog dialog = null;
+
+		if (id == R.layout.rating_dialog) {
+			AlertDialog.Builder d = new AlertDialog.Builder(this);
+			d.setTitle("Voting Dialog"); // TODO: I18N
+			
+			// create view
+			LayoutInflater factory = LayoutInflater.from(this);
+            final View ratingView = factory.inflate(R.layout.rating_dialog, null);
+            d.setView(ratingView);
+			
+			d.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int whichButton) {
+					dialog.dismiss();
+
+					// WORKAROUND: dialog data is not deleted for next display
+					RatingBar r = (RatingBar) ratingView.findViewById(R.id.visual);
+					float visual = r.getRating();
+					r.setRating(0);
+					r = (RatingBar) ratingView.findViewById(R.id.price);
+					float price = r.getRating();
+					r.setRating(0);
+					r = (RatingBar) ratingView.findViewById(R.id.taste);
+					float taste = r.getRating();
+					r.setRating(0);
+					
+					// TODO: Save data
+					Toast.makeText(getApplicationContext(), "Visual: " + visual + "\nPrice: " + price + "\nTaste: " + taste, Toast.LENGTH_LONG).show();
+				}
+			});
+
+			d.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int whichButton) {
+					// WORKAROUND: dialog data is not deleted for next display
+					RatingBar r = (RatingBar) ratingView.findViewById(R.id.visual);
+					r.setRating(0);
+					r = (RatingBar) ratingView.findViewById(R.id.price);
+					r.setRating(0);
+					r = (RatingBar) ratingView.findViewById(R.id.taste);
+					r.setRating(0);
+
+					dialog.cancel();
+				}
+			});
+
+			dialog = d.create();
+		}
+		
+		return dialog;
 	}
-	
+
 	@Override
 	public void onGroupCollapse(int groupPosition) {
 		// keep the Groups expanded
@@ -541,7 +592,8 @@ public class MensaMeals extends ExpandableListActivity {
 		CustomCursorTreeAdapter meals = new CustomCursorTreeAdapter(this, c, R.layout.simple_expandable_list_item_1,
 				group_from, group_to, R.layout.simple_expandable_list_item_2, child_from, child_to);
 		setListAdapter(meals);
-
+// TODO: change list_item_2 for ratings + I18N dialog
+		
 		// expand all items
 		for (int i = 0; i < c.getCount(); i++) {
 			getExpandableListView().expandGroup(i);

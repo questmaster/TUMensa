@@ -46,6 +46,16 @@ public class MealsDbAdapter {
 	public static final String KEY_INFO = "info";
 	public static final String KEY_ROWID = "_id";
 
+	public static final String KEY_VOTE_TASTE = "vote_taste";
+	public static final String KEY_VOTE_PRICE = "vote_price";
+	public static final String KEY_VOTE_VISUAL = "vote_visual";
+	public static final String KEY_RESULT_TASTE = "res_taste";
+	public static final String KEY_RESULT_PRICE = "res_price";
+	public static final String KEY_RESULT_VISUAL = "res_visual";
+	public static final String KEY_COUNT_TASTE = "cnt_taste";
+	public static final String KEY_COUNT_PRICE = "cnt_price";
+	public static final String KEY_COUNT_VISUAL = "cnt_visual";
+
 	private static final String TAG = "MealsDbAdapter";
 	private DatabaseHelper mDbHelper;
 	private SQLiteDatabase mDb;
@@ -55,11 +65,13 @@ public class MealsDbAdapter {
 	 */
 	private static final String DATABASE_CREATE = "create table meals (_id integer primary key autoincrement, "
 			+ "location text not null, num short not null," + "date text not null, counter text not null,"
-			+ "name text not null, type text not null," + "price text not null, info text);";
+			+ "name text not null, type text not null," + "price text not null, info text,"
+			+ "vote_taste float, vote_price float, vote_visual float," + "res_taste float, res_price float, res_visual float,"
+			+ "cnt_taste integer, cnt_price integer, cnt_visual integer);";
 
 	private static final String DATABASE_NAME = "data";
 	private static final String DATABASE_TABLE = "meals";
-	private static final int DATABASE_VERSION = 7;
+	private static final int DATABASE_VERSION = 8;
 
 	private final Context mCtx;
 
@@ -77,10 +89,22 @@ public class MealsDbAdapter {
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			Log.w(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion
-					+ ", which will destroy all old data");
-			db.execSQL("DROP TABLE IF EXISTS meals");
-			onCreate(db);
+			if (oldVersion == 7 && newVersion == 8) {
+				db.execSQL("ALTER TABLE meals ADD vote_taste float DEFAULT 0.0");
+				db.execSQL("ALTER TABLE meals ADD vote_price float DEFAULT 0.0");
+				db.execSQL("ALTER TABLE meals ADD vote_visual float DEFAULT 0.0");
+				db.execSQL("ALTER TABLE meals ADD res_taste float DEFAULT 0.0");
+				db.execSQL("ALTER TABLE meals ADD res_price float DEFAULT 0.0");
+				db.execSQL("ALTER TABLE meals ADD res_visual float DEFAULT 0.0");
+				db.execSQL("ALTER TABLE meals ADD cnt_taste integer DEFAULT 0");
+				db.execSQL("ALTER TABLE meals ADD cnt_price integer DEFAULT 0");
+				db.execSQL("ALTER TABLE meals ADD cnt_visual integer DEFAULT 0");
+			} else {
+				Log.w(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion
+						+ ", which will destroy all old data");
+				db.execSQL("DROP TABLE IF EXISTS meals");
+				onCreate(db);
+			}
 		}
 	}
 
@@ -253,6 +277,8 @@ public class MealsDbAdapter {
 		return result;
 	}
 
+	// TODO: Add fetch methods to get meals + ratings
+	
 	/**
 	 * Update the note using the details provided. The note to be updated is
 	 * specified using the rowId, and it is altered to use the title and body
@@ -277,6 +303,31 @@ public class MealsDbAdapter {
 		args.put(KEY_TYPE, type);
 		args.put(KEY_PRICE, price);
 		args.put(KEY_INFO, info);
+
+		return mDb.update(DATABASE_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
+	}
+
+	public boolean updateMeal(long rowId, String location, String date, int num, String counter, String name,
+			String type, String price, String info, float vTaste, float vPrice, float vVisual, float rTaste, 
+			float rPrice, float rVisual, int cTaste, int cPrice, int cVisual) {
+		ContentValues args = new ContentValues();
+		args.put(KEY_LOCATION, location);
+		args.put(KEY_DATE, date);
+		args.put(KEY_MEAL_NUM, num);
+		args.put(KEY_COUNTER, counter);
+		args.put(KEY_NAME, name);
+		args.put(KEY_TYPE, type);
+		args.put(KEY_PRICE, price);
+		args.put(KEY_INFO, info);
+		args.put(KEY_VOTE_TASTE, vTaste);
+		args.put(KEY_VOTE_PRICE, vPrice);
+		args.put(KEY_VOTE_VISUAL, vVisual);
+		args.put(KEY_RESULT_TASTE, rTaste);
+		args.put(KEY_RESULT_PRICE, rPrice);
+		args.put(KEY_RESULT_VISUAL, rVisual);
+		args.put(KEY_COUNT_TASTE, cTaste);
+		args.put(KEY_COUNT_PRICE, cPrice);
+		args.put(KEY_COUNT_VISUAL, cVisual);
 
 		return mDb.update(DATABASE_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
 	}

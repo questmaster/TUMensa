@@ -14,6 +14,8 @@ import android.preference.PreferenceManager;
 
 public class MensaMealsSettings extends PreferenceActivity {
 
+	// TODO: add new property for rating
+	
 	private MensaMealsSettings.Settings mSettings = new MensaMealsSettings.Settings();
 
 	@Override
