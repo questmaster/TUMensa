@@ -83,24 +83,41 @@ containing a value of this type.
         public static final int trans_pix=0x7f020014;
     }
     public static final class id {
+        public static final int TextView01=0x7f080007;
+        public static final int TextView02=0x7f080009;
+        public static final int TextView03=0x7f08000b;
         public static final int ad=0x7f080006;
         public static final int btn_next=0x7f080004;
         public static final int btn_prev=0x7f080002;
         public static final int content=0x7f080005;
-        public static final int counter=0x7f080007;
+        public static final int counter=0x7f08000d;
         public static final int documentroot=0x7f080000;
+        public static final int linearLayout1=0x7f080013;
+        public static final int linearLayout2=0x7f080012;
+        public static final int linearLayout3=0x7f080016;
+        public static final int linearLayout4=0x7f080019;
         public static final int list_header=0x7f080001;
-        public static final int meal=0x7f08000b;
-        public static final int meal_type=0x7f080009;
-        public static final int price=0x7f08000c;
+        public static final int meal=0x7f080011;
+        public static final int meal_type=0x7f08000f;
+        public static final int price=0x7f08000a;
+        public static final int taste=0x7f08000c;
+        public static final int textView1=0x7f080014;
+        public static final int textView2=0x7f080017;
+        public static final int textView3=0x7f08001a;
         public static final int txt_date=0x7f080003;
-        public static final int widget35=0x7f080008;
-        public static final int widget37=0x7f08000a;
+        public static final int visual=0x7f080008;
+        public static final int vote_price=0x7f080018;
+        public static final int vote_taste=0x7f08001b;
+        public static final int vote_visual=0x7f080015;
+        public static final int widget35=0x7f08000e;
+        public static final int widget37=0x7f080010;
     }
     public static final class layout {
         public static final int meals_list=0x7f030000;
-        public static final int simple_expandable_list_item_1=0x7f030001;
-        public static final int simple_expandable_list_item_2=0x7f030002;
+        public static final int rating_dialog=0x7f030001;
+        public static final int simple_expandable_list_item_1=0x7f030002;
+        public static final int simple_expandable_list_item_2=0x7f030003;
+        public static final int simple_expandable_list_item_2_rating=0x7f030004;
     }
     public static final class string {
         public static final int PREF_KEY_ADS=0x7f06002f;
@@ -116,10 +133,15 @@ containing a value of this type.
         public static final int beefpig=0x7f06000f;
         public static final int blackened =0x7f060016;
         public static final int calf=0x7f06000c;
+        public static final int checkout_1=0x7f060039;
+        public static final int checkout_2_on=0x7f06003a;
+        public static final int checkout_3_at=0x7f060038;
         public static final int colorant=0x7f060010;
         public static final int dialog_updating_text=0x7f060003;
         public static final int fish=0x7f06000b;
         public static final int flavor_enhancer=0x7f060013;
+        public static final int meals=0x7f060037;
+        public static final int mensa_meal_on=0x7f060033;
         public static final int menu_settings=0x7f060007;
         public static final int menu_today=0x7f060026;
         public static final int menu_update=0x7f060008;
@@ -150,10 +172,13 @@ containing a value of this type.
         public static final int pref_cat_mensa=0x7f060004;
         public static final int preservative=0x7f060011;
         public static final int settings_name=0x7f060000;
+        public static final int share_with_friends=0x7f060035;
         public static final int sulphur_treated=0x7f060014;
         public static final int sweetening=0x7f060019;
         public static final int vegie=0x7f06000e;
+        public static final int vote=0x7f060034;
         public static final int waxed=0x7f060015;
+        public static final int where_to_share=0x7f060036;
     }
     public static final class style {
         /**  Widgets 
