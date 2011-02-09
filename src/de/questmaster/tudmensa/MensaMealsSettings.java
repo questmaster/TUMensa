@@ -30,7 +30,6 @@ import android.preference.PreferenceManager;
 
 public class MensaMealsSettings extends PreferenceActivity {
 
-	// TODO: add new property for rating
 	
 	private MensaMealsSettings.Settings mSettings = new MensaMealsSettings.Settings();
 
@@ -66,6 +65,7 @@ public class MensaMealsSettings extends PreferenceActivity {
 		public boolean m_bAutoUpdate = true;
 		public boolean m_bDeleteOldData = true;
 		public boolean m_bGestures = true;
+		public boolean m_bEnableVoting = false;
 		public String m_sThemes = "dark";
 
 
@@ -78,6 +78,7 @@ public class MensaMealsSettings extends PreferenceActivity {
 				m_bAutoUpdate = sharedPref.getBoolean(res.getString(R.string.PREF_KEY_AUTO_UPDATE), m_bAutoUpdate);
 				m_bDeleteOldData = sharedPref.getBoolean(res.getString(R.string.PREF_KEY_DELETE_OLD_DATA), m_bDeleteOldData);
 				m_bGestures = sharedPref.getBoolean(res.getString(R.string.PREF_KEY_GESTURES), m_bGestures);
+				m_bEnableVoting = sharedPref.getBoolean(res.getString(R.string.PREF_KEY_ENABLE_VOTING), m_bEnableVoting);
 
 				m_lLastUpdate = sharedPref.getLong(res.getString(R.string.PREF_KEY_LAST_UPDATE), m_lLastUpdate);
 

@@ -43,6 +43,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.ExpandableListContextMenuInfo;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.SimpleCursorTreeAdapter;
 import android.widget.TextView;
@@ -59,6 +60,12 @@ public class MensaMeals extends ExpandableListActivity {
 
 	private static final int MENU_SHARE_ID = ContextMenu.FIRST;
 	private static final int MENU_VOTE_ID = ContextMenu.FIRST + 1;
+
+	private static final String VOTE_DIALOG_MEAL_ID = "meal_id";
+	private static final String VOTE_DIALOG_VISUAL_ID = "vote_visual";
+	private static final String VOTE_DIALOG_TASTE_ID = "vote_taste";
+	private static final String VOTE_DIALOG_PRICE_ID = "vote_price";
+	private static final String VOTE_DIALOG_DATE_ID = "meal_date";
 
 	public static final int ON_SETTINGS_CHANGE = 0;
 
@@ -84,6 +91,7 @@ public class MensaMeals extends ExpandableListActivity {
 	protected Activity mActivity = this;
 	private String mOldTheme;
 	private GestureDetector gestureDetector;
+	private Bundle mVoteDialogData;
 
 	/**
 	 * Copied from K9mail.
@@ -133,22 +141,77 @@ public class MensaMeals extends ExpandableListActivity {
 
 	public class CustomCursorTreeAdapter extends SimpleCursorTreeAdapter {
 
+		private int[] mChildFrom;
+		private int[] mChildTo;
+
 		public CustomCursorTreeAdapter(Context context, Cursor cursor, int groupLayout, String[] groupFrom,
 				int[] groupTo, int childLayout, String[] childFrom, int[] childTo) {
 			super(context, cursor, groupLayout, groupFrom, groupTo, childLayout, childFrom, childTo);
+
+			mChildFrom = new int[childFrom.length];
+			initFromColumns(getChildrenCursor(cursor), childFrom, mChildFrom);
+
+			mChildTo = childTo;
+		}
+
+		/**
+		 * Copied from SimpleCurserTreeAdapter
+		 * 
+		 * @param cursor
+		 * @param fromColumnNames
+		 * @param fromColumns
+		 */
+		private void initFromColumns(Cursor cursor, String[] fromColumnNames, int[] fromColumns) {
+			for (int i = fromColumnNames.length - 1; i >= 0; i--) {
+				fromColumns[i] = cursor.getColumnIndexOrThrow(fromColumnNames[i]);
+			}
 		}
 
 		@Override
 		protected Cursor getChildrenCursor(Cursor groupCursor) {
+			Cursor c;
+
 			String location = groupCursor.getString(groupCursor.getColumnIndex(MealsDbAdapter.KEY_LOCATION));
 			String date = groupCursor.getString(groupCursor.getColumnIndex(MealsDbAdapter.KEY_DATE));
 			String counter = groupCursor.getString(groupCursor.getColumnIndex(MealsDbAdapter.KEY_COUNTER));
 
-			Cursor c = new MealsDbCursorWrapper(mDbHelper.fetchMealsOfGroupDay(location, date, counter), mContext);
-
+			if (mSettings.m_bEnableVoting) {
+				c = new MealsDbCursorWrapper(mDbHelper.fetchMealsOfGroupDayPlusVote(location, date, counter), mContext);
+			} else {
+				c = new MealsDbCursorWrapper(mDbHelper.fetchMealsOfGroupDay(location, date, counter), mContext);
+			}
 			startManagingCursor(c);
+			
 			return c;
 		}
+
+		@Override
+		protected void bindChildView(View view, Context context, Cursor cursor, boolean isLastChild) {
+			int[] from = mChildFrom;
+			int[] to = mChildTo;
+
+			for (int i = 0; i < to.length; i++) {
+				View v = view.findViewById(to[i]);
+				if (v != null) {
+					String text = cursor.getString(from[i]);
+					if (text == null) {
+						text = "";
+					}
+					if (v instanceof TextView) {
+						((TextView) v).setText(text);
+					} else if (v instanceof ImageView) {
+						setViewImage((ImageView) v, text);
+					} else if (v instanceof RatingBar) {
+						Float value = cursor.getFloat(from[i]);
+						((RatingBar) v).setRating(value);
+					} else {
+						throw new IllegalStateException("CustomCursorAdapter can bind values only to"
+								+ " RatingBar, TextView and ImageView!");
+					}
+				}
+			}
+		}
+
 	}
 
 	/** Called when the activity is first created. */
@@ -281,8 +344,9 @@ public class MensaMeals extends ExpandableListActivity {
 			if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
 				menu.setHeaderTitle(getResources().getString(R.string.meals));
 				menu.add(MENU_GROUP_MEAL_ID, MENU_SHARE_ID, 0, getResources().getString(R.string.share_with_friends));
-				// TODO: add entry only if voting enabled
-				menu.add(MENU_GROUP_MEAL_ID, MENU_VOTE_ID, 1, getResources().getString(R.string.vote));
+				if (mSettings.m_bEnableVoting) {
+					menu.add(MENU_GROUP_MEAL_ID, MENU_VOTE_ID, 1, getResources().getString(R.string.vote));
+				}
 			}
 		} else if (v instanceof Button) {
 
@@ -327,7 +391,15 @@ public class MensaMeals extends ExpandableListActivity {
 				startActivity(Intent.createChooser(share, getResources().getString(R.string.where_to_share)));
 				return true;
 			case MENU_VOTE_ID:
-				// TODO: code missing?
+				// TODO: code missing? -> save votes
+				String meal_num = c.getString(c.getColumnIndex(MealsDbAdapter.KEY_MEAL_NUM));
+				String counter = c.getString(c.getColumnIndex(MealsDbAdapter.KEY_COUNTER));
+
+				mVoteDialogData = new Bundle();
+				mVoteDialogData.putString(VOTE_DIALOG_MEAL_ID, mensa + counter + meal_num);
+				mVoteDialogData.putString(VOTE_DIALOG_DATE_ID,
+						(String) DateFormat.format("yyyy-MM-dd", mToday.getTime()));
+
 				showDialog(R.layout.rating_dialog);
 
 				return true;
@@ -345,18 +417,18 @@ public class MensaMeals extends ExpandableListActivity {
 		return super.onContextItemSelected(item);
 	}
 
-	protected Dialog onCreateDialog(int id, Bundle b) {
+	protected Dialog onCreateDialog(int id) {
 		Dialog dialog = null;
 
 		if (id == R.layout.rating_dialog) {
 			AlertDialog.Builder d = new AlertDialog.Builder(this);
 			d.setTitle("Voting Dialog"); // TODO: I18N
-			
+
 			// create view
 			LayoutInflater factory = LayoutInflater.from(this);
-            final View ratingView = factory.inflate(R.layout.rating_dialog, null);
-            d.setView(ratingView);
-			
+			final View ratingView = factory.inflate(R.layout.rating_dialog, null);
+			d.setView(ratingView);
+
 			d.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int whichButton) {
 					dialog.dismiss();
@@ -364,37 +436,41 @@ public class MensaMeals extends ExpandableListActivity {
 					// WORKAROUND: dialog data is not deleted for next display
 					RatingBar r = (RatingBar) ratingView.findViewById(R.id.visual);
 					float visual = r.getRating();
-					r.setRating(0);
 					r = (RatingBar) ratingView.findViewById(R.id.price);
 					float price = r.getRating();
-					r.setRating(0);
 					r = (RatingBar) ratingView.findViewById(R.id.taste);
 					float taste = r.getRating();
-					r.setRating(0);
-					
+
 					// TODO: Save data
-					Toast.makeText(getApplicationContext(), "Visual: " + visual + "\nPrice: " + price + "\nTaste: " + taste, Toast.LENGTH_LONG).show();
+					Toast.makeText(getApplicationContext(),
+							"Visual: " + visual + "\nPrice: " + price + "\nTaste: " + taste, Toast.LENGTH_LONG).show();
 				}
 			});
 
 			d.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int whichButton) {
-					// WORKAROUND: dialog data is not deleted for next display
-					RatingBar r = (RatingBar) ratingView.findViewById(R.id.visual);
-					r.setRating(0);
-					r = (RatingBar) ratingView.findViewById(R.id.price);
-					r.setRating(0);
-					r = (RatingBar) ratingView.findViewById(R.id.taste);
-					r.setRating(0);
-
 					dialog.cancel();
 				}
 			});
 
 			dialog = d.create();
 		}
-		
+
 		return dialog;
+	}
+
+	protected void onPrepareDialog(int id, Dialog dialog) {
+		if (id == R.layout.rating_dialog) {
+			// TODO: read previous vote
+
+			RatingBar r = (RatingBar) dialog.findViewById(R.id.visual);
+			r.setRating(0);
+			r = (RatingBar) dialog.findViewById(R.id.price);
+			r.setRating(0);
+			r = (RatingBar) dialog.findViewById(R.id.taste);
+			r.setRating(0);
+
+		}
 	}
 
 	@Override
@@ -585,15 +661,28 @@ public class MensaMeals extends ExpandableListActivity {
 
 		String[] group_from = new String[] { MealsDbAdapter.KEY_COUNTER };
 		int[] group_to = new int[] { R.id.counter };
-		String[] child_from = new String[] { MealsDbAdapter.KEY_NAME, MealsDbAdapter.KEY_PRICE, MealsDbAdapter.KEY_TYPE };
-		int[] child_to = new int[] { R.id.meal, R.id.price, R.id.meal_type };
 
 		// Now create an array adapter and set it to display using our row
-		CustomCursorTreeAdapter meals = new CustomCursorTreeAdapter(this, c, R.layout.simple_expandable_list_item_1,
-				group_from, group_to, R.layout.simple_expandable_list_item_2, child_from, child_to);
+		CustomCursorTreeAdapter meals;
+		if (mSettings.m_bEnableVoting) {
+			String[] child_from = new String[] { MealsDbAdapter.KEY_NAME, MealsDbAdapter.KEY_PRICE,
+					MealsDbAdapter.KEY_TYPE, MealsDbAdapter.KEY_RESULT_VISUAL, MealsDbAdapter.KEY_RESULT_PRICE,
+					MealsDbAdapter.KEY_RESULT_TASTE };
+			int[] child_to = new int[] { R.id.meal, R.id.price, R.id.meal_type, R.id.vote_visual, R.id.vote_price,
+					R.id.vote_taste };
+
+			meals = new CustomCursorTreeAdapter(this, c, R.layout.simple_expandable_list_item_1, group_from, group_to,
+					R.layout.simple_expandable_list_item_2_rating, child_from, child_to);
+		} else {
+			String[] child_from = new String[] { MealsDbAdapter.KEY_NAME, MealsDbAdapter.KEY_PRICE,
+					MealsDbAdapter.KEY_TYPE };
+			int[] child_to = new int[] { R.id.meal, R.id.price, R.id.meal_type };
+
+			meals = new CustomCursorTreeAdapter(this, c, R.layout.simple_expandable_list_item_1, group_from, group_to,
+					R.layout.simple_expandable_list_item_2, child_from, child_to);
+		}
 		setListAdapter(meals);
-// TODO: change list_item_2 for ratings + I18N dialog
-		
+
 		// expand all items
 		for (int i = 0; i < c.getCount(); i++) {
 			getExpandableListView().expandGroup(i);

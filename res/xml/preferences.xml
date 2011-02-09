@@ -8,8 +8,9 @@
 		<CheckBoxPreference android:defaultValue="true" android:title="@string/pref_DeleteOldDataLabel" android:key="@string/PREF_KEY_DELETE_OLD_DATA" android:summaryOn="@string/pref_DeleteOldDataDescr" android:summaryOff="@string/pref_DeleteOldDataDescrOff" /><CheckBoxPreference android:defaultValue="true"
 			android:title="@string/pref_AutoUpdateLabel" android:key="@string/PREF_KEY_AUTO_UPDATE"
 			android:summaryOn="@string/pref_AutoUpdateDescr" android:summaryOff="@string/pref_AutoUpdateDescrOff" />
-		<Preference android:key="@string/PREF_KEY_LAST_UPDATE"
+		<CheckBoxPreference android:key="@string/PREF_KEY_ENABLE_VOTING" android:title="@string/pref_EnableVotingLabel" android:summaryOff="@string/pref_EnableVotingDescrOff" android:summaryOn="@string/pref_EnableVotingDescr" android:defaultValue="false"></CheckBoxPreference><Preference android:key="@string/PREF_KEY_LAST_UPDATE"
 			android:title="@string/pref_LastUpdateLabel"/>
+		
 		
 	</PreferenceCategory>
 	

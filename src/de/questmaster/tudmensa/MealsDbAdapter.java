@@ -66,8 +66,9 @@ public class MealsDbAdapter {
 	private static final String DATABASE_CREATE = "create table meals (_id integer primary key autoincrement, "
 			+ "location text not null, num short not null," + "date text not null, counter text not null,"
 			+ "name text not null, type text not null," + "price text not null, info text,"
-			+ "vote_taste float, vote_price float, vote_visual float," + "res_taste float, res_price float, res_visual float,"
-			+ "cnt_taste integer, cnt_price integer, cnt_visual integer);";
+			+ "vote_taste float DEFAULT 0.0, vote_price float DEFAULT 0.0, vote_visual float DEFAULT 0.0," 
+			+ "res_taste float DEFAULT 0.0, res_price float DEFAULT 0.0, res_visual float DEFAULT 0.0,"
+			+ "cnt_taste integer DEFAULT 0, cnt_price integer DEFAULT 0, cnt_visual integer DEFAULT 0);";
 
 	private static final String DATABASE_NAME = "data";
 	private static final String DATABASE_TABLE = "meals";
@@ -90,6 +91,9 @@ public class MealsDbAdapter {
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			if (oldVersion == 7 && newVersion == 8) {
+				Log.w(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion
+						+ ", which will preserve all old data");
+
 				db.execSQL("ALTER TABLE meals ADD vote_taste float DEFAULT 0.0");
 				db.execSQL("ALTER TABLE meals ADD vote_price float DEFAULT 0.0");
 				db.execSQL("ALTER TABLE meals ADD vote_visual float DEFAULT 0.0");
@@ -241,6 +245,20 @@ public class MealsDbAdapter {
 
 		Cursor mCursor = mDb.query(true, DATABASE_TABLE, new String[] { KEY_ROWID, KEY_LOCATION, KEY_DATE,
 				KEY_MEAL_NUM, KEY_COUNTER, KEY_NAME, KEY_TYPE, KEY_PRICE, KEY_INFO }, KEY_DATE + "=\"" + date
+				+ "\" AND " + KEY_LOCATION + "=\"" + location + "\" AND " + KEY_COUNTER + "=\"" + counter + "\"", null,
+				null, null, null, null);
+		if (mCursor != null) {
+			mCursor.moveToFirst();
+		}
+		return mCursor;
+
+	}
+
+	public Cursor fetchMealsOfGroupDayPlusVote(String location, String date, String counter) {
+
+		Cursor mCursor = mDb.query(true, DATABASE_TABLE, new String[] { KEY_ROWID, KEY_LOCATION, KEY_DATE,
+				KEY_MEAL_NUM, KEY_COUNTER, KEY_NAME, KEY_TYPE, KEY_PRICE, KEY_INFO, KEY_RESULT_VISUAL, KEY_RESULT_PRICE, 
+				KEY_RESULT_TASTE }, KEY_DATE + "=\"" + date
 				+ "\" AND " + KEY_LOCATION + "=\"" + location + "\" AND " + KEY_COUNTER + "=\"" + counter + "\"", null,
 				null, null, null, null);
 		if (mCursor != null) {

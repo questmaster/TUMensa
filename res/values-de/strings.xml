@@ -1,29 +1,20 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <resources>
     <string name="settings_name">Mensa Einstellungen</string>
-    
     <string name="no_meals">Keine Daten über das heutige Menü verfügbar.</string>
-    
-
-
     <string name="dialog_updating_text">Aktualisiere Datenbank.</string>
-
     <string name="pref_MensaLocationSummary">Menü des ausgewählten Standorts wird angezeigt.</string>
     <string name="pref_MensaLocationLabel">Mensa Standort</string>
     <string name="menu_settings">Einstellungen</string>
-    
-<string name="menu_update">Aktualisieren</string>
-
-<string name="poultry">Geflügel</string>
+    <string name="menu_update">Aktualisieren</string>
+    <string name="poultry">Geflügel</string>
     <string name="beef">Rind</string>
     <string name="fish">Fisch</string>
     <string name="calf">Kalb</string>
     <string name="pig">Schwein</string>
     <string name="vegie">Vegetarisch</string>
     <string name="beefpig">Rind und Schwein</string>
-    
-    
-<string name="colorant">Farbstoff</string>
+    <string name="colorant">Farbstoff</string>
     <string name="preservative">Konservierungsmittel</string>
     <string name="antioxidant">Antioxidationsmittel</string>
     <string name="flavor_enhancer">Geschmacksverstärker</string>
@@ -33,31 +24,26 @@
     <string name="phosphate">Phosphat</string>
     <string name="phenylalanine_source">Phenylalaninquelle</string>
     <string name="sweetening">Süssungsmittel</string>
-
-
-<string name="pref_AutoUpdateLabel">Automatisches Update</string>
+    <string name="pref_AutoUpdateLabel">Automatisches Update</string>
     <string name="pref_AutoUpdateDescr">Lädt automatisch das aktuelle Mensamenü.</string>
-
-<string name="pref_DeleteOldDataDescr">Löscht Einträge der letzten Woche und davor.</string>
+    <string name="pref_DeleteOldDataDescr">Löscht Einträge der letzten Woche und davor.</string>
     <string name="pref_DeleteOldDataLabel">Alte Essenseinträge löschen</string>
-    
-
     <string name="pref_ThemesLabel">Thema auswählen</string>
     <string name="pref_ThemesSummary">Wähle ein Thema.</string>
-<string name="pref_cat_mensa">Mensa</string>
-<string name="pref_DeleteOldDataDescrOff">Behält alle Einträge in der Datenbank.</string>
+    <string name="pref_cat_mensa">Mensa</string>
+    <string name="pref_DeleteOldDataDescrOff">Behält alle Einträge in der Datenbank.</string>
     <string name="pref_AutoUpdateDescrOff">Nur manuelle Updates.</string>
-<string name="menu_today">Heute</string>
-<string name="pref_cat_app">Anwendung</string>
+    <string name="menu_today">Heute</string>
+    <string name="pref_cat_app">Anwendung</string>
     <string name="pref_GesturesDescr">Wischen und doppel-tippen aktiviert.</string>
     <string name="pref_GesturesDescrOff">Gesten ausgeschaltet.</string>
     <string name="pref_GesturesLabel">Aktiviere Gesten</string>
-<string name="pref_cat_ad">Werbung</string>
+    <string name="pref_cat_ad">Werbung</string>
     <string name="pref_AdsDescr">Werbung wird gezeigt, um den Entwickler (mich ;) ) zu unterstützen. Danke!</string>
     <string name="pref_AdsDescrOff">Keine Unterstützung für Entwickler.</string>
     <string name="pref_AdsLabel">Entwickler unterstützen</string>
-<string name="pref_LastUpdateLabel">Letztes Update</string>
-<string name="mensa_meal_on">Mensa Essen vom</string>
+    <string name="pref_LastUpdateLabel">Letztes Update</string>
+    <string name="mensa_meal_on">Mensa Essen vom</string>
     <string name="share_with_friends">Teile mit Freunden</string>
     <string name="vote">Bewerte</string>
     <string name="checkout_3_at">in der Mensa</string>
@@ -65,4 +51,5 @@
     <string name="checkout_1">Sieh dir das an:</string>
     <string name="checkout_2_on">am</string>
     <string name="meals">Essen</string>
+    <string name="pref_EnableVotingLabel">Bewertungen abgeben</string>
 </resources>
