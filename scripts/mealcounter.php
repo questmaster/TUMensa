@@ -51,12 +51,20 @@ if (strlen($new_mealid) > 1) {
 
 		if (strcmp($new_mealid, $mealid) == 0) {
 			// new votes
-			$vote1 = (($vote1 * $count1) + $new_vote1) / ($count1 + 1);
-			$count1 = $count1 + 1;
-			$vote2 = (($vote2 * $count2) + $new_vote2) / ($count2 + 1);
-			$count2 = $count2 + 1;
-			$vote3 = (($vote3 * $count3) + $new_vote3) / ($count3 + 1);
-			$count3 = $count3 + 1;
+			if (new_vote1 != 0) {
+				$vote1 = (($vote1 * $count1) + $new_vote1) / ($count1 + 1);
+				$count1 = $count1 + 1;
+			}
+			
+			if (new_vote2 != 0) {
+				$vote2 = (($vote2 * $count2) + $new_vote2) / ($count2 + 1);
+				$count2 = $count2 + 1;
+			}
+
+			if (new_vote3 != 0) {
+				$vote3 = (($vote3 * $count3) + $new_vote3) / ($count3 + 1);
+				$count3 = $count3 + 1;
+			}
 
 			$newmeallist[$i] = $mealid." ".$vote1." ".$count1." ".$vote2." ".$count2." ".$vote3." ".$count3."\n";
 			$entry_changed = true;
