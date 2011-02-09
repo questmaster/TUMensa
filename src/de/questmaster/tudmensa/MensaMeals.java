@@ -394,11 +394,17 @@ public class MensaMeals extends ExpandableListActivity {
 				// TODO: code missing? -> save votes
 				String meal_num = c.getString(c.getColumnIndex(MealsDbAdapter.KEY_MEAL_NUM));
 				String counter = c.getString(c.getColumnIndex(MealsDbAdapter.KEY_COUNTER));
+				float vis = c.getFloat(c.getColumnIndex(MealsDbAdapter.KEY_VOTE_VISUAL));
+				float tst = c.getFloat(c.getColumnIndex(MealsDbAdapter.KEY_VOTE_TASTE));
+				float prc = c.getFloat(c.getColumnIndex(MealsDbAdapter.KEY_VOTE_PRICE));
 
 				mVoteDialogData = new Bundle();
 				mVoteDialogData.putString(VOTE_DIALOG_MEAL_ID, mensa + counter + meal_num);
 				mVoteDialogData.putString(VOTE_DIALOG_DATE_ID,
 						(String) DateFormat.format("yyyy-MM-dd", mToday.getTime()));
+				mVoteDialogData.putFloat(VOTE_DIALOG_VISUAL_ID, vis);
+				mVoteDialogData.putFloat(VOTE_DIALOG_TASTE_ID, tst);
+				mVoteDialogData.putFloat(VOTE_DIALOG_PRICE_ID, prc);
 
 				showDialog(R.layout.rating_dialog);
 
@@ -441,7 +447,7 @@ public class MensaMeals extends ExpandableListActivity {
 					r = (RatingBar) ratingView.findViewById(R.id.taste);
 					float taste = r.getRating();
 
-					// TODO: Save data
+					// TODO: Save data (DB + Inet)
 					Toast.makeText(getApplicationContext(),
 							"Visual: " + visual + "\nPrice: " + price + "\nTaste: " + taste, Toast.LENGTH_LONG).show();
 				}
@@ -461,15 +467,12 @@ public class MensaMeals extends ExpandableListActivity {
 
 	protected void onPrepareDialog(int id, Dialog dialog) {
 		if (id == R.layout.rating_dialog) {
-			// TODO: read previous vote
-
 			RatingBar r = (RatingBar) dialog.findViewById(R.id.visual);
-			r.setRating(0);
+			r.setRating(mVoteDialogData.getFloat(VOTE_DIALOG_VISUAL_ID));
 			r = (RatingBar) dialog.findViewById(R.id.price);
-			r.setRating(0);
+			r.setRating(mVoteDialogData.getFloat(VOTE_DIALOG_PRICE_ID));
 			r = (RatingBar) dialog.findViewById(R.id.taste);
-			r.setRating(0);
-
+			r.setRating(mVoteDialogData.getFloat(VOTE_DIALOG_TASTE_ID));
 		}
 	}
 
