@@ -22,7 +22,6 @@
     <string name="flavor_enhancer">flavor enhancer</string>
     <string name="sulphur_treated">sulphur-treated</string>
     <string name="waxed">waxed</string>
-    <string name="blackened ">blackened </string>
     <string name="phosphate">phosphate</string>
     <string name="phenylalanine_source">phenylalanine source</string>
     <string name="sweetening">sweetening</string>
@@ -52,7 +51,7 @@
     <string name="pref_LastUpdateLabel">Last Update</string>
     <string name="PREF_KEY_LAST_UPDATE">last_update</string>
     <string name="mensa_meal_on">Mensa meal on</string>
-    <string name="vote">Vote</string>
+    <string name="vote">Rate your Meal</string>
     <string name="share_with_friends">Share with friends</string>
     <string name="where_to_share">Where to share?</string>
     <string name="meals">Meals</string>
@@ -63,4 +62,6 @@
     <string name="pref_EnableVotingDescr">TODO</string>
     <string name="PREF_KEY_ENABLE_VOTING">enable_voting</string>
     <string name="pref_EnableVotingLabel">Enable Voting</string>
+    <string name="dlg_title_voting">Rate your Meal</string>
+    <string name="blackened">blackened </string>
 </resources>

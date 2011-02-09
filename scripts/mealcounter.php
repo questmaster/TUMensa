@@ -21,6 +21,7 @@
  * mealid with length 1 is just readfile, with more letters its a new entry.
  * example call: .../mealcounter.php?mealid=test123&date=2011-01-01&vote1=2&vote2=4&vote3=5
  * TODO: make it possible to NOT vote for something -> vote=0
+ * TODO: create new file, then move -> so reading can be done directly on data files
  */
 $new_mealid = $_REQUEST['mealid'];
 $new_vote1 = $_REQUEST['vote1'];

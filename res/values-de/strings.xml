@@ -19,7 +19,6 @@
     <string name="antioxidant">Antioxidationsmittel</string>
     <string name="flavor_enhancer">Geschmacksverstärker</string>
     <string name="sulphur_treated">geschwefelt</string>
-    <string name="blackened ">geschwärzt</string>
     <string name="waxed">gewachst</string>
     <string name="phosphate">Phosphat</string>
     <string name="phenylalanine_source">Phenylalaninquelle</string>
@@ -45,11 +44,12 @@
     <string name="pref_LastUpdateLabel">Letztes Update</string>
     <string name="mensa_meal_on">Mensa Essen vom</string>
     <string name="share_with_friends">Teile mit Freunden</string>
-    <string name="vote">Bewerte</string>
+    <string name="vote">Bewerte dein Essen</string>
     <string name="checkout_3_at">in der Mensa</string>
     <string name="where_to_share">Wo teilen?</string>
     <string name="checkout_1">Sieh dir das an:</string>
     <string name="checkout_2_on">am</string>
     <string name="meals">Essen</string>
     <string name="pref_EnableVotingLabel">Bewertungen abgeben</string>
+    <string name="blackened">geschwärzt</string>
 </resources>

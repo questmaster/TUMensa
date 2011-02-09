@@ -66,6 +66,7 @@ public class MensaMeals extends ExpandableListActivity {
 	private static final String VOTE_DIALOG_TASTE_ID = "vote_taste";
 	private static final String VOTE_DIALOG_PRICE_ID = "vote_price";
 	private static final String VOTE_DIALOG_DATE_ID = "meal_date";
+	private static final String VOTE_DIALOG_MEAL_SCRIPT_ID = "meal_script";
 
 	public static final int ON_SETTINGS_CHANGE = 0;
 
@@ -391,7 +392,7 @@ public class MensaMeals extends ExpandableListActivity {
 				startActivity(Intent.createChooser(share, getResources().getString(R.string.where_to_share)));
 				return true;
 			case MENU_VOTE_ID:
-				// TODO: code missing? -> save votes
+				long meal_id = c.getLong(c.getColumnIndex(MealsDbAdapter.KEY_ROWID));
 				String meal_num = c.getString(c.getColumnIndex(MealsDbAdapter.KEY_MEAL_NUM));
 				String counter = c.getString(c.getColumnIndex(MealsDbAdapter.KEY_COUNTER));
 				float vis = c.getFloat(c.getColumnIndex(MealsDbAdapter.KEY_VOTE_VISUAL));
@@ -399,7 +400,8 @@ public class MensaMeals extends ExpandableListActivity {
 				float prc = c.getFloat(c.getColumnIndex(MealsDbAdapter.KEY_VOTE_PRICE));
 
 				mVoteDialogData = new Bundle();
-				mVoteDialogData.putString(VOTE_DIALOG_MEAL_ID, mensa + counter + meal_num);
+				mVoteDialogData.putLong(VOTE_DIALOG_MEAL_ID, meal_id);
+				mVoteDialogData.putString(VOTE_DIALOG_MEAL_SCRIPT_ID, mensa + counter + meal_num);
 				mVoteDialogData.putString(VOTE_DIALOG_DATE_ID,
 						(String) DateFormat.format("yyyy-MM-dd", mToday.getTime()));
 				mVoteDialogData.putFloat(VOTE_DIALOG_VISUAL_ID, vis);
@@ -428,7 +430,7 @@ public class MensaMeals extends ExpandableListActivity {
 
 		if (id == R.layout.rating_dialog) {
 			AlertDialog.Builder d = new AlertDialog.Builder(this);
-			d.setTitle("Voting Dialog"); // TODO: I18N
+			d.setTitle(getResources().getString(R.string.dlg_title_voting));
 
 			// create view
 			LayoutInflater factory = LayoutInflater.from(this);
@@ -437,17 +439,27 @@ public class MensaMeals extends ExpandableListActivity {
 
 			d.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int whichButton) {
+					float visual = 0, price = 0, taste = 0;
+					
 					dialog.dismiss();
 
-					// WORKAROUND: dialog data is not deleted for next display
+					// get dialog data 
 					RatingBar r = (RatingBar) ratingView.findViewById(R.id.visual);
-					float visual = r.getRating();
-					r = (RatingBar) ratingView.findViewById(R.id.price);
-					float price = r.getRating();
-					r = (RatingBar) ratingView.findViewById(R.id.taste);
-					float taste = r.getRating();
+					if (!r.isIndicator())
+						visual = r.getRating();
 
-					// TODO: Save data (DB + Inet)
+					r = (RatingBar) ratingView.findViewById(R.id.price);
+					if (!r.isIndicator())
+						price = r.getRating();
+
+					r = (RatingBar) ratingView.findViewById(R.id.taste);
+					if (!r.isIndicator())
+						taste = r.getRating();
+
+					// FIXME: Save data (DB + Inet -> change script)
+					long rowId = mVoteDialogData.getLong(VOTE_DIALOG_MEAL_ID);
+					mDbHelper.updateMealExternalVotes(rowId, taste, price, visual);
+					
 					Toast.makeText(getApplicationContext(),
 							"Visual: " + visual + "\nPrice: " + price + "\nTaste: " + taste, Toast.LENGTH_LONG).show();
 				}
@@ -467,12 +479,44 @@ public class MensaMeals extends ExpandableListActivity {
 
 	protected void onPrepareDialog(int id, Dialog dialog) {
 		if (id == R.layout.rating_dialog) {
+			String voted = "";
+			
+			// set prev vote
 			RatingBar r = (RatingBar) dialog.findViewById(R.id.visual);
+			if (mVoteDialogData.getFloat(VOTE_DIALOG_VISUAL_ID) != 0) {
+				r.setIsIndicator(true);
+				voted += "Visual, ";// TODO: I18N
+			} else {
+				r.setIsIndicator(false);
+			}
 			r.setRating(mVoteDialogData.getFloat(VOTE_DIALOG_VISUAL_ID));
+			
 			r = (RatingBar) dialog.findViewById(R.id.price);
+			if (mVoteDialogData.getFloat(VOTE_DIALOG_PRICE_ID) != 0) {
+				r.setIsIndicator(true);
+				voted += "Price, ";// TODO: I18N
+			} else {
+				r.setIsIndicator(false);
+			}
 			r.setRating(mVoteDialogData.getFloat(VOTE_DIALOG_PRICE_ID));
+			
 			r = (RatingBar) dialog.findViewById(R.id.taste);
+			if (mVoteDialogData.getFloat(VOTE_DIALOG_TASTE_ID) != 0) {
+				r.setIsIndicator(true);
+				voted += "Taste, ";// TODO: I18N
+			} else {
+				r.setIsIndicator(false);
+			}
 			r.setRating(mVoteDialogData.getFloat(VOTE_DIALOG_TASTE_ID));
+		
+			// set already voted line
+			TextView txt = (TextView) dialog.findViewById(R.id.alreadyVoted);
+			if (!voted.equals("")) {				
+				voted = voted.substring(0, voted.length()-2) + ".";
+				txt.setText("You already rated: " + voted);// TODO: I18N
+			} else {
+				txt.setText("");
+			}
 		}
 	}
 

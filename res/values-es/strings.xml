@@ -26,23 +26,21 @@
     <string name="antioxidant">antioxidante</string>
     <string name="dialog_updating_text">Actualizando la base de datos.</string>
     <string name="pref_cat_ad">Publicidad</string>
-    <string name="blackened ">colorante negro</string>
     <string name="no_meals">No hay datos disponibles para el menú de hoy.</string>
     <string name="pref_DeleteOldDataDescr">Borra las entradas desde la semana anterior.</string>
     <string name="pref_cat_mensa">Mensa</string>
     <string name="flavor_enhancer">Reforzante de sabor</string>
     <string name="phosphate">fosfato</string>
-    
     <string name="pref_DeleteOldDataDescrOff">Retiene todas las entradas en la base de datos.</string>
     <string name="menu_update">Actualizar</string>
     <string name="pig">carne de cerdo</string>
     <string name="pref_AutoUpdateDescrOff">Solo actualizaciones manuales.</string>
     <string name="beefpig">carne vacuna y de cerdo</string>
     <string name="menu_settings">Propiedades</string>
-    
     <string name="colorant">colorante</string>
     <string name="pref_AdsLabel">Apoyar al desarrollador</string>
     <string name="pref_AutoUpdateDescr">Descarga el menú actual automáticamente.</string>
     <string name="sulphur_treated">sulfurado</string>
     <string name="pref_cat_app">Aplicación</string>
+    <string name="blackened">colorante negro</string>
 </resources>

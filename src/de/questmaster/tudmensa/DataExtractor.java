@@ -44,6 +44,7 @@ public class DataExtractor implements Runnable {
 	public void run() {
 		mWork_done = false;
 
+		// TODO: replace by real XML parser
 		parseTable(getWebPage(mLocation, "week"));
 		parseTable(getWebPage(mLocation, "nextweek"));
 		if (mSettings.m_bDeleteOldData)

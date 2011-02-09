@@ -66,7 +66,7 @@ public class MealsDbAdapter {
 	private static final String DATABASE_CREATE = "create table meals (_id integer primary key autoincrement, "
 			+ "location text not null, num short not null," + "date text not null, counter text not null,"
 			+ "name text not null, type text not null," + "price text not null, info text,"
-			+ "vote_taste float DEFAULT 0.0, vote_price float DEFAULT 0.0, vote_visual float DEFAULT 0.0," 
+			+ "vote_taste float DEFAULT 0.0, vote_price float DEFAULT 0.0, vote_visual float DEFAULT 0.0,"
 			+ "res_taste float DEFAULT 0.0, res_price float DEFAULT 0.0, res_visual float DEFAULT 0.0,"
 			+ "cnt_taste integer DEFAULT 0, cnt_price integer DEFAULT 0, cnt_visual integer DEFAULT 0);";
 
@@ -142,10 +142,10 @@ public class MealsDbAdapter {
 	public boolean isOpen() {
 		if (mDb != null)
 			return mDb.isOpen();
-		
+
 		return false;
 	}
-	
+
 	public void close() {
 		mDbHelper.close();
 	}
@@ -205,7 +205,9 @@ public class MealsDbAdapter {
 	public Cursor fetchAllMeals() {
 
 		return mDb.query(DATABASE_TABLE, new String[] { KEY_ROWID, KEY_LOCATION, KEY_DATE, KEY_MEAL_NUM, KEY_COUNTER,
-				KEY_NAME, KEY_TYPE, KEY_PRICE, KEY_INFO }, null, null, null, null, null);
+				KEY_NAME, KEY_TYPE, KEY_PRICE, KEY_INFO, KEY_VOTE_VISUAL, KEY_VOTE_PRICE, 
+				KEY_VOTE_TASTE, KEY_RESULT_VISUAL, KEY_RESULT_PRICE, KEY_RESULT_TASTE, KEY_COUNT_VISUAL, 
+				KEY_COUNT_PRICE, KEY_COUNT_TASTE }, null, null, null, null, null);
 	}
 
 	/**
@@ -220,8 +222,9 @@ public class MealsDbAdapter {
 	public Cursor fetchMeal(long rowId) {
 
 		Cursor mCursor = mDb.query(true, DATABASE_TABLE, new String[] { KEY_ROWID, KEY_LOCATION, KEY_DATE,
-				KEY_MEAL_NUM, KEY_COUNTER, KEY_NAME, KEY_TYPE, KEY_PRICE, KEY_INFO }, KEY_ROWID + "=" + rowId, null,
-				null, null, null, null);
+				KEY_MEAL_NUM, KEY_COUNTER, KEY_NAME, KEY_TYPE, KEY_PRICE, KEY_INFO, KEY_VOTE_VISUAL, KEY_VOTE_PRICE, 
+				KEY_VOTE_TASTE, KEY_RESULT_VISUAL, KEY_RESULT_PRICE, KEY_RESULT_TASTE, KEY_COUNT_VISUAL, 
+				KEY_COUNT_PRICE, KEY_COUNT_TASTE}, KEY_ROWID + "=" + rowId, null, null, null, null, null);
 		if (mCursor != null) {
 			mCursor.moveToFirst();
 		}
@@ -257,10 +260,9 @@ public class MealsDbAdapter {
 	public Cursor fetchMealsOfGroupDayPlusVote(String location, String date, String counter) {
 
 		Cursor mCursor = mDb.query(true, DATABASE_TABLE, new String[] { KEY_ROWID, KEY_LOCATION, KEY_DATE,
-				KEY_MEAL_NUM, KEY_COUNTER, KEY_NAME, KEY_TYPE, KEY_PRICE, KEY_INFO, KEY_RESULT_VISUAL, KEY_RESULT_PRICE, 
-				KEY_RESULT_TASTE }, KEY_DATE + "=\"" + date
-				+ "\" AND " + KEY_LOCATION + "=\"" + location + "\" AND " + KEY_COUNTER + "=\"" + counter + "\"", null,
-				null, null, null, null);
+				KEY_MEAL_NUM, KEY_COUNTER, KEY_NAME, KEY_TYPE, KEY_PRICE, KEY_INFO, KEY_RESULT_VISUAL,
+				KEY_RESULT_PRICE, KEY_RESULT_TASTE }, KEY_DATE + "=\"" + date + "\" AND " + KEY_LOCATION + "=\""
+				+ location + "\" AND " + KEY_COUNTER + "=\"" + counter + "\"", null, null, null, null, null);
 		if (mCursor != null) {
 			mCursor.moveToFirst();
 		}
@@ -295,8 +297,6 @@ public class MealsDbAdapter {
 		return result;
 	}
 
-	// TODO: Add fetch methods to get meals + ratings
-	
 	/**
 	 * Update the note using the details provided. The note to be updated is
 	 * specified using the rowId, and it is altered to use the title and body
@@ -326,7 +326,7 @@ public class MealsDbAdapter {
 	}
 
 	public boolean updateMeal(long rowId, String location, String date, int num, String counter, String name,
-			String type, String price, String info, float vTaste, float vPrice, float vVisual, float rTaste, 
+			String type, String price, String info, float vTaste, float vPrice, float vVisual, float rTaste,
 			float rPrice, float rVisual, int cTaste, int cPrice, int cVisual) {
 		ContentValues args = new ContentValues();
 		args.put(KEY_LOCATION, location);
@@ -346,6 +346,28 @@ public class MealsDbAdapter {
 		args.put(KEY_COUNT_TASTE, cTaste);
 		args.put(KEY_COUNT_PRICE, cPrice);
 		args.put(KEY_COUNT_VISUAL, cVisual);
+
+		return mDb.update(DATABASE_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
+	}
+
+	public boolean updateMealExternalVotes(long rowId, float rTaste, float rPrice, float rVisual, int cTaste,
+			int cPrice, int cVisual) {
+		ContentValues args = new ContentValues();
+		args.put(KEY_RESULT_TASTE, rTaste);
+		args.put(KEY_RESULT_PRICE, rPrice);
+		args.put(KEY_RESULT_VISUAL, rVisual);
+		args.put(KEY_COUNT_TASTE, cTaste);
+		args.put(KEY_COUNT_PRICE, cPrice);
+		args.put(KEY_COUNT_VISUAL, cVisual);
+
+		return mDb.update(DATABASE_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
+	}
+
+	public boolean updateMealExternalVotes(long rowId, float vTaste, float vPrice, float vVisual) {
+		ContentValues args = new ContentValues();
+		args.put(KEY_VOTE_TASTE, vTaste);
+		args.put(KEY_VOTE_PRICE, vPrice);
+		args.put(KEY_VOTE_VISUAL, vVisual);
 
 		return mDb.update(DATABASE_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
 	}
