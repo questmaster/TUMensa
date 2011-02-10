@@ -71,211 +71,135 @@ public class DataExtractor implements Runnable {
 	}
 
 	/* parse Website and store in database */
-/*	private Vector<String> getWebPage(String task, String view) {
-		Vector<String> webTable = new Vector<String>();
-
-		try {
-			URL uTest = new URL("http://www.studentenwerkdarmstadt.de/index.php?option=com_spk&task=" + task + "&view="
-					+ view);
-			BufferedReader br = new BufferedReader(new InputStreamReader(uTest.openStream()), 2048);
-
-			boolean store = false;
-			String s;
-			while ((s = br.readLine()) != null) {
-				// find first line of meal tables
-				if (s.indexOf("class=\"spk_table\">") >= 0) {
-					// remove before table
-					s = s.substring(s.indexOf("<tr><td"));
-					store = true;
-				}
-				if (store) {
-					if (s.indexOf("</table>") >= 0) {
-						// remove after table
-						s = "</table>";
-						store = false;
-					}
-
-					// append line
-					webTable.add(s);
-
-					if (!store) {
-						break; // fertig
-					}
-				}
-			}
-
-			br.close();
-		} catch (MalformedURLException e) {
-			// Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return webTable;
-	}
-
-	private void parseTable(Vector<String> tbl) {
-		Vector<String> days = new Vector<String>();
-		int day_index = 0;
-		int meal_num = 0;
-		String curCounter = "";
-
-		for (String s : tbl) {
-			// new Row -> maybe new counter
-			if (s.startsWith("<tr>")) {
-				if (s.indexOf("&nbsp;") < 0) {
-					// get new Counter name
-					curCounter = extractData(s);
-					meal_num = 0;
-				} else if (!curCounter.equals("")) {
-					// more meals at one counter
-					meal_num++;
-				}
-			}
-
-			if (s.startsWith("<td")) {
-				String tmp = extractData(s);
-
-				// date line
-				if (curCounter.compareTo("") == 0 && tmp.length() == 10) {
-					tmp = tmp.substring(6, 10) + tmp.substring(3, 5) + tmp.substring(0, 2);
-					days.add(tmp);
-
-					if (mFirstDate == null) {
-						mFirstDate = tmp;
-					}
-
-					// €-sign unfortunately not encoded, so checking price-tag
-				} else if (tmp.lastIndexOf(",") > 0 && day_index < days.size()
-						&& Character.isDigit(tmp.charAt(tmp.lastIndexOf(",") - 1))
-						&& Character.isDigit(tmp.charAt(tmp.lastIndexOf(",") + 1))
-						&& Character.isDigit(tmp.charAt(tmp.lastIndexOf(",") + 2))) {
-
-					// price
-					tmp = tmp.substring(0, tmp.lastIndexOf(",") + 3);
-					String price = tmp.substring(tmp.lastIndexOf(" ") + 1);
-
-					// cut price from string
-					tmp = tmp.substring(0, tmp.length() - price.length()).trim();
-
-					// add EUR sign to price string
-					price += " €";
-
-					// type
-					String type = tmp.substring(tmp.lastIndexOf(" ") + 1);
-
-					// cut type from string
-					String meal = tmp.substring(0, tmp.length() - type.length()).trim();
-					meal = htmlDecode(meal);
-
-					// create detail information
-					String info;
-					if (type.equals("F")) {
-						info = mActivity.getResources().getString(R.string.fish);
-					} else if (type.equals("G")) {
-						info = mActivity.getResources().getString(R.string.poultry);
-					} else if (type.equals("K")) {
-						info = mActivity.getResources().getString(R.string.calf);
-					} else if (type.equals("R")) {
-						info = mActivity.getResources().getString(R.string.beef);
-					} else if (type.equals("RS")) {
-						info = mActivity.getResources().getString(R.string.beefpig);
-					} else if (type.equals("S")) {
-						info = mActivity.getResources().getString(R.string.pig);
-					} else if (type.equals("V")) {
-						info = mActivity.getResources().getString(R.string.vegie);
-					} else {
-						info = "";
-					}
-
-					// get additional information (extract from meal name)
-					String mealInspect = meal;
-					while (mealInspect.contains("(") && mealInspect.contains(")")) {
-						String additions = mealInspect
-								.substring(mealInspect.indexOf("(") + 1, mealInspect.indexOf(")"));
-						mealInspect = mealInspect.substring(mealInspect.indexOf(")") + 1); // skip
-																							// current
-																							// (...)
-						String[] splitAdditions = additions.split(",");
-						try {
-							for (String s1 : splitAdditions) {
-								switch (Integer.parseInt(s1)) {
-								case 1:
-									info += "\n(1) " + mActivity.getResources().getString(R.string.colorant);
-									break;
-								case 2:
-									info += "\n(2) " + mActivity.getResources().getString(R.string.preservative);
-									break;
-								case 3:
-									info += "\n(3) " + mActivity.getResources().getString(R.string.antioxidant);
-									break;
-								case 4:
-									info += "\n(4) " + mActivity.getResources().getString(R.string.flavor_enhancer);
-									break;
-								case 5:
-									info += "\n(5) " + mActivity.getResources().getString(R.string.sulphur_treated);
-									break;
-								case 6:
-									info += "\n(6) " + mActivity.getResources().getString(R.string.blackened);
-									break;
-								case 7:
-									info += "\n(7) " + mActivity.getResources().getString(R.string.waxed);
-									break;
-								case 8:
-									info += "\n(8) " + mActivity.getResources().getString(R.string.phosphate);
-									break;
-								case 9:
-									info += "\n(9) " + mActivity.getResources().getString(R.string.sweetening);
-									break;
-								case 11:
-									info += "\n(11) "
-											+ mActivity.getResources().getString(R.string.phenylalanine_source);
-									break;
-								}
-							}
-
-						} catch (NumberFormatException e) {
-							// No number, so its nothing we care about
-						}
-					}
-
-					// Add table entry
-					String date = days.get(day_index);
-					long rowId = 0;
-					if ((rowId = mDbHelper.fetchMealId(mLocation, date, curCounter, meal_num)) >= 0) {
-						mDbHelper.updateMeal(rowId, mLocation, date, meal_num, curCounter, meal, type, price, info);
-					} else
-						mDbHelper.createMeal(mLocation, date, meal_num, curCounter, meal, type, price, info);
-				}
-
-				day_index++;
-			}
-
-			if (s.startsWith("</tr>")) {
-				day_index = 0;
-			}
-
-			// </table>: end -> clean old entries
-			if (s.equals("</table>")) {
-				break;
-			}
-		}
-	}
-
-	private String extractData(String s) {
-		// cut end "</td>"
-		s = s.substring(0, s.length() - 5);
-
-		// cut begining
-		return s.substring(s.lastIndexOf(">") + 1, s.length()).trim();
-	}
-
-*/
+	/*
+	 * private Vector<String> getWebPage(String task, String view) {
+	 * Vector<String> webTable = new Vector<String>();
+	 * 
+	 * try { URL uTest = new
+	 * URL("http://www.studentenwerkdarmstadt.de/index.php?option=com_spk&task="
+	 * + task + "&view=" + view); BufferedReader br = new BufferedReader(new
+	 * InputStreamReader(uTest.openStream()), 2048);
+	 * 
+	 * boolean store = false; String s; while ((s = br.readLine()) != null) { //
+	 * find first line of meal tables if (s.indexOf("class=\"spk_table\">") >=
+	 * 0) { // remove before table s = s.substring(s.indexOf("<tr><td")); store
+	 * = true; } if (store) { if (s.indexOf("</table>") >= 0) { // remove after
+	 * table s = "</table>"; store = false; }
+	 * 
+	 * // append line webTable.add(s);
+	 * 
+	 * if (!store) { break; // fertig } } }
+	 * 
+	 * br.close(); } catch (MalformedURLException e) { // Auto-generated catch
+	 * block e.printStackTrace(); } catch (IOException e) { // Auto-generated
+	 * catch block e.printStackTrace(); }
+	 * 
+	 * return webTable; }
+	 * 
+	 * private void parseTable(Vector<String> tbl) { Vector<String> days = new
+	 * Vector<String>(); int day_index = 0; int meal_num = 0; String curCounter
+	 * = "";
+	 * 
+	 * for (String s : tbl) { // new Row -> maybe new counter if
+	 * (s.startsWith("<tr>")) { if (s.indexOf("&nbsp;") < 0) { // get new
+	 * Counter name curCounter = extractData(s); meal_num = 0; } else if
+	 * (!curCounter.equals("")) { // more meals at one counter meal_num++; } }
+	 * 
+	 * if (s.startsWith("<td")) { String tmp = extractData(s);
+	 * 
+	 * // date line if (curCounter.compareTo("") == 0 && tmp.length() == 10) {
+	 * tmp = tmp.substring(6, 10) + tmp.substring(3, 5) + tmp.substring(0, 2);
+	 * days.add(tmp);
+	 * 
+	 * if (mFirstDate == null) { mFirstDate = tmp; }
+	 * 
+	 * // €-sign unfortunately not encoded, so checking price-tag } else if
+	 * (tmp.lastIndexOf(",") > 0 && day_index < days.size() &&
+	 * Character.isDigit(tmp.charAt(tmp.lastIndexOf(",") - 1)) &&
+	 * Character.isDigit(tmp.charAt(tmp.lastIndexOf(",") + 1)) &&
+	 * Character.isDigit(tmp.charAt(tmp.lastIndexOf(",") + 2))) {
+	 * 
+	 * // price tmp = tmp.substring(0, tmp.lastIndexOf(",") + 3); String price =
+	 * tmp.substring(tmp.lastIndexOf(" ") + 1);
+	 * 
+	 * // cut price from string tmp = tmp.substring(0, tmp.length() -
+	 * price.length()).trim();
+	 * 
+	 * // add EUR sign to price string price += " €";
+	 * 
+	 * // type String type = tmp.substring(tmp.lastIndexOf(" ") + 1);
+	 * 
+	 * // cut type from string String meal = tmp.substring(0, tmp.length() -
+	 * type.length()).trim(); meal = htmlDecode(meal);
+	 * 
+	 * // create detail information String info; if (type.equals("F")) { info =
+	 * mActivity.getResources().getString(R.string.fish); } else if
+	 * (type.equals("G")) { info =
+	 * mActivity.getResources().getString(R.string.poultry); } else if
+	 * (type.equals("K")) { info =
+	 * mActivity.getResources().getString(R.string.calf); } else if
+	 * (type.equals("R")) { info =
+	 * mActivity.getResources().getString(R.string.beef); } else if
+	 * (type.equals("RS")) { info =
+	 * mActivity.getResources().getString(R.string.beefpig); } else if
+	 * (type.equals("S")) { info =
+	 * mActivity.getResources().getString(R.string.pig); } else if
+	 * (type.equals("V")) { info =
+	 * mActivity.getResources().getString(R.string.vegie); } else { info = ""; }
+	 * 
+	 * // get additional information (extract from meal name) String mealInspect
+	 * = meal; while (mealInspect.contains("(") && mealInspect.contains(")")) {
+	 * String additions = mealInspect .substring(mealInspect.indexOf("(") + 1,
+	 * mealInspect.indexOf(")")); mealInspect =
+	 * mealInspect.substring(mealInspect.indexOf(")") + 1); // skip // current
+	 * // (...) String[] splitAdditions = additions.split(","); try { for
+	 * (String s1 : splitAdditions) { switch (Integer.parseInt(s1)) { case 1:
+	 * info += "\n(1) " + mActivity.getResources().getString(R.string.colorant);
+	 * break; case 2: info += "\n(2) " +
+	 * mActivity.getResources().getString(R.string.preservative); break; case 3:
+	 * info += "\n(3) " +
+	 * mActivity.getResources().getString(R.string.antioxidant); break; case 4:
+	 * info += "\n(4) " +
+	 * mActivity.getResources().getString(R.string.flavor_enhancer); break; case
+	 * 5: info += "\n(5) " +
+	 * mActivity.getResources().getString(R.string.sulphur_treated); break; case
+	 * 6: info += "\n(6) " +
+	 * mActivity.getResources().getString(R.string.blackened); break; case 7:
+	 * info += "\n(7) " + mActivity.getResources().getString(R.string.waxed);
+	 * break; case 8: info += "\n(8) " +
+	 * mActivity.getResources().getString(R.string.phosphate); break; case 9:
+	 * info += "\n(9) " +
+	 * mActivity.getResources().getString(R.string.sweetening); break; case 11:
+	 * info += "\n(11) " +
+	 * mActivity.getResources().getString(R.string.phenylalanine_source); break;
+	 * } }
+	 * 
+	 * } catch (NumberFormatException e) { // No number, so its nothing we care
+	 * about } }
+	 * 
+	 * // Add table entry String date = days.get(day_index); long rowId = 0; if
+	 * ((rowId = mDbHelper.fetchMealId(mLocation, date, curCounter, meal_num))
+	 * >= 0) { mDbHelper.updateMeal(rowId, mLocation, date, meal_num,
+	 * curCounter, meal, type, price, info); } else
+	 * mDbHelper.createMeal(mLocation, date, meal_num, curCounter, meal, type,
+	 * price, info); }
+	 * 
+	 * day_index++; }
+	 * 
+	 * if (s.startsWith("</tr>")) { day_index = 0; }
+	 * 
+	 * // </table>: end -> clean old entries if (s.equals("</table>")) { break;
+	 * } } }
+	 * 
+	 * private String extractData(String s) { // cut end "</td>" s =
+	 * s.substring(0, s.length() - 5);
+	 * 
+	 * // cut begining return s.substring(s.lastIndexOf(">") + 1,
+	 * s.length()).trim(); }
+	 */
 	private String htmlDecode(String in) {
 		String out = in;
-
+		
 		out = out.replaceAll("&auml;", "ä");
 		out = out.replaceAll("&Auml;", "Ä");
 		out = out.replaceAll("&ouml;", "ö");
@@ -296,10 +220,9 @@ public class DataExtractor implements Runnable {
 		int day_index = 0;
 		int meal_num = 0;
 		String curCounter = "";
-//FIXME: Debug new code
+		// FIXME: Debug new code
 		try {
-			URL uMenuWebsite = new URL("http://www.studentenwerkdarmstadt.de/index.php?option=com_spk&task=" + task
-					+ "&view=" + view);
+			URL uMenuWebsite = new URL("http://www.studentenwerkdarmstadt.de/index.php?option=com_spk&task=" + task + "&view=" + view);
 
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
@@ -317,151 +240,164 @@ public class DataExtractor implements Runnable {
 					// iterate rows
 					for (int j = 0; j < tblRows.getLength(); j++) {
 						Node tblRow = tblRows.item(j);
-						NodeList tblEntries = tblRow.getChildNodes();
+						if (tblRow.getNodeType() == Node.ELEMENT_NODE) {
+							NodeList tblEntries = tblRow.getChildNodes();
 
-						String counter_name = tblEntries.item(0).getNodeValue(); 
-						if (counter_name.indexOf("&nbsp;") < 0) {
-							// get new Counter name
-							curCounter = counter_name;
-							meal_num = 0;
-						} else if (!curCounter.equals("")) {
-							// more meals at one counter
-							meal_num++;
-						}
-
-						// iterate tbl-data
-						for (int k = 1; k < tblEntries.getLength(); k++) {
-							Node tblEntry = tblEntries.item(k);
-							String tmp = tblEntry.getNodeValue();
-							
-							if (j == 0) {
-								// first row are the dates
-								tmp = tmp.substring(6, 10) + tmp.substring(3, 5) + tmp.substring(0, 2);
-								days.add(tmp);
-
-								if (mFirstDate == null) {
-									mFirstDate = tmp;
-								}
-
+							String counter_name;
+							if (tblEntries.item(0).getFirstChild().getNodeType() == Node.ENTITY_REFERENCE_NODE) {
+								counter_name = "nbsp";
 							} else {
-								// further rows are data; search for price in Value
-								if (tmp.lastIndexOf(",") > 0 && day_index < days.size()
-										&& Character.isDigit(tmp.charAt(tmp.lastIndexOf(",") - 1))
-										&& Character.isDigit(tmp.charAt(tmp.lastIndexOf(",") + 1))
-										&& Character.isDigit(tmp.charAt(tmp.lastIndexOf(",") + 2))) {
+								counter_name = tblEntries.item(0).getFirstChild().getNodeValue(); // TODO!
+							}
+							if (counter_name.indexOf("nbsp") < 0) {
+								// get new Counter name
+								curCounter = counter_name;
+								meal_num = 0;
+							} else if (!curCounter.equals("")) {
+								// more meals at one counter
+								meal_num++;
+							}
 
-									// price
-									tmp = tmp.substring(0, tmp.lastIndexOf(",") + 3);
-									String price = tmp.substring(tmp.lastIndexOf(" ") + 1);
+							// iterate tbl-data
+							for (int k = 1; k < tblEntries.getLength(); k++) {
+								Node tblEntry = tblEntries.item(k);
 
-									// cut price from string
-									tmp = tmp.substring(0, tmp.length() - price.length()).trim();
+								if (tblEntry.getNodeType() == Node.ELEMENT_NODE) {
+									if (j == 0) {
+										String tmp = tblEntry.getFirstChild().getNodeValue();
 
-									// add EUR sign to price string
-									price += " €";
+										// first row are the dates
+										tmp = tmp.substring(6, 10) + tmp.substring(3, 5) + tmp.substring(0, 2);
+										days.add(tmp);
 
-									// type
-									String type = tmp.substring(tmp.lastIndexOf(" ") + 1);
+										if (mFirstDate == null) {
+											mFirstDate = tmp;
+										}
 
-									// cut type from string
-									String meal = tmp.substring(0, tmp.length() - type.length()).trim();
-									meal = htmlDecode(meal);
-
-									// create detail information
-									String info;
-									if (type.equals("F")) {
-										info = mActivity.getResources().getString(R.string.fish);
-									} else if (type.equals("G")) {
-										info = mActivity.getResources().getString(R.string.poultry);
-									} else if (type.equals("K")) {
-										info = mActivity.getResources().getString(R.string.calf);
-									} else if (type.equals("R")) {
-										info = mActivity.getResources().getString(R.string.beef);
-									} else if (type.equals("RS")) {
-										info = mActivity.getResources().getString(R.string.beefpig);
-									} else if (type.equals("S")) {
-										info = mActivity.getResources().getString(R.string.pig);
-									} else if (type.equals("V")) {
-										info = mActivity.getResources().getString(R.string.vegie);
 									} else {
-										info = "";
-									}
+										// Rebuild String
+										NodeList tblData = tblEntry.getChildNodes();
+										String tmp = "";
+										for (int l = 0; l < tblData.getLength(); l++) {
+											Node data = tblData.item(l);
+											if (data.getNodeType() == Node.TEXT_NODE) {
+												tmp += data.getNodeValue();
+											} else if (data.getNodeType() == Node.ENTITY_REFERENCE_NODE){
+												tmp += "&" + data.getNodeName() + ";";
+											}
+										}
+										tmp = htmlDecode(tmp);
 
-									// get additional information (extract from meal name)
-									String mealInspect = meal;
-									while (mealInspect.contains("(") && mealInspect.contains(")")) {
-										String additions = mealInspect.substring(mealInspect.indexOf("(") + 1,
-												mealInspect.indexOf(")"));
-										mealInspect = mealInspect.substring(mealInspect.indexOf(")") + 1); // skip current (...)
-										String[] splitAdditions = additions.split(",");
-										try {
-											for (String s1 : splitAdditions) {
-												switch (Integer.parseInt(s1)) {
-												case 1:
-													info += "\n(1) "
-															+ mActivity.getResources().getString(R.string.colorant);
-													break;
-												case 2:
-													info += "\n(2) "
-															+ mActivity.getResources().getString(R.string.preservative);
-													break;
-												case 3:
-													info += "\n(3) "
-															+ mActivity.getResources().getString(R.string.antioxidant);
-													break;
-												case 4:
-													info += "\n(4) "
-															+ mActivity.getResources().getString(
-																	R.string.flavor_enhancer);
-													break;
-												case 5:
-													info += "\n(5) "
-															+ mActivity.getResources().getString(
-																	R.string.sulphur_treated);
-													break;
-												case 6:
-													info += "\n(6) "
-															+ mActivity.getResources().getString(R.string.blackened);
-													break;
-												case 7:
-													info += "\n(7) "
-															+ mActivity.getResources().getString(R.string.waxed);
-													break;
-												case 8:
-													info += "\n(8) "
-															+ mActivity.getResources().getString(R.string.phosphate);
-													break;
-												case 9:
-													info += "\n(9) "
-															+ mActivity.getResources().getString(R.string.sweetening);
-													break;
-												case 11:
-													info += "\n(11) "
-															+ mActivity.getResources().getString(
-																	R.string.phenylalanine_source);
-													break;
+										// further rows are data; search for price in Value
+										if (tmp.lastIndexOf(",") > 0 && day_index < days.size() && Character.isDigit(tmp.charAt(tmp.lastIndexOf(",") - 1))
+												&& Character.isDigit(tmp.charAt(tmp.lastIndexOf(",") + 1)) && Character.isDigit(tmp.charAt(tmp.lastIndexOf(",") + 2))) {
+
+											// price
+											tmp = tmp.substring(0, tmp.lastIndexOf(",") + 3);
+											String price = tmp.substring(tmp.lastIndexOf(" ") + 1);
+
+											// cut price from string
+											tmp = tmp.substring(0, tmp.length() - price.length()).trim();
+
+											// add EUR sign to price string
+											price += " €";
+
+											// type
+											String type = tmp.substring(tmp.lastIndexOf(" ") + 1);
+
+											// cut type from string
+											String meal = tmp.substring(0, tmp.length() - type.length()).trim();
+											meal = htmlDecode(meal);
+
+											// create detail information
+											String info;
+											if (type.equals("F")) {
+												info = mActivity.getResources().getString(R.string.fish);
+											} else if (type.equals("G")) {
+												info = mActivity.getResources().getString(R.string.poultry);
+											} else if (type.equals("K")) {
+												info = mActivity.getResources().getString(R.string.calf);
+											} else if (type.equals("R")) {
+												info = mActivity.getResources().getString(R.string.beef);
+											} else if (type.equals("RS")) {
+												info = mActivity.getResources().getString(R.string.beefpig);
+											} else if (type.equals("S")) {
+												info = mActivity.getResources().getString(R.string.pig);
+											} else if (type.equals("V")) {
+												info = mActivity.getResources().getString(R.string.vegie);
+											} else {
+												info = "";
+											}
+
+											// get additional information
+											// (extract
+											// from meal name)
+											String mealInspect = meal;
+											while (mealInspect.contains("(") && mealInspect.contains(")")) {
+												String additions = mealInspect.substring(mealInspect.indexOf("(") + 1, mealInspect.indexOf(")"));
+												mealInspect = mealInspect.substring(mealInspect.indexOf(")") + 1); // skip
+																													// current
+																													// (...)
+												String[] splitAdditions = additions.split(",");
+												try {
+													for (String s1 : splitAdditions) {
+														switch (Integer.parseInt(s1)) {
+														case 1:
+															info += "\n(1) " + mActivity.getResources().getString(R.string.colorant);
+															break;
+														case 2:
+															info += "\n(2) " + mActivity.getResources().getString(R.string.preservative);
+															break;
+														case 3:
+															info += "\n(3) " + mActivity.getResources().getString(R.string.antioxidant);
+															break;
+														case 4:
+															info += "\n(4) " + mActivity.getResources().getString(R.string.flavor_enhancer);
+															break;
+														case 5:
+															info += "\n(5) " + mActivity.getResources().getString(R.string.sulphur_treated);
+															break;
+														case 6:
+															info += "\n(6) " + mActivity.getResources().getString(R.string.blackened);
+															break;
+														case 7:
+															info += "\n(7) " + mActivity.getResources().getString(R.string.waxed);
+															break;
+														case 8:
+															info += "\n(8) " + mActivity.getResources().getString(R.string.phosphate);
+															break;
+														case 9:
+															info += "\n(9) " + mActivity.getResources().getString(R.string.sweetening);
+															break;
+														case 11:
+															info += "\n(11) " + mActivity.getResources().getString(R.string.phenylalanine_source);
+															break;
+														}
+													}
+
+												} catch (NumberFormatException e) {
+													// No number, so its nothing
+													// we
+													// care about
 												}
 											}
 
-										} catch (NumberFormatException e) {
-											// No number, so its nothing we care about
+											// Add table entry
+											String date = days.get(day_index);
+											long rowId = 0;
+											if ((rowId = mDbHelper.fetchMealId(mLocation, date, curCounter, meal_num)) >= 0) {
+												mDbHelper.updateMeal(rowId, mLocation, date, meal_num, curCounter, meal, type, price, info);
+											} else
+												mDbHelper.createMeal(mLocation, date, meal_num, curCounter, meal, type, price, info);
 										}
+
+										day_index++;
 									}
+								} // ENTITY_REFERENCE_NODEs
+							} // Data
 
-									// Add table entry
-									String date = days.get(day_index);
-									long rowId = 0;
-									if ((rowId = mDbHelper.fetchMealId(mLocation, date, curCounter, meal_num)) >= 0) {
-										mDbHelper.updateMeal(rowId, mLocation, date, meal_num, curCounter, meal, type, price, info);
-									} else
-										mDbHelper.createMeal(mLocation, date, meal_num, curCounter, meal, type, price, info);
-								}
-
-								day_index++;
-							}
-						} // Data
-
-						day_index = 0;
+							day_index = 0;
+						}
 					} // Row
 				} // Table
 			}

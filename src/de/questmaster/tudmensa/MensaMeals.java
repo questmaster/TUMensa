@@ -145,8 +145,7 @@ public class MensaMeals extends ExpandableListActivity {
 		private int[] mChildFrom;
 		private int[] mChildTo;
 
-		public CustomCursorTreeAdapter(Context context, Cursor cursor, int groupLayout, String[] groupFrom,
-				int[] groupTo, int childLayout, String[] childFrom, int[] childTo) {
+		public CustomCursorTreeAdapter(Context context, Cursor cursor, int groupLayout, String[] groupFrom, int[] groupTo, int childLayout, String[] childFrom, int[] childTo) {
 			super(context, cursor, groupLayout, groupFrom, groupTo, childLayout, childFrom, childTo);
 
 			mChildFrom = new int[childFrom.length];
@@ -163,26 +162,29 @@ public class MensaMeals extends ExpandableListActivity {
 		 * @param fromColumns
 		 */
 		private void initFromColumns(Cursor cursor, String[] fromColumnNames, int[] fromColumns) {
-			for (int i = fromColumnNames.length - 1; i >= 0; i--) {
-				fromColumns[i] = cursor.getColumnIndexOrThrow(fromColumnNames[i]);
-			}
+			if (cursor != null)
+				for (int i = fromColumnNames.length - 1; i >= 0; i--) {
+					fromColumns[i] = cursor.getColumnIndexOrThrow(fromColumnNames[i]);
+				}
 		}
 
 		@Override
 		protected Cursor getChildrenCursor(Cursor groupCursor) {
-			Cursor c;
+			Cursor c = null;
 
-			String location = groupCursor.getString(groupCursor.getColumnIndex(MealsDbAdapter.KEY_LOCATION));
-			String date = groupCursor.getString(groupCursor.getColumnIndex(MealsDbAdapter.KEY_DATE));
-			String counter = groupCursor.getString(groupCursor.getColumnIndex(MealsDbAdapter.KEY_COUNTER));
+			if (groupCursor.getCount() > 0) {
+				String location = groupCursor.getString(groupCursor.getColumnIndex(MealsDbAdapter.KEY_LOCATION));
+				String date = groupCursor.getString(groupCursor.getColumnIndex(MealsDbAdapter.KEY_DATE));
+				String counter = groupCursor.getString(groupCursor.getColumnIndex(MealsDbAdapter.KEY_COUNTER));
 
-			if (mSettings.m_bEnableVoting) {
-				c = new MealsDbCursorWrapper(mDbHelper.fetchMealsOfGroupDayPlusVote(location, date, counter), mContext);
-			} else {
-				c = new MealsDbCursorWrapper(mDbHelper.fetchMealsOfGroupDay(location, date, counter), mContext);
+				if (mSettings.m_bEnableVoting) {
+					c = new MealsDbCursorWrapper(mDbHelper.fetchMealsOfGroupDayPlusVote(location, date, counter), mContext);
+				} else {
+					c = new MealsDbCursorWrapper(mDbHelper.fetchMealsOfGroupDay(location, date, counter), mContext);
+				}
+				startManagingCursor(c);
 			}
-			startManagingCursor(c);
-			
+
 			return c;
 		}
 
@@ -206,8 +208,7 @@ public class MensaMeals extends ExpandableListActivity {
 						Float value = cursor.getFloat(from[i]);
 						((RatingBar) v).setRating(value);
 					} else {
-						throw new IllegalStateException("CustomCursorAdapter can bind values only to"
-								+ " RatingBar, TextView and ImageView!");
+						throw new IllegalStateException("CustomCursorAdapter can bind values only to" + " RatingBar, TextView and ImageView!");
 					}
 				}
 			}
@@ -379,15 +380,9 @@ public class MensaMeals extends ExpandableListActivity {
 			case MENU_SHARE_ID:
 				Intent share = new Intent(Intent.ACTION_SEND);
 				share.setType("text/plain");
-				share.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.mensa_meal_on) + " "
-						+ DateFormat.getDateFormat(this).format(mToday.getTime()));
-				share.putExtra(
-						Intent.EXTRA_TEXT,
-						getResources().getString(R.string.checkout_1) + " \"" + meal + "\" "
-								+ getResources().getString(R.string.checkout_2_on) + " "
-								+ DateFormat.getDateFormat(this).format(mToday.getTime()) + " "
-								+ getResources().getString(R.string.checkout_3_at) + " \""
-								+ getMensaLocationString(mensa) + "\"");
+				share.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.mensa_meal_on) + " " + DateFormat.getDateFormat(this).format(mToday.getTime()));
+				share.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.checkout_1) + " \"" + meal + "\" " + getResources().getString(R.string.checkout_2_on) + " "
+						+ DateFormat.getDateFormat(this).format(mToday.getTime()) + " " + getResources().getString(R.string.checkout_3_at) + " \"" + getMensaLocationString(mensa) + "\"");
 
 				startActivity(Intent.createChooser(share, getResources().getString(R.string.where_to_share)));
 				return true;
@@ -402,8 +397,7 @@ public class MensaMeals extends ExpandableListActivity {
 				mVoteDialogData = new Bundle();
 				mVoteDialogData.putLong(VOTE_DIALOG_MEAL_ID, meal_id);
 				mVoteDialogData.putString(VOTE_DIALOG_MEAL_SCRIPT_ID, mensa + counter + meal_num);
-				mVoteDialogData.putString(VOTE_DIALOG_DATE_ID,
-						(String) DateFormat.format("yyyy-MM-dd", mToday.getTime()));
+				mVoteDialogData.putString(VOTE_DIALOG_DATE_ID, (String) DateFormat.format("yyyy-MM-dd", mToday.getTime()));
 				mVoteDialogData.putFloat(VOTE_DIALOG_VISUAL_ID, vis);
 				mVoteDialogData.putFloat(VOTE_DIALOG_TASTE_ID, tst);
 				mVoteDialogData.putFloat(VOTE_DIALOG_PRICE_ID, prc);
@@ -414,8 +408,7 @@ public class MensaMeals extends ExpandableListActivity {
 			}
 		} else if (item.getGroupId() == MENU_GROUP_MENSA_ID) {
 			// set Mensa location
-			mSettings.setMensaLocation(mContext,
-					getResources().getStringArray(R.array.MensaLocationsValues)[item.getItemId()]);
+			mSettings.setMensaLocation(mContext, getResources().getStringArray(R.array.MensaLocationsValues)[item.getItemId()]);
 
 			// Reread data and display it
 			updateButtonText();
@@ -440,10 +433,10 @@ public class MensaMeals extends ExpandableListActivity {
 			d.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int whichButton) {
 					float visual = 0, price = 0, taste = 0;
-					
+
 					dialog.dismiss();
 
-					// get dialog data 
+					// get dialog data
 					RatingBar r = (RatingBar) ratingView.findViewById(R.id.visual);
 					if (!r.isIndicator())
 						visual = r.getRating();
@@ -459,9 +452,8 @@ public class MensaMeals extends ExpandableListActivity {
 					// FIXME: Save data (DB + Inet -> change script)
 					long rowId = mVoteDialogData.getLong(VOTE_DIALOG_MEAL_ID);
 					mDbHelper.updateMealExternalVotes(rowId, taste, price, visual);
-					
-					Toast.makeText(getApplicationContext(),
-							"Visual: " + visual + "\nPrice: " + price + "\nTaste: " + taste, Toast.LENGTH_LONG).show();
+
+					Toast.makeText(getApplicationContext(), "Visual: " + visual + "\nPrice: " + price + "\nTaste: " + taste, Toast.LENGTH_LONG).show();
 				}
 			});
 
@@ -480,7 +472,7 @@ public class MensaMeals extends ExpandableListActivity {
 	protected void onPrepareDialog(int id, Dialog dialog) {
 		if (id == R.layout.rating_dialog) {
 			String voted = "";
-			
+
 			// set prev vote
 			RatingBar r = (RatingBar) dialog.findViewById(R.id.visual);
 			if (mVoteDialogData.getFloat(VOTE_DIALOG_VISUAL_ID) != 0) {
@@ -490,7 +482,7 @@ public class MensaMeals extends ExpandableListActivity {
 				r.setIsIndicator(false);
 			}
 			r.setRating(mVoteDialogData.getFloat(VOTE_DIALOG_VISUAL_ID));
-			
+
 			r = (RatingBar) dialog.findViewById(R.id.price);
 			if (mVoteDialogData.getFloat(VOTE_DIALOG_PRICE_ID) != 0) {
 				r.setIsIndicator(true);
@@ -499,7 +491,7 @@ public class MensaMeals extends ExpandableListActivity {
 				r.setIsIndicator(false);
 			}
 			r.setRating(mVoteDialogData.getFloat(VOTE_DIALOG_PRICE_ID));
-			
+
 			r = (RatingBar) dialog.findViewById(R.id.taste);
 			if (mVoteDialogData.getFloat(VOTE_DIALOG_TASTE_ID) != 0) {
 				r.setIsIndicator(true);
@@ -508,11 +500,11 @@ public class MensaMeals extends ExpandableListActivity {
 				r.setIsIndicator(false);
 			}
 			r.setRating(mVoteDialogData.getFloat(VOTE_DIALOG_TASTE_ID));
-		
+
 			// set already voted line
 			TextView txt = (TextView) dialog.findViewById(R.id.alreadyVoted);
-			if (!voted.equals("")) {				
-				voted = voted.substring(0, voted.length()-2) + ".";
+			if (!voted.equals("")) {
+				voted = voted.substring(0, voted.length() - 2) + ".";
 				txt.setText("You already rated: " + voted);// TODO: I18N
 			} else {
 				txt.setText("");
@@ -661,9 +653,7 @@ public class MensaMeals extends ExpandableListActivity {
 
 		// Set new title + Update label
 		TextView labelDay = (TextView) findViewById(R.id.txt_date);
-		labelDay.setText(getMensaLocationString(mSettings.m_sMensaLocation) + "\n"
-				+ DateFormat.format("EEEE", mToday.getTime()) + ", "
-				+ DateFormat.getDateFormat(this).format(mToday.getTime()));
+		labelDay.setText(getMensaLocationString(mSettings.m_sMensaLocation) + "\n" + DateFormat.format("EEEE", mToday.getTime()) + ", " + DateFormat.getDateFormat(this).format(mToday.getTime()));
 	}
 
 	private boolean doMondayUpdate() {
@@ -712,21 +702,16 @@ public class MensaMeals extends ExpandableListActivity {
 		// Now create an array adapter and set it to display using our row
 		CustomCursorTreeAdapter meals;
 		if (mSettings.m_bEnableVoting) {
-			String[] child_from = new String[] { MealsDbAdapter.KEY_NAME, MealsDbAdapter.KEY_PRICE,
-					MealsDbAdapter.KEY_TYPE, MealsDbAdapter.KEY_RESULT_VISUAL, MealsDbAdapter.KEY_RESULT_PRICE,
+			String[] child_from = new String[] { MealsDbAdapter.KEY_NAME, MealsDbAdapter.KEY_PRICE, MealsDbAdapter.KEY_TYPE, MealsDbAdapter.KEY_RESULT_VISUAL, MealsDbAdapter.KEY_RESULT_PRICE,
 					MealsDbAdapter.KEY_RESULT_TASTE };
-			int[] child_to = new int[] { R.id.meal, R.id.price, R.id.meal_type, R.id.vote_visual, R.id.vote_price,
-					R.id.vote_taste };
+			int[] child_to = new int[] { R.id.meal, R.id.price, R.id.meal_type, R.id.vote_visual, R.id.vote_price, R.id.vote_taste };
 
-			meals = new CustomCursorTreeAdapter(this, c, R.layout.simple_expandable_list_item_1, group_from, group_to,
-					R.layout.simple_expandable_list_item_2_rating, child_from, child_to);
+			meals = new CustomCursorTreeAdapter(this, c, R.layout.simple_expandable_list_item_1, group_from, group_to, R.layout.simple_expandable_list_item_2_rating, child_from, child_to);
 		} else {
-			String[] child_from = new String[] { MealsDbAdapter.KEY_NAME, MealsDbAdapter.KEY_PRICE,
-					MealsDbAdapter.KEY_TYPE };
+			String[] child_from = new String[] { MealsDbAdapter.KEY_NAME, MealsDbAdapter.KEY_PRICE, MealsDbAdapter.KEY_TYPE };
 			int[] child_to = new int[] { R.id.meal, R.id.price, R.id.meal_type };
 
-			meals = new CustomCursorTreeAdapter(this, c, R.layout.simple_expandable_list_item_1, group_from, group_to,
-					R.layout.simple_expandable_list_item_2, child_from, child_to);
+			meals = new CustomCursorTreeAdapter(this, c, R.layout.simple_expandable_list_item_1, group_from, group_to, R.layout.simple_expandable_list_item_2, child_from, child_to);
 		}
 		setListAdapter(meals);
 
