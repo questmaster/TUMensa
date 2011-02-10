@@ -396,7 +396,7 @@ public class MensaMeals extends ExpandableListActivity {
 
 				mVoteDialogData = new Bundle();
 				mVoteDialogData.putLong(VOTE_DIALOG_MEAL_ID, meal_id);
-				mVoteDialogData.putString(VOTE_DIALOG_MEAL_SCRIPT_ID, mensa + counter + meal_num);
+				mVoteDialogData.putString(VOTE_DIALOG_MEAL_SCRIPT_ID, mensa + "|" + counter + "|" + meal_num);
 				mVoteDialogData.putString(VOTE_DIALOG_DATE_ID, (String) DateFormat.format("yyyy-MM-dd", mToday.getTime()));
 				mVoteDialogData.putFloat(VOTE_DIALOG_VISUAL_ID, vis);
 				mVoteDialogData.putFloat(VOTE_DIALOG_TASTE_ID, tst);

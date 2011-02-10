@@ -17,9 +17,7 @@
 package de.questmaster.tudmensa;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Vector;
@@ -220,7 +218,7 @@ public class DataExtractor implements Runnable {
 		int day_index = 0;
 		int meal_num = 0;
 		String curCounter = "";
-		// FIXME: Debug new code
+
 		try {
 			URL uMenuWebsite = new URL("http://www.studentenwerkdarmstadt.de/index.php?option=com_spk&task=" + task + "&view=" + view);
 
@@ -247,7 +245,7 @@ public class DataExtractor implements Runnable {
 							if (tblEntries.item(0).getFirstChild().getNodeType() == Node.ENTITY_REFERENCE_NODE) {
 								counter_name = "nbsp";
 							} else {
-								counter_name = tblEntries.item(0).getFirstChild().getNodeValue(); // TODO!
+								counter_name = tblEntries.item(0).getFirstChild().getNodeValue();
 							}
 							if (counter_name.indexOf("nbsp") < 0) {
 								// get new Counter name
