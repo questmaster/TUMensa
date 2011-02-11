@@ -139,6 +139,7 @@ containing a value of this type.
         public static final int dialog_title_voting=0x7f060027;
         public static final int dialog_updating_text=0x7f060003;
         public static final int dialog_visual=0x7f06003e;
+        public static final int dialog_vote_done=0x7f060045;
         public static final int meals_price=0x7f060043;
         public static final int meals_taste=0x7f060042;
         public static final int meals_visual=0x7f060044;

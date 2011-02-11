@@ -64,4 +64,5 @@
     <string name="meals_taste">G:</string>
     <string name="meals_price">P:</string>
     <string name="meals_visual">O:</string>
+    <string name="dialog_vote_done">Die Bewertung wurde übertragen.</string>
 </resources>

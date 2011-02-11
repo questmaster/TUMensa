@@ -303,7 +303,7 @@ public class MealsDbAdapter {
 		Vector<String> result = new Vector<String>();
 
 		Cursor mCursor = mDb.query(true, DATABASE_TABLE, new String[] { KEY_DATE }, KEY_DATE + "<=\"" + date + "\""
-				, null, null, null, null, null);
+				, null, null, null, null, "5"); // Max. 5 days back are requested
 		if (mCursor != null) {
 			for (mCursor.moveToFirst(); !mCursor.isAfterLast(); mCursor.moveToNext()) {
 				result.add(mCursor.getString(0));

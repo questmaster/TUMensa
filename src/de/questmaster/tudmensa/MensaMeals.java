@@ -93,7 +93,8 @@ public class MensaMeals extends ExpandableListActivity {
 				invokeVoteUpdater();
 
 			} else if (msg.what == 1) { // VoteHelper finished updating votes
-
+				Toast.makeText(mContext, getResources().getText(R.string.dialog_vote_done), Toast.LENGTH_SHORT).show();
+				
 				// update data displayed
 				mRestart = true;
 				fillData();
