@@ -34,7 +34,7 @@
 		<LinearLayout android:id="@+id/linearLayout1"
 			android:layout_width="wrap_content" android:layout_height="match_parent">
 			<TextView android:id="@+id/textView1" android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:text="V: "></TextView>
+				android:layout_height="wrap_content" android:text="@string/meals_visual"></TextView>
 			<RatingBar android:id="@+id/vote_visual"
 				android:isIndicator="true" android:layout_width="wrap_content"
 				android:layout_height="wrap_content" style="?android:attr/ratingBarStyleSmall"
@@ -44,7 +44,7 @@
 			android:layout_width="wrap_content" android:layout_height="match_parent"
 			android:layout_marginLeft="5dp" android:layout_marginRight="5dp">
 			<TextView android:id="@+id/textView2" android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:text="P: "></TextView>
+				android:layout_height="wrap_content" android:text="@string/meals_price"></TextView>
 			<RatingBar android:id="@+id/vote_price"
 				android:isIndicator="true" android:layout_width="wrap_content"
 				android:layout_height="wrap_content" style="?android:attr/ratingBarStyleSmall"
@@ -53,7 +53,7 @@
 		<LinearLayout android:id="@+id/linearLayout4"
 			android:layout_width="wrap_content" android:layout_height="match_parent">
 			<TextView android:id="@+id/textView3" android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:text="T: "></TextView>
+				android:layout_height="wrap_content" android:text="@string/meals_taste"></TextView>
 			<RatingBar android:id="@+id/vote_taste"
 				android:isIndicator="true" android:layout_width="wrap_content"
 				android:layout_height="wrap_content" style="?android:attr/ratingBarStyleSmall"

@@ -89,7 +89,7 @@ public class MensaMeals extends ExpandableListActivity {
 				mSettings.setLastUpdate(mContext);
 				fillData();
 			} else if (msg.what == 1) { // VoteHelper finished updating votes
-				// FIXME: does this work?
+				// TODO: does this work?
 				
 				// update data displayed
 				mRestart = true;
@@ -330,7 +330,7 @@ public class MensaMeals extends ExpandableListActivity {
 		case ON_SETTINGS_CHANGE:
 			mSettings.ReadSettings(this);
 
-			// WORKAROUND: restart activity FIXME may have side-effects in froyo
+			// WORKAROUND: restart activity TODO may have side-effects in froyo
 			if (!mOldTheme.equals(mSettings.m_sThemes)) {
 				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -485,9 +485,6 @@ public class MensaMeals extends ExpandableListActivity {
 
 						// Save data (Inet)
 						new VoteHelper(mVoteDialogData).start();
-
-						// TODO: Debug
-						Toast.makeText(getApplicationContext(), "Visual: " + visual + "\nPrice: " + price + "\nTaste: " + taste, Toast.LENGTH_LONG).show();
 					}
 				}
 			});
@@ -538,7 +535,7 @@ public class MensaMeals extends ExpandableListActivity {
 
 			// set already voted line
 			TextView txt = (TextView) dialog.findViewById(R.id.alreadyVoted);
-			if (!voted.equals("")) {
+			if (voted.length() > 0) {
 				voted = voted.substring(0, voted.length() - 2) + ".";
 				txt.setText(String.format(getResources().getString(R.string.dialog_already_voted), voted));
 			} else {

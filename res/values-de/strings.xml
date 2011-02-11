@@ -61,4 +61,7 @@
     <string name="dialog_price">Preis/Leistung</string>
     <string name="dialog_taste">Geschmack</string>
     <string name="dialog_already_voted">Schon bewerted: %s</string>
+    <string name="meals_taste">G:</string>
+    <string name="meals_price">P:</string>
+    <string name="meals_visual">O:</string>
 </resources>

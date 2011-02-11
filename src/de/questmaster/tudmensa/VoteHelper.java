@@ -19,6 +19,7 @@ public class VoteHelper extends Thread {
 
 	private final static int MODE_GET_VOTES = 0;
 	private final static int MODE_SET_VOTES = 1;
+	private static final String mURLlocation = "http://www.questmaster.de/tumensa/";
 	
 	private Bundle mDialogData = null;
 	private MealsDbAdapter mDbHelper;
@@ -49,14 +50,14 @@ public class VoteHelper extends Thread {
 	public void run() {
 		switch (mModeOfOperation) {
 		case MODE_GET_VOTES:
-			// TODO: get dates in DB from today on
+			// FIXME: get dates in DB from today on
 			
-			// TODO: read date data
+			// FIXME: read votes data
 			
-			// TODO: store votes in DB
+			// FIXME: store votes in DB
 			
 			// DEBUG test
-//			long id = mDbHelper.fetchMealId("stadtmitte", "20110211", "Bistro", 1);
+//			long id = mDbHelper.fetchMealId("stadtmitte", "20110209", "Bistro", 0);
 //			mDbHelper.updateMealExternalVotes(id, (float) 3.5, (float) 4.0, (float) 1.5, 1, 1, 1);
 			
 			// update list
@@ -68,7 +69,7 @@ public class VoteHelper extends Thread {
 				String price = String.valueOf(mDialogData.getBoolean(MensaMeals.VOTE_DIALOG_PRICE_CHANGE_ID) ? mDialogData.getFloat(MensaMeals.VOTE_DIALOG_PRICE_ID) : 0);
 				String taste = String.valueOf(mDialogData.getBoolean(MensaMeals.VOTE_DIALOG_TASTE_CHANGE_ID) ? mDialogData.getFloat(MensaMeals.VOTE_DIALOG_TASTE_ID) : 0);
 				
-				URL voteURL = new URL(String.format("http://www.questmaster.de/tumensa/mealcounter.php?mealid=%s&date=%s&vote1=%s&vote2=%s&vote3=%s",
+				URL voteURL = new URL(String.format(mURLlocation + "mealcounter.php?mealid=%s&date=%s&vote1=%s&vote2=%s&vote3=%s",
 						mDialogData.getString(MensaMeals.VOTE_DIALOG_MEAL_SCRIPT_ID), 
 						mDialogData.getString(MensaMeals.VOTE_DIALOG_DATE_ID), 
 						visual, price, taste));

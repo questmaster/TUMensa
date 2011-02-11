@@ -77,4 +77,7 @@
     <string name="dialog_price">Value for money</string>
     <string name="dialog_taste">Taste</string>
     <string name="dialog_already_voted">You already rated: %s</string>
+    <string name="meals_taste">T:</string>
+    <string name="meals_price">P:</string>
+    <string name="meals_visual">V:</string>
 </resources>
