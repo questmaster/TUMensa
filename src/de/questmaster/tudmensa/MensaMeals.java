@@ -39,6 +39,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.ExpandableListContextMenuInfo;
@@ -155,10 +156,13 @@ public class MensaMeals extends ExpandableListActivity {
 
 		private int[] mChildFrom;
 		private int[] mChildTo;
+		private int mChildLayoutUsed;
 
 		public CustomCursorTreeAdapter(Context context, Cursor cursor, int groupLayout, String[] groupFrom, int[] groupTo, int childLayout, String[] childFrom, int[] childTo) {
 			super(context, cursor, groupLayout, groupFrom, groupTo, childLayout, childFrom, childTo);
 
+			mChildLayoutUsed = childLayout;
+			
 			mChildFrom = new int[childFrom.length];
 			initFromColumns(getChildrenCursor(cursor), childFrom, mChildFrom);
 
@@ -223,6 +227,23 @@ public class MensaMeals extends ExpandableListActivity {
 					}
 				}
 			}
+		}
+		
+		@Override
+		public View newChildView (Context context, Cursor cursor, boolean isLastChild, ViewGroup parent) {
+			View new_view = super.newChildView(context, cursor, isLastChild, parent);
+			
+			// check if data avail, if not...
+			if (mChildLayoutUsed == R.layout.simple_expandable_list_item_2_rating 
+					&& cursor.getFloat(cursor.getColumnIndexOrThrow(MealsDbAdapter.KEY_RESULT_VISUAL)) == 0
+					&& cursor.getFloat(cursor.getColumnIndexOrThrow(MealsDbAdapter.KEY_RESULT_PRICE)) == 0
+					&& cursor.getFloat(cursor.getColumnIndexOrThrow(MealsDbAdapter.KEY_RESULT_TASTE)) == 0) {
+				// hide stuff
+				View holder = new_view.findViewById(R.id.ratingHolder);
+				holder.setVisibility(View.GONE);
+			}
+			
+			return new_view;
 		}
 
 	}

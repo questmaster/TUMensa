@@ -19,7 +19,7 @@
 		<TextView android:id="@+id/price" android:layout_height="wrap_content"
 			android:layout_width="fill_parent" android:gravity="right"
 			android:paddingRight="10dp" android:text="Price $"
-			style="@style/myExpandableListViewItem2_price">
+			style="@style/myExpandableListViewItem2_price" android:paddingBottom="5dp">
 		</TextView>
 	</LinearLayout>
 </LinearLayout>
