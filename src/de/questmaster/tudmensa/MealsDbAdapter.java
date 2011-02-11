@@ -363,7 +363,7 @@ public class MealsDbAdapter {
 		return mDb.update(DATABASE_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
 	}
 
-	public boolean updateMealExternalVotes(long rowId, float vTaste, float vPrice, float vVisual) {
+	public boolean updateMealInternalVotes(long rowId, float vTaste, float vPrice, float vVisual) {
 		ContentValues args = new ContentValues();
 		args.put(KEY_VOTE_TASTE, vTaste);
 		args.put(KEY_VOTE_PRICE, vPrice);

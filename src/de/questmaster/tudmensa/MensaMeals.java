@@ -18,7 +18,6 @@ package de.questmaster.tudmensa;
 
 import java.util.Calendar;
 import de.questmaster.tudmensa.R;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ExpandableListActivity;
@@ -61,12 +60,15 @@ public class MensaMeals extends ExpandableListActivity {
 	private static final int MENU_SHARE_ID = ContextMenu.FIRST;
 	private static final int MENU_VOTE_ID = ContextMenu.FIRST + 1;
 
-	private static final String VOTE_DIALOG_MEAL_ID = "meal_id";
-	private static final String VOTE_DIALOG_VISUAL_ID = "vote_visual";
-	private static final String VOTE_DIALOG_TASTE_ID = "vote_taste";
-	private static final String VOTE_DIALOG_PRICE_ID = "vote_price";
-	private static final String VOTE_DIALOG_DATE_ID = "meal_date";
-	private static final String VOTE_DIALOG_MEAL_SCRIPT_ID = "meal_script";
+	protected static final String VOTE_DIALOG_MEAL_ID = "meal_id";
+	protected static final String VOTE_DIALOG_VISUAL_ID = "vote_visual";
+	protected static final String VOTE_DIALOG_TASTE_ID = "vote_taste";
+	protected static final String VOTE_DIALOG_PRICE_ID = "vote_price";
+	protected static final String VOTE_DIALOG_VISUAL_CHANGE_ID = "chg_visual";
+	protected static final String VOTE_DIALOG_TASTE_CHANGE_ID = "chg_taste";
+	protected static final String VOTE_DIALOG_PRICE_CHANGE_ID = "chg_price";
+	protected static final String VOTE_DIALOG_DATE_ID = "meal_date";
+	protected static final String VOTE_DIALOG_MEAL_SCRIPT_ID = "meal_script";
 
 	public static final int ON_SETTINGS_CHANGE = 0;
 
@@ -78,18 +80,27 @@ public class MensaMeals extends ExpandableListActivity {
 	protected Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
-			mPDialog.dismiss();
-			// updateView after update. Don't do it for an update after startup
-			mRestart = true;
-			// set update time
-			mSettings.setLastUpdate(mContext);
-			fillData();
+			if (msg.what == 0) { // progress Dialog data update
+				mPDialog.dismiss();
+				// updateView after update. Don't do it for an update after
+				// startup
+				mRestart = true;
+				// set update time
+				mSettings.setLastUpdate(mContext);
+				fillData();
+			} else if (msg.what == 1) { // VoteHelper finished updating votes
+				// FIXME: does this work?
+				
+				// update data displayed
+				mRestart = true;
+				fillData();
+			}
 		}
 	};
 
 	private Calendar mToday = Calendar.getInstance();
 	protected Context mContext = this;
-	protected Activity mActivity = this;
+	protected MensaMeals mActivity = this;
 	private String mOldTheme;
 	private GestureDetector gestureDetector;
 	private Bundle mVoteDialogData;
@@ -396,7 +407,7 @@ public class MensaMeals extends ExpandableListActivity {
 
 				mVoteDialogData = new Bundle();
 				mVoteDialogData.putLong(VOTE_DIALOG_MEAL_ID, meal_id);
-				mVoteDialogData.putString(VOTE_DIALOG_MEAL_SCRIPT_ID, mensa + "|" + counter + "|" + meal_num);
+				mVoteDialogData.putString(VOTE_DIALOG_MEAL_SCRIPT_ID, (mensa + "|" + counter + "|" + meal_num).replace(" ", "%20"));
 				mVoteDialogData.putString(VOTE_DIALOG_DATE_ID, (String) DateFormat.format("yyyy-MM-dd", mToday.getTime()));
 				mVoteDialogData.putFloat(VOTE_DIALOG_VISUAL_ID, vis);
 				mVoteDialogData.putFloat(VOTE_DIALOG_TASTE_ID, tst);
@@ -433,27 +444,51 @@ public class MensaMeals extends ExpandableListActivity {
 			d.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int whichButton) {
 					float visual = 0, price = 0, taste = 0;
+					boolean vis_set = false, prc_set = false, tst_set = false;
 
 					dialog.dismiss();
 
-					// get dialog data
+					// get dialog data, only the new stuff
 					RatingBar r = (RatingBar) ratingView.findViewById(R.id.visual);
-					if (!r.isIndicator())
+					if (!r.isIndicator()) {
 						visual = r.getRating();
+						vis_set = true;
+						mVoteDialogData.putFloat(VOTE_DIALOG_VISUAL_ID, visual);
+					} else {
+						visual = mVoteDialogData.getFloat(VOTE_DIALOG_VISUAL_ID);
+					}
+					mVoteDialogData.putBoolean(VOTE_DIALOG_VISUAL_CHANGE_ID, vis_set);
 
 					r = (RatingBar) ratingView.findViewById(R.id.price);
-					if (!r.isIndicator())
+					if (!r.isIndicator()) {
 						price = r.getRating();
+						prc_set = true;
+						mVoteDialogData.putFloat(VOTE_DIALOG_PRICE_ID, price);
+					} else {
+						price = mVoteDialogData.getFloat(VOTE_DIALOG_PRICE_ID);
+					}
+					mVoteDialogData.putBoolean(VOTE_DIALOG_PRICE_CHANGE_ID, prc_set);
 
 					r = (RatingBar) ratingView.findViewById(R.id.taste);
-					if (!r.isIndicator())
+					if (!r.isIndicator()) {
 						taste = r.getRating();
+						tst_set = true;
+						mVoteDialogData.putFloat(VOTE_DIALOG_TASTE_ID, taste);
+					} else {
+						taste = mVoteDialogData.getFloat(VOTE_DIALOG_TASTE_ID);
+					}
+					mVoteDialogData.putBoolean(VOTE_DIALOG_TASTE_CHANGE_ID, tst_set);
 
-					// FIXME: Save data (DB + Inet -> change script)
-					long rowId = mVoteDialogData.getLong(VOTE_DIALOG_MEAL_ID);
-					mDbHelper.updateMealExternalVotes(rowId, taste, price, visual);
+					if (vis_set || prc_set || tst_set) {
+						// Save data (DB)
+						long rowId = mVoteDialogData.getLong(VOTE_DIALOG_MEAL_ID);
+						mDbHelper.updateMealInternalVotes(rowId, taste, price, visual);
 
-					Toast.makeText(getApplicationContext(), "Visual: " + visual + "\nPrice: " + price + "\nTaste: " + taste, Toast.LENGTH_LONG).show();
+						// Save data (Inet)
+						new VoteHelper(mVoteDialogData).start();
+
+						Toast.makeText(getApplicationContext(), "Visual: " + visual + "\nPrice: " + price + "\nTaste: " + taste, Toast.LENGTH_LONG).show();
+					}
 				}
 			});
 
