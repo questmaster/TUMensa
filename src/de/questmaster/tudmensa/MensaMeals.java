@@ -355,10 +355,10 @@ public class MensaMeals extends ExpandableListActivity {
 
 			// Only create a context menu for child items
 			if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
-				menu.setHeaderTitle(getResources().getString(R.string.meals));
-				menu.add(MENU_GROUP_MEAL_ID, MENU_SHARE_ID, 0, getResources().getString(R.string.share_with_friends));
+				menu.setHeaderTitle(getResources().getString(R.string.contextmenu_meals));
+				menu.add(MENU_GROUP_MEAL_ID, MENU_SHARE_ID, 0, getResources().getString(R.string.contextmenu_share_with_friends));
 				if (mSettings.m_bEnableVoting) {
-					menu.add(MENU_GROUP_MEAL_ID, MENU_VOTE_ID, 1, getResources().getString(R.string.vote));
+					menu.add(MENU_GROUP_MEAL_ID, MENU_VOTE_ID, 1, getResources().getString(R.string.contextmenu_vote));
 				}
 			}
 		} else if (v instanceof Button) {
@@ -391,11 +391,10 @@ public class MensaMeals extends ExpandableListActivity {
 			case MENU_SHARE_ID:
 				Intent share = new Intent(Intent.ACTION_SEND);
 				share.setType("text/plain");
-				share.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.mensa_meal_on) + " " + DateFormat.getDateFormat(this).format(mToday.getTime()));
-				share.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.checkout_1) + " \"" + meal + "\" " + getResources().getString(R.string.checkout_2_on) + " "
-						+ DateFormat.getDateFormat(this).format(mToday.getTime()) + " " + getResources().getString(R.string.checkout_3_at) + " \"" + getMensaLocationString(mensa) + "\"");
+				share.putExtra(Intent.EXTRA_SUBJECT, String.format(getResources().getString(R.string.share_subject), DateFormat.getDateFormat(this).format(mToday.getTime())));
+				share.putExtra(Intent.EXTRA_TEXT, String.format(getResources().getString(R.string.share_checkout), meal, DateFormat.getDateFormat(this).format(mToday.getTime()), getMensaLocationString(mensa)));
 
-				startActivity(Intent.createChooser(share, getResources().getString(R.string.where_to_share)));
+				startActivity(Intent.createChooser(share, getResources().getString(R.string.share_where_to)));
 				return true;
 			case MENU_VOTE_ID:
 				long meal_id = c.getLong(c.getColumnIndex(MealsDbAdapter.KEY_ROWID));
@@ -434,7 +433,7 @@ public class MensaMeals extends ExpandableListActivity {
 
 		if (id == R.layout.rating_dialog) {
 			AlertDialog.Builder d = new AlertDialog.Builder(this);
-			d.setTitle(getResources().getString(R.string.dlg_title_voting));
+			d.setTitle(getResources().getString(R.string.dialog_title_voting));
 
 			// create view
 			LayoutInflater factory = LayoutInflater.from(this);

@@ -310,73 +310,67 @@ public class DataExtractor implements Runnable {
 											// create detail information
 											String info;
 											if (type.equals("F")) {
-												info = mActivity.getResources().getString(R.string.fish);
+												info = mActivity.getResources().getString(R.string.type_fish);
 											} else if (type.equals("G")) {
-												info = mActivity.getResources().getString(R.string.poultry);
+												info = mActivity.getResources().getString(R.string.type_poultry);
 											} else if (type.equals("K")) {
-												info = mActivity.getResources().getString(R.string.calf);
+												info = mActivity.getResources().getString(R.string.type_calf);
 											} else if (type.equals("R")) {
-												info = mActivity.getResources().getString(R.string.beef);
+												info = mActivity.getResources().getString(R.string.type_beef);
 											} else if (type.equals("RS")) {
-												info = mActivity.getResources().getString(R.string.beefpig);
+												info = mActivity.getResources().getString(R.string.type_beefpig);
 											} else if (type.equals("S")) {
-												info = mActivity.getResources().getString(R.string.pig);
+												info = mActivity.getResources().getString(R.string.type_pig);
 											} else if (type.equals("V")) {
-												info = mActivity.getResources().getString(R.string.vegie);
+												info = mActivity.getResources().getString(R.string.type_vegie);
 											} else {
 												info = "";
 											}
 
-											// get additional information
-											// (extract
-											// from meal name)
+											// get additional information (extract from meal name)
 											String mealInspect = meal;
 											while (mealInspect.contains("(") && mealInspect.contains(")")) {
 												String additions = mealInspect.substring(mealInspect.indexOf("(") + 1, mealInspect.indexOf(")"));
-												mealInspect = mealInspect.substring(mealInspect.indexOf(")") + 1); // skip
-																													// current
-																													// (...)
+												mealInspect = mealInspect.substring(mealInspect.indexOf(")") + 1); // skip current (...)
 												String[] splitAdditions = additions.split(",");
 												try {
 													for (String s1 : splitAdditions) {
 														switch (Integer.parseInt(s1)) {
 														case 1:
-															info += "\n(1) " + mActivity.getResources().getString(R.string.colorant);
+															info += "\n(1) " + mActivity.getResources().getString(R.string.note_colorant);
 															break;
 														case 2:
-															info += "\n(2) " + mActivity.getResources().getString(R.string.preservative);
+															info += "\n(2) " + mActivity.getResources().getString(R.string.note_preservative);
 															break;
 														case 3:
-															info += "\n(3) " + mActivity.getResources().getString(R.string.antioxidant);
+															info += "\n(3) " + mActivity.getResources().getString(R.string.note_antioxidant);
 															break;
 														case 4:
-															info += "\n(4) " + mActivity.getResources().getString(R.string.flavor_enhancer);
+															info += "\n(4) " + mActivity.getResources().getString(R.string.note_flavor_enhancer);
 															break;
 														case 5:
-															info += "\n(5) " + mActivity.getResources().getString(R.string.sulphur_treated);
+															info += "\n(5) " + mActivity.getResources().getString(R.string.note_sulphur_treated);
 															break;
 														case 6:
-															info += "\n(6) " + mActivity.getResources().getString(R.string.blackened);
+															info += "\n(6) " + mActivity.getResources().getString(R.string.note_blackened);
 															break;
 														case 7:
-															info += "\n(7) " + mActivity.getResources().getString(R.string.waxed);
+															info += "\n(7) " + mActivity.getResources().getString(R.string.note_waxed);
 															break;
 														case 8:
-															info += "\n(8) " + mActivity.getResources().getString(R.string.phosphate);
+															info += "\n(8) " + mActivity.getResources().getString(R.string.note_phosphate);
 															break;
 														case 9:
-															info += "\n(9) " + mActivity.getResources().getString(R.string.sweetening);
+															info += "\n(9) " + mActivity.getResources().getString(R.string.note_sweetening);
 															break;
 														case 11:
-															info += "\n(11) " + mActivity.getResources().getString(R.string.phenylalanine_source);
+															info += "\n(11) " + mActivity.getResources().getString(R.string.note_phenylalanine_source);
 															break;
 														}
 													}
 
 												} catch (NumberFormatException e) {
-													// No number, so its nothing
-													// we
-													// care about
+													// No number, so its nothing we care about
 												}
 											}
 

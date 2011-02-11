@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <resources>
-    <string name="vegie">vegetariano</string>
-    <string name="sweetening">endulzante</string>
-    <string name="preservative">conservante</string>
     <string name="pref_ThemesSummary">Selecciona un estilo visual.</string>
     <string name="pref_ThemesLabel">Seleccionar estilo visual</string>
     <string name="pref_MensaLocationSummary">Se mostrará el menú de la Mensa escogida.</string>
@@ -13,34 +10,41 @@
     <string name="pref_GesturesDescr">Deslizar y tocar-doble activados.</string>
     <string name="pref_DeleteOldDataLabel">Borrar entradas antiguas</string>
     <string name="pref_AdsDescr">Se muestra publicidad para apoyar al desarrollador (yo) ;)</string>
-    <string name="poultry">carne de ave</string>
-    <string name="beef">carne vacuna</string>
-    <string name="fish">carne de pescado</string>
-    <string name="calf">carne de ternera</string>
-    <string name="waxed">encerado</string>
-    <string name="phenylalanine_source">fenilalanina</string>
     <string name="settings_name">Propiedades de Mensa</string>
     <string name="menu_today">Hoy</string>
     <string name="pref_AutoUpdateLabel">Actualización automática</string>
     <string name="pref_AdsDescrOff">No apoyas al desarrollador :(</string>
-    <string name="antioxidant">antioxidante</string>
     <string name="dialog_updating_text">Actualizando la base de datos.</string>
     <string name="pref_cat_ad">Publicidad</string>
     <string name="no_meals">No hay datos disponibles para el menú de hoy.</string>
     <string name="pref_DeleteOldDataDescr">Borra las entradas desde la semana anterior.</string>
     <string name="pref_cat_mensa">Mensa</string>
-    <string name="flavor_enhancer">Reforzante de sabor</string>
-    <string name="phosphate">fosfato</string>
     <string name="pref_DeleteOldDataDescrOff">Retiene todas las entradas en la base de datos.</string>
     <string name="menu_update">Actualizar</string>
-    <string name="pig">carne de cerdo</string>
     <string name="pref_AutoUpdateDescrOff">Solo actualizaciones manuales.</string>
-    <string name="beefpig">carne vacuna y de cerdo</string>
     <string name="menu_settings">Propiedades</string>
-    <string name="colorant">colorante</string>
     <string name="pref_AdsLabel">Apoyar al desarrollador</string>
     <string name="pref_AutoUpdateDescr">Descarga el menú actual automáticamente.</string>
-    <string name="sulphur_treated">sulfurado</string>
     <string name="pref_cat_app">Aplicación</string>
-    <string name="blackened">colorante negro</string>
+    <string name="type_beef">carne vacuna</string>
+    <string name="note_colorant">colorante</string>
+    <string name="note_sulphur_treated">sulfurado</string>
+    <string name="type_poultry">carne de ave</string>
+    <string name="type_beefpig">carne vacuna y de cerdo</string>
+    <string name="note_sweetening">endulzante</string>
+    <string name="type_calf">carne de ternera</string>
+    <string name="type_pig">carne de cerdo</string>
+    <string name="note_flavor_enhancer">Reforzante de sabor</string>
+    <string name="note_phosphate">fosfato</string>
+    <string name="note_preservative">conservante</string>
+    <string name="note_phenylalanine_source">fenilalanina</string>
+    <string name="note_antioxidant">antioxidante</string>
+    <string name="note_waxed">encerado</string>
+    <string name="type_vegie">vegetariano</string>
+    <string name="note_blackened">colorante negro</string>
+    <string name="type_fish">carne de pescado</string>
+    <string-array name="Themes">
+        <item>Oscuro</item>
+        <item>Claro</item>
+    </string-array>
 </resources>

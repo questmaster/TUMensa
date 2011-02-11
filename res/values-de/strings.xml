@@ -7,22 +7,6 @@
     <string name="pref_MensaLocationLabel">Mensa Standort</string>
     <string name="menu_settings">Einstellungen</string>
     <string name="menu_update">Aktualisieren</string>
-    <string name="poultry">Geflügel</string>
-    <string name="beef">Rind</string>
-    <string name="fish">Fisch</string>
-    <string name="calf">Kalb</string>
-    <string name="pig">Schwein</string>
-    <string name="vegie">Vegetarisch</string>
-    <string name="beefpig">Rind und Schwein</string>
-    <string name="colorant">Farbstoff</string>
-    <string name="preservative">Konservierungsmittel</string>
-    <string name="antioxidant">Antioxidationsmittel</string>
-    <string name="flavor_enhancer">Geschmacksverstärker</string>
-    <string name="sulphur_treated">geschwefelt</string>
-    <string name="waxed">gewachst</string>
-    <string name="phosphate">Phosphat</string>
-    <string name="phenylalanine_source">Phenylalaninquelle</string>
-    <string name="sweetening">Süssungsmittel</string>
     <string name="pref_AutoUpdateLabel">Automatisches Update</string>
     <string name="pref_AutoUpdateDescr">Lädt automatisch das aktuelle Mensamenü.</string>
     <string name="pref_DeleteOldDataDescr">Löscht Einträge der letzten Woche und davor.</string>
@@ -42,14 +26,35 @@
     <string name="pref_AdsDescrOff">Keine Unterstützung für Entwickler.</string>
     <string name="pref_AdsLabel">Entwickler unterstützen</string>
     <string name="pref_LastUpdateLabel">Letztes Update</string>
-    <string name="mensa_meal_on">Mensa Essen vom</string>
-    <string name="share_with_friends">Teile mit Freunden</string>
-    <string name="vote">Bewerte dein Essen</string>
-    <string name="checkout_3_at">in der Mensa</string>
-    <string name="where_to_share">Wo teilen?</string>
-    <string name="checkout_1">Sieh dir das an:</string>
-    <string name="checkout_2_on">am</string>
-    <string name="meals">Essen</string>
     <string name="pref_EnableVotingLabel">Bewertungen abgeben</string>
-    <string name="blackened">geschwärzt</string>
+    <string name="share_checkout">Sieh dir das an: "%1$s" am %2$s in der Mensa "%3$s"</string>
+    <string name="share_subject">Mensa Essen vom %s</string>
+    <string name="share_where_to">Wie teilen?</string>
+    <string name="type_poultry">Geflügel</string>
+    <string name="type_calf">Kalb</string>
+    <string name="type_pig">Schwein</string>
+    <string name="note_flavor_enhancer">Geschmacksverstärker</string>
+    <string name="note_phosphate">Phosphat</string>
+    <string name="note_preservative">Konservierungsmittel</string>
+    <string name="type_vegie">Vegetarisch</string>
+    <string name="note_blackened">geschwärzt</string>
+    <string name="type_beef">Rind</string>
+    <string name="note_colorant">Farbstoff</string>
+    <string name="note_sulphur_treated">geschwefelt</string>
+    <string name="type_beefpig">Rind und Schwein</string>
+    <string name="note_sweetening">Süssungsmittel</string>
+    <string name="note_antioxidant">Antioxidationsmittel</string>
+    <string name="note_phenylalanine_source">Phenylalaninquelle</string>
+    <string name="note_waxed">gewachst</string>
+    <string name="type_fish">Fisch</string>
+    <string name="contextmenu_share_with_friends">Teile mit Freunden</string>
+    <string name="contextmenu_meals">Essen</string>
+    <string name="contextmenu_vote">Bewerte dein Essen</string>
+    <string name="dialog_title_voting">Bewerte dein Essen</string>
+    <string name="pref_EnableVotingDescrOff">EXPERIMENTELL. Bewertungen sind aus.</string>
+    <string name="pref_EnableVotingDescr">EXPERIMENTELL. Bewertungen werden angezeitgt und können abgegeben werden.</string>
+    <string-array name="Themes">
+        <item>Dunkel</item>
+        <item>Hell</item>
+    </string-array>
 </resources>
