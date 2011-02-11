@@ -16,6 +16,8 @@
 
 package de.questmaster.tudmensa;
 
+import java.util.Vector;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -90,25 +92,25 @@ public class MealsDbAdapter {
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			if (oldVersion == 7 && newVersion == 8) {
-				Log.w(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion
-						+ ", which will preserve all old data");
-
-				db.execSQL("ALTER TABLE meals ADD vote_taste float DEFAULT 0.0");
-				db.execSQL("ALTER TABLE meals ADD vote_price float DEFAULT 0.0");
-				db.execSQL("ALTER TABLE meals ADD vote_visual float DEFAULT 0.0");
-				db.execSQL("ALTER TABLE meals ADD res_taste float DEFAULT 0.0");
-				db.execSQL("ALTER TABLE meals ADD res_price float DEFAULT 0.0");
-				db.execSQL("ALTER TABLE meals ADD res_visual float DEFAULT 0.0");
-				db.execSQL("ALTER TABLE meals ADD cnt_taste integer DEFAULT 0");
-				db.execSQL("ALTER TABLE meals ADD cnt_price integer DEFAULT 0");
-				db.execSQL("ALTER TABLE meals ADD cnt_visual integer DEFAULT 0");
-			} else {
+//			if (oldVersion == 7 && newVersion == 8) {
+//				Log.w(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion
+//						+ ", which will preserve all old data");
+//
+//				db.execSQL("ALTER TABLE meals ADD vote_taste float DEFAULT 0.0");
+//				db.execSQL("ALTER TABLE meals ADD vote_price float DEFAULT 0.0");
+//				db.execSQL("ALTER TABLE meals ADD vote_visual float DEFAULT 0.0");
+//				db.execSQL("ALTER TABLE meals ADD res_taste float DEFAULT 0.0");
+//				db.execSQL("ALTER TABLE meals ADD res_price float DEFAULT 0.0");
+//				db.execSQL("ALTER TABLE meals ADD res_visual float DEFAULT 0.0");
+//				db.execSQL("ALTER TABLE meals ADD cnt_taste integer DEFAULT 0");
+//				db.execSQL("ALTER TABLE meals ADD cnt_price integer DEFAULT 0");
+//				db.execSQL("ALTER TABLE meals ADD cnt_visual integer DEFAULT 0");
+//			} else {
 				Log.w(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion
 						+ ", which will destroy all old data");
 				db.execSQL("DROP TABLE IF EXISTS meals");
 				onCreate(db);
-			}
+//			}
 		}
 	}
 
@@ -297,6 +299,20 @@ public class MealsDbAdapter {
 		return result;
 	}
 
+	public String[] fetchDatesFromToday(String date) {
+		Vector<String> result = new Vector<String>();
+
+		Cursor mCursor = mDb.query(true, DATABASE_TABLE, new String[] { KEY_DATE }, KEY_DATE + "<=\"" + date + "\""
+				, null, null, null, null, null);
+		if (mCursor != null) {
+			for (mCursor.moveToFirst(); !mCursor.isAfterLast(); mCursor.moveToNext()) {
+				result.add(mCursor.getString(0));
+			}
+		}
+		mCursor.close();
+		return result.toArray(new String[result.size()]);
+	}
+
 	/**
 	 * Update the note using the details provided. The note to be updated is
 	 * specified using the rowId, and it is altered to use the title and body
@@ -350,8 +366,8 @@ public class MealsDbAdapter {
 		return mDb.update(DATABASE_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
 	}
 
-	public boolean updateMealExternalVotes(long rowId, float rTaste, float rPrice, float rVisual, int cTaste,
-			int cPrice, int cVisual) {
+	public boolean updateMealExternalVotes(long rowId, float rVisual, float rPrice, float rTaste, int cVisual,
+			int cPrice, int cTaste) {
 		ContentValues args = new ContentValues();
 		args.put(KEY_RESULT_TASTE, rTaste);
 		args.put(KEY_RESULT_PRICE, rPrice);
@@ -363,7 +379,7 @@ public class MealsDbAdapter {
 		return mDb.update(DATABASE_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
 	}
 
-	public boolean updateMealInternalVotes(long rowId, float vTaste, float vPrice, float vVisual) {
+	public boolean updateMealInternalVotes(long rowId, float vVisual, float vPrice, float vTaste) {
 		ContentValues args = new ContentValues();
 		args.put(KEY_VOTE_TASTE, vTaste);
 		args.put(KEY_VOTE_PRICE, vPrice);

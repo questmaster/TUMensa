@@ -89,9 +89,11 @@ public class MensaMeals extends ExpandableListActivity {
 				// set update time
 				mSettings.setLastUpdate(mContext);
 				fillData();
+
+				invokeVoteUpdater();
+
 			} else if (msg.what == 1) { // VoteHelper finished updating votes
-				// TODO: does this work?
-				
+
 				// update data displayed
 				mRestart = true;
 				fillData();
@@ -105,6 +107,7 @@ public class MensaMeals extends ExpandableListActivity {
 	private String mOldTheme;
 	private GestureDetector gestureDetector;
 	private Bundle mVoteDialogData;
+	private Thread voteUpdater;
 
 	/**
 	 * Copied from K9mail.
@@ -162,7 +165,7 @@ public class MensaMeals extends ExpandableListActivity {
 			super(context, cursor, groupLayout, groupFrom, groupTo, childLayout, childFrom, childTo);
 
 			mChildLayoutUsed = childLayout;
-			
+
 			mChildFrom = new int[childFrom.length];
 			initFromColumns(getChildrenCursor(cursor), childFrom, mChildFrom);
 
@@ -228,21 +231,26 @@ public class MensaMeals extends ExpandableListActivity {
 				}
 			}
 		}
-		
+
 		@Override
-		public View newChildView (Context context, Cursor cursor, boolean isLastChild, ViewGroup parent) {
+		public View newChildView(Context context, Cursor cursor, boolean isLastChild, ViewGroup parent) {
 			View new_view = super.newChildView(context, cursor, isLastChild, parent);
-			
+
 			// check if data avail, if not...
-			if (mChildLayoutUsed == R.layout.simple_expandable_list_item_2_rating 
-					&& cursor.getFloat(cursor.getColumnIndexOrThrow(MealsDbAdapter.KEY_RESULT_VISUAL)) == 0
-					&& cursor.getFloat(cursor.getColumnIndexOrThrow(MealsDbAdapter.KEY_RESULT_PRICE)) == 0
-					&& cursor.getFloat(cursor.getColumnIndexOrThrow(MealsDbAdapter.KEY_RESULT_TASTE)) == 0) {
-				// hide stuff
-				View holder = new_view.findViewById(R.id.ratingHolder);
-				holder.setVisibility(View.GONE);
+			if (mChildLayoutUsed == R.layout.simple_expandable_list_item_2_rating) {
+				if (cursor.getFloat(cursor.getColumnIndexOrThrow(MealsDbAdapter.KEY_RESULT_VISUAL)) == 0 
+						&& cursor.getFloat(cursor.getColumnIndexOrThrow(MealsDbAdapter.KEY_RESULT_PRICE)) == 0
+						&& cursor.getFloat(cursor.getColumnIndexOrThrow(MealsDbAdapter.KEY_RESULT_TASTE)) == 0) {
+					// hide stuff
+					View holder = new_view.findViewById(R.id.ratingHolder);
+					holder.setVisibility(View.GONE);
+				} else {
+					// show stuff
+					View holder = new_view.findViewById(R.id.ratingHolder);
+					holder.setVisibility(View.VISIBLE);
+				}
 			}
-			
+
 			return new_view;
 		}
 
@@ -378,7 +386,7 @@ public class MensaMeals extends ExpandableListActivity {
 			if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
 				menu.setHeaderTitle(getResources().getString(R.string.contextmenu_meals));
 				menu.add(MENU_GROUP_MEAL_ID, MENU_SHARE_ID, 0, getResources().getString(R.string.contextmenu_share_with_friends));
-				if (mSettings.m_bEnableVoting) {
+				if (mSettings.m_bEnableVoting && (mToday.before(Calendar.getInstance()) || mToday.equals(Calendar.getInstance()))) {
 					menu.add(MENU_GROUP_MEAL_ID, MENU_VOTE_ID, 1, getResources().getString(R.string.contextmenu_vote));
 				}
 			}
@@ -413,7 +421,8 @@ public class MensaMeals extends ExpandableListActivity {
 				Intent share = new Intent(Intent.ACTION_SEND);
 				share.setType("text/plain");
 				share.putExtra(Intent.EXTRA_SUBJECT, String.format(getResources().getString(R.string.share_subject), DateFormat.getDateFormat(this).format(mToday.getTime())));
-				share.putExtra(Intent.EXTRA_TEXT, String.format(getResources().getString(R.string.share_checkout), meal, DateFormat.getDateFormat(this).format(mToday.getTime()), getMensaLocationString(mensa)));
+				share.putExtra(Intent.EXTRA_TEXT,
+						String.format(getResources().getString(R.string.share_checkout), meal, DateFormat.getDateFormat(this).format(mToday.getTime()), getMensaLocationString(mensa)));
 
 				startActivity(Intent.createChooser(share, getResources().getString(R.string.share_where_to)));
 				return true;
@@ -427,8 +436,8 @@ public class MensaMeals extends ExpandableListActivity {
 
 				mVoteDialogData = new Bundle();
 				mVoteDialogData.putLong(VOTE_DIALOG_MEAL_ID, meal_id);
-				mVoteDialogData.putString(VOTE_DIALOG_MEAL_SCRIPT_ID, (mensa + "|" + counter + "|" + meal_num).replace(" ", "%20"));
-				mVoteDialogData.putString(VOTE_DIALOG_DATE_ID, (String) DateFormat.format("yyyy-MM-dd", mToday.getTime()));
+				mVoteDialogData.putString(VOTE_DIALOG_MEAL_SCRIPT_ID, (mensa + "|" + counter + "|" + meal_num).replaceAll(" ", "_"));
+				mVoteDialogData.putString(VOTE_DIALOG_DATE_ID, "D" + DateFormat.format("yyyyMMdd", mToday.getTime()));
 				mVoteDialogData.putFloat(VOTE_DIALOG_VISUAL_ID, vis);
 				mVoteDialogData.putFloat(VOTE_DIALOG_TASTE_ID, tst);
 				mVoteDialogData.putFloat(VOTE_DIALOG_PRICE_ID, prc);
@@ -502,10 +511,12 @@ public class MensaMeals extends ExpandableListActivity {
 					if (vis_set || prc_set || tst_set) {
 						// Save data (DB)
 						long rowId = mVoteDialogData.getLong(VOTE_DIALOG_MEAL_ID);
-						mDbHelper.updateMealInternalVotes(rowId, taste, price, visual);
+						mDbHelper.updateMealInternalVotes(rowId, visual, price, taste);
 
 						// Save data (Inet)
 						new VoteHelper(mVoteDialogData).start();
+						
+						invokeVoteUpdater();
 					}
 				}
 			});
@@ -633,9 +644,8 @@ public class MensaMeals extends ExpandableListActivity {
 			mDbHelper.open();
 		}
 
-		// start getting new votes
-		new VoteHelper(mActivity, mDbHelper, mToday).start();
-		
+		invokeVoteUpdater();
+
 		// expand groups
 		fillData();
 	}
@@ -784,5 +794,16 @@ public class MensaMeals extends ExpandableListActivity {
 		DataExtractor de = new DataExtractor(this, mSettings.m_sMensaLocation);
 		Thread t = new Thread(de);
 		t.start();
+	}
+
+	/**
+	 * 
+	 */
+	private void invokeVoteUpdater() {
+		// start getting new votes
+		if (voteUpdater == null || !voteUpdater.isAlive()) {
+			voteUpdater = new VoteHelper(mActivity, mDbHelper);
+			voteUpdater.start();
+		}
 	}
 }

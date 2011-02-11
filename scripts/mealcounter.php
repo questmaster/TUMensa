@@ -19,7 +19,7 @@
 /*
  * This scripts counts votes from TUMensa Android App
  * mealid with length 1 is just readfile, with more letters its a new entry.
- * example call: .../mealcounter.php?mealid=test123&date=2011-01-01&vote1=2&vote2=4&vote3=5
+ * example call: .../mealcounter.php?mealid=test123&date=20110101&vote1=2&vote2=4&vote3=5
  */
 if (array_key_exists('mealid', $_REQUEST) 
 	&& array_key_exists('vote1', $_REQUEST) // visual
@@ -40,7 +40,7 @@ if (array_key_exists('mealid', $_REQUEST)
 		&& $new_vote1 >= 0 && $new_vote1 <= 5 
 		&& $new_vote2 >= 0 && $new_vote2 <= 5 
 		&& $new_vote3 >= 0 && $new_vote3 <= 5
-		&& strlen($new_date) == 10
+		&& strlen($new_date) == 9
 		&& strlen($new_mealid) < 50)) {
 		die ("ERR: don't trick me!");	
 	}
@@ -116,11 +116,13 @@ if (array_key_exists('mealid', $_REQUEST)
 					$count3 = 0;
 				}
 	
-				$newmeallist[$i] = $mealid." ".$vote1." ".$count1." ".$vote2." ".$count2." ".$vote3." ".$count3;//."\n" ;
+				$newmeallist[$i] = "\n".$mealid." ".$vote1." ".$count1." ".$vote2." ".$count2." ".$vote3." ".$count3;//."\n" ;
 //				echo $newmeallist[$i];
 		}
 	
 		$tmpname = tempnam("/tmp", "FOO");
+		chmod ($tmpname, 0644);
+		
 		$fp = fopen ($tmpname, "w");
 	
 		// save new file
