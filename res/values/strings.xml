@@ -73,4 +73,8 @@
         <item>Dark</item>
         <item>Light</item>
     </string-array>
+    <string name="dialog_visual">Visual appearance</string>
+    <string name="dialog_price">Value for money</string>
+    <string name="dialog_taste">Taste</string>
+    <string name="dialog_already_voted">You already rated: %s</string>
 </resources>

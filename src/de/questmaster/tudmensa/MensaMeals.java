@@ -486,6 +486,7 @@ public class MensaMeals extends ExpandableListActivity {
 						// Save data (Inet)
 						new VoteHelper(mVoteDialogData).start();
 
+						// TODO: Debug
 						Toast.makeText(getApplicationContext(), "Visual: " + visual + "\nPrice: " + price + "\nTaste: " + taste, Toast.LENGTH_LONG).show();
 					}
 				}
@@ -511,7 +512,7 @@ public class MensaMeals extends ExpandableListActivity {
 			RatingBar r = (RatingBar) dialog.findViewById(R.id.visual);
 			if (mVoteDialogData.getFloat(VOTE_DIALOG_VISUAL_ID) != 0) {
 				r.setIsIndicator(true);
-				voted += "Visual, ";// TODO: I18N
+				voted += getResources().getString(R.string.dialog_visual) + ", ";
 			} else {
 				r.setIsIndicator(false);
 			}
@@ -520,7 +521,7 @@ public class MensaMeals extends ExpandableListActivity {
 			r = (RatingBar) dialog.findViewById(R.id.price);
 			if (mVoteDialogData.getFloat(VOTE_DIALOG_PRICE_ID) != 0) {
 				r.setIsIndicator(true);
-				voted += "Price, ";// TODO: I18N
+				voted += getResources().getString(R.string.dialog_price) + ", ";
 			} else {
 				r.setIsIndicator(false);
 			}
@@ -529,7 +530,7 @@ public class MensaMeals extends ExpandableListActivity {
 			r = (RatingBar) dialog.findViewById(R.id.taste);
 			if (mVoteDialogData.getFloat(VOTE_DIALOG_TASTE_ID) != 0) {
 				r.setIsIndicator(true);
-				voted += "Taste, ";// TODO: I18N
+				voted += getResources().getString(R.string.dialog_taste) + ", ";
 			} else {
 				r.setIsIndicator(false);
 			}
@@ -539,7 +540,7 @@ public class MensaMeals extends ExpandableListActivity {
 			TextView txt = (TextView) dialog.findViewById(R.id.alreadyVoted);
 			if (!voted.equals("")) {
 				voted = voted.substring(0, voted.length() - 2) + ".";
-				txt.setText("You already rated: " + voted);// TODO: I18N
+				txt.setText(String.format(getResources().getString(R.string.dialog_already_voted), voted));
 			} else {
 				txt.setText("");
 			}
@@ -614,6 +615,9 @@ public class MensaMeals extends ExpandableListActivity {
 			mDbHelper.open();
 		}
 
+		// start getting new votes
+		new VoteHelper(mActivity, mDbHelper, mToday).start();
+		
 		// expand groups
 		fillData();
 	}

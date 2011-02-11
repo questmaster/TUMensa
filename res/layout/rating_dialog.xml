@@ -3,22 +3,19 @@
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
 	android:orientation="vertical">
 	<TextView android:id="@+id/TextView01" android:layout_width="wrap_content"
-		android:layout_height="wrap_content" android:text="Visual appearence"
-		android:paddingLeft="10dp" android:paddingRight="10dp"></TextView>
+		android:layout_height="wrap_content" android:paddingLeft="10dp" android:paddingRight="10dp" android:text="@string/dialog_visual"></TextView>
 	<RatingBar android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:id="@+id/visual"
 		android:rating="0.0"></RatingBar>
 	<TextView android:id="@+id/TextView02" android:layout_width="wrap_content"
-		android:layout_height="wrap_content" android:text="Price"
-		android:paddingLeft="10dp" android:paddingRight="10dp"
-		android:paddingTop="10dp"></TextView>
+		android:layout_height="wrap_content" android:paddingLeft="10dp" android:paddingRight="10dp"
+		android:paddingTop="10dp" android:text="@string/dialog_price"></TextView>
 	<RatingBar android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:id="@+id/price"
 		android:rating="0.0"></RatingBar>
 	<TextView android:id="@+id/TextView03" android:layout_width="wrap_content"
-		android:layout_height="wrap_content" android:text="Taste"
-		android:paddingLeft="10dp" android:paddingRight="10dp"
-		android:paddingTop="10dp"></TextView>
+		android:layout_height="wrap_content" android:paddingLeft="10dp" android:paddingRight="10dp"
+		android:paddingTop="10dp" android:text="@string/dialog_taste"></TextView>
 	<RatingBar android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:id="@+id/taste"
 		android:rating="0.0"></RatingBar>
