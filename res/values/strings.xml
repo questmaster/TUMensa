@@ -81,4 +81,7 @@
     <string name="meals_price">P:</string>
     <string name="meals_visual">V:</string>
     <string name="dialog_vote_done">Your vote was submitted.</string>
+    <string name="PREF_KEY_LAST_DIALOG_SHOWN">dlg_shown</string>
+    <string name="help_dialog_msg">text</string>
+    <string name="help_dialog_title">Update News</string>
 </resources>

@@ -22,6 +22,7 @@ import java.util.Calendar;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -66,6 +67,7 @@ public class MensaMealsSettings extends PreferenceActivity {
 		public boolean m_bDeleteOldData = true;
 		public boolean m_bGestures = true;
 		public boolean m_bEnableVoting = false;
+		public int m_iShowDialog = 0;
 		public String m_sThemes = "dark";
 
 
@@ -81,7 +83,8 @@ public class MensaMealsSettings extends PreferenceActivity {
 				m_bEnableVoting = sharedPref.getBoolean(res.getString(R.string.PREF_KEY_ENABLE_VOTING), m_bEnableVoting);
 
 				m_lLastUpdate = sharedPref.getLong(res.getString(R.string.PREF_KEY_LAST_UPDATE), m_lLastUpdate);
-
+				m_iShowDialog = sharedPref.getInt(res.getString(R.string.PREF_KEY_LAST_DIALOG_SHOWN), m_iShowDialog);
+				
 				m_sMensaLocation = sharedPref.getString(res.getString(R.string.PREF_KEY_MENSA_LOCATION), m_sMensaLocation);
 
 				m_sThemes = sharedPref.getString(res.getString(R.string.PREF_KEY_THEMES), m_sThemes);
@@ -94,6 +97,19 @@ public class MensaMealsSettings extends PreferenceActivity {
 			
 			m_lLastUpdate = Calendar.getInstance().getTimeInMillis();
 			sharedPref.putLong(res.getString(R.string.PREF_KEY_LAST_UPDATE), m_lLastUpdate);
+			
+			sharedPref.commit();
+		}
+
+		public void setLastDialogShown(Context p_oContext) {
+			Editor sharedPref = PreferenceManager.getDefaultSharedPreferences(p_oContext).edit();
+			Resources res = p_oContext.getResources();
+			
+			try {
+				m_iShowDialog = p_oContext.getPackageManager().getPackageInfo(p_oContext.getPackageName(), 0).versionCode;
+			} catch (NameNotFoundException e) {
+			}
+			sharedPref.putInt(res.getString(R.string.PREF_KEY_LAST_UPDATE), m_iShowDialog);
 			
 			sharedPref.commit();
 		}

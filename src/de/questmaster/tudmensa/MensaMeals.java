@@ -26,6 +26,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
@@ -93,8 +94,7 @@ public class MensaMeals extends ExpandableListActivity {
 				invokeVoteUpdater();
 
 			} else if (msg.what == 1) { // VoteHelper finished updating votes
-				Toast.makeText(mContext, getResources().getText(R.string.dialog_vote_done), Toast.LENGTH_SHORT).show();
-				
+
 				// update data displayed
 				mRestart = true;
 				fillData();
@@ -239,8 +239,7 @@ public class MensaMeals extends ExpandableListActivity {
 
 			// check if data avail, if not...
 			if (mChildLayoutUsed == R.layout.simple_expandable_list_item_2_rating) {
-				if (cursor.getFloat(cursor.getColumnIndexOrThrow(MealsDbAdapter.KEY_RESULT_VISUAL)) == 0 
-						&& cursor.getFloat(cursor.getColumnIndexOrThrow(MealsDbAdapter.KEY_RESULT_PRICE)) == 0
+				if (cursor.getFloat(cursor.getColumnIndexOrThrow(MealsDbAdapter.KEY_RESULT_VISUAL)) == 0 && cursor.getFloat(cursor.getColumnIndexOrThrow(MealsDbAdapter.KEY_RESULT_PRICE)) == 0
 						&& cursor.getFloat(cursor.getColumnIndexOrThrow(MealsDbAdapter.KEY_RESULT_TASTE)) == 0) {
 					// hide stuff
 					View holder = new_view.findViewById(R.id.ratingHolder);
@@ -300,7 +299,20 @@ public class MensaMeals extends ExpandableListActivity {
 
 		// Gesture detection
 		gestureDetector = new GestureDetector(new MyGestureDetector());
-
+		
+		// FIXME: show help dialog
+		int ver;
+		try {
+			ver = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+			if (mSettings.m_iShowDialog != ver) {
+				AlertDialog.Builder d = new AlertDialog.Builder(this);
+				d.setTitle(getResources().getString(R.string.help_dialog_title));
+				d.setMessage(getResources().getString(R.string.help_dialog_msg));
+				d.show();
+			}
+		} catch (NameNotFoundException e) {
+			// Nothing to do
+		}
 	}
 
 	@Override
@@ -516,7 +528,7 @@ public class MensaMeals extends ExpandableListActivity {
 
 						// Save data (Inet)
 						new VoteHelper(mVoteDialogData).start();
-						
+
 						invokeVoteUpdater();
 					}
 				}

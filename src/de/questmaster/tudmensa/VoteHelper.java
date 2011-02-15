@@ -27,6 +27,7 @@ import java.util.Calendar;
 
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.widget.Toast;
 
 /**
  * @author Daniel
@@ -136,6 +137,9 @@ public class VoteHelper extends Thread {
 
 				uc.connect();
 				uc.getContent();
+
+				// Signal the user everything is done
+				Toast.makeText(mParent, mParent.getResources().getText(R.string.dialog_vote_done), Toast.LENGTH_SHORT).show();
 
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
