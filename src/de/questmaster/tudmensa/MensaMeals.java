@@ -309,6 +309,8 @@ public class MensaMeals extends ExpandableListActivity {
 				d.setTitle(getResources().getString(R.string.help_dialog_title));
 				d.setMessage(getResources().getString(R.string.help_dialog_msg));
 				d.show();
+				
+				mSettings.setLastDialogShown(this);
 			}
 		} catch (NameNotFoundException e) {
 			// Nothing to do

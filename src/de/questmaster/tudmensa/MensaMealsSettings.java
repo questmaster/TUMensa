@@ -109,7 +109,7 @@ public class MensaMealsSettings extends PreferenceActivity {
 				m_iShowDialog = p_oContext.getPackageManager().getPackageInfo(p_oContext.getPackageName(), 0).versionCode;
 			} catch (NameNotFoundException e) {
 			}
-			sharedPref.putInt(res.getString(R.string.PREF_KEY_LAST_UPDATE), m_iShowDialog);
+			sharedPref.putInt(res.getString(R.string.PREF_KEY_LAST_DIALOG_SHOWN), m_iShowDialog);
 			
 			sharedPref.commit();
 		}
