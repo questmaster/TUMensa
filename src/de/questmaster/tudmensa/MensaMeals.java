@@ -31,6 +31,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Html;
 import android.text.format.DateFormat;
 import android.view.ContextMenu;
 import android.view.GestureDetector;
@@ -41,6 +42,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.ExpandableListContextMenuInfo;
@@ -239,8 +241,9 @@ public class MensaMeals extends ExpandableListActivity {
 
 			// check if data avail, if not...
 			if (mChildLayoutUsed == R.layout.simple_expandable_list_item_2_rating) {
-				if (cursor.getFloat(cursor.getColumnIndexOrThrow(MealsDbAdapter.KEY_RESULT_VISUAL)) == 0 && cursor.getFloat(cursor.getColumnIndexOrThrow(MealsDbAdapter.KEY_RESULT_PRICE)) == 0
-						&& cursor.getFloat(cursor.getColumnIndexOrThrow(MealsDbAdapter.KEY_RESULT_TASTE)) == 0) {
+				if (cursor.getFloat(cursor.getColumnIndexOrThrow(MealsDbAdapter.KEY_RESULT_VISUAL)) < 0.5 
+						&& cursor.getFloat(cursor.getColumnIndexOrThrow(MealsDbAdapter.KEY_RESULT_PRICE)) < 0.5
+						&& cursor.getFloat(cursor.getColumnIndexOrThrow(MealsDbAdapter.KEY_RESULT_TASTE)) < 0.5) {
 					// hide stuff
 					View holder = new_view.findViewById(R.id.ratingHolder);
 					holder.setVisibility(View.GONE);
@@ -300,14 +303,24 @@ public class MensaMeals extends ExpandableListActivity {
 		// Gesture detection
 		gestureDetector = new GestureDetector(new MyGestureDetector());
 		
-		// FIXME: show help dialog
+		// show help dialog
 		int ver;
 		try {
 			ver = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
-			if (mSettings.m_iShowDialog != ver) {
-				AlertDialog.Builder d = new AlertDialog.Builder(this);
+			if (mSettings.m_iShowDialog == ver) {
+				//load some kind of a view
+			    LayoutInflater li = LayoutInflater.from(this);
+			    View view = li.inflate(R.layout.help_dialog, null);
+			 
+			    // TODO: lets webview look like a dialog
+			    WebView wv = (WebView) view.findViewById(R.id.help_dialog_message);
+			    wv.loadUrl(getResources().getString(R.string.help_dialog_msg));
+			    
+			    AlertDialog.Builder d = new AlertDialog.Builder(this);
 				d.setTitle(getResources().getString(R.string.help_dialog_title));
-				d.setMessage(getResources().getString(R.string.help_dialog_msg));
+				d.setIcon(android.R.drawable.ic_menu_info_details);
+				d.setView(view);
+//				d.setMessage(Html.fromHtml(getResources().getString(R.string.help_dialog_msg)));
 				d.show();
 				
 				mSettings.setLastDialogShown(this);

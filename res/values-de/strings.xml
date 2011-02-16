@@ -60,9 +60,10 @@
     <string name="dialog_visual">Optischer Eindruck</string>
     <string name="dialog_price">Preis/Leistung</string>
     <string name="dialog_taste">Geschmack</string>
-    <string name="dialog_already_voted">Schon bewerted: %s</string>
+    <string name="dialog_already_voted">Schon bewertet: %s</string>
     <string name="meals_taste">G:</string>
     <string name="meals_price">P:</string>
     <string name="meals_visual">O:</string>
     <string name="dialog_vote_done">Die Bewertung wurde übertragen.</string>
+    <string name="help_dialog_title">Funktionsüberblick</string>
 </resources>

@@ -13,7 +13,7 @@
     <string name="pref_AutoUpdateDescr">Updates meals automatically.</string>
     <string name="pref_DeleteOldDataDescr">Deletes meals from last week and before.</string>
     <string name="pref_DeleteOldDataLabel">Delete old menu entries</string>
-    <string name="pref_ThemesLabel">Select Theme</string>
+    <string name="pref_ThemesLabel">Select theme</string>
     <string name="pref_ThemesSummary">Select a theme.</string>
     <string name="PREF_KEY_DELETE_OLD_DATA">del_old_data</string>
     <string name="PREF_KEY_MENSA_LOCATION">mensa_location</string>
@@ -37,7 +37,7 @@
     <string name="pref_EnableVotingDescrOff">EXPERIMENTAL. Voting is off.</string>
     <string name="pref_EnableVotingDescr">EXPERIMENTAL. Shows and enables to vote.</string>
     <string name="PREF_KEY_ENABLE_VOTING">enable_voting</string>
-    <string name="pref_EnableVotingLabel">Enable Voting</string>
+    <string name="pref_EnableVotingLabel">Enable voting</string>
     <string name="share_checkout">Checkout "%1$s" on %2$s at "%3$s"</string>
     <string name="dialog_title_voting">Rate your Meal</string>
     <string name="share_subject">Mensa meal on %s</string>
@@ -82,6 +82,6 @@
     <string name="meals_visual">V:</string>
     <string name="dialog_vote_done">Your vote was submitted.</string>
     <string name="PREF_KEY_LAST_DIALOG_SHOWN">dlg_shown</string>
-    <string name="help_dialog_msg">text</string>
-    <string name="help_dialog_title">Update News</string>
+    <string name="help_dialog_msg">file:///android_asset/features.html</string>
+    <string name="help_dialog_title">Feature Overview</string>
 </resources>
