@@ -27,7 +27,6 @@ import java.util.Calendar;
 
 import android.os.Bundle;
 import android.text.format.DateFormat;
-import android.widget.Toast;
 
 /**
  * @author Daniel
@@ -57,8 +56,9 @@ public class VoteHelper extends Thread {
 	/**
 	 * @param bundle
 	 */
-	public VoteHelper(Bundle bundle) {
+	public VoteHelper(MensaMeals parent, Bundle bundle) {
 		mDialogData = bundle;
+		mParent = parent;
 		mModeOfOperation = MODE_SET_VOTES;
 	}
 
@@ -96,7 +96,7 @@ public class VoteHelper extends Thread {
 						if (tokens.length == 7 && db_tokens.length == 3) {
 							// populate vars
 							db_location = db_tokens[0].replaceAll("_", " ");
-							db_counter = db_tokens[1];
+							db_counter = db_tokens[1].replaceAll("_", " ");
 							db_counter_num = Integer.parseInt(db_tokens[2]);
 
 							res_visual = Float.parseFloat(tokens[1]);
@@ -139,7 +139,7 @@ public class VoteHelper extends Thread {
 				uc.getContent();
 
 				// Signal the user everything is done
-				Toast.makeText(mParent, mParent.getResources().getText(R.string.dialog_vote_done), Toast.LENGTH_SHORT).show();
+				mParent.mHandler.sendEmptyMessage(2);
 
 			} catch (MalformedURLException e) {
 				e.printStackTrace();

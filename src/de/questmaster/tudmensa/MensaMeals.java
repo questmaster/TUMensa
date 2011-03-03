@@ -17,7 +17,7 @@
 package de.questmaster.tudmensa;
 
 import java.util.Calendar;
-import de.questmaster.tudmensa.R;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ExpandableListActivity;
@@ -31,7 +31,6 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.Html;
 import android.text.format.DateFormat;
 import android.view.ContextMenu;
 import android.view.GestureDetector;
@@ -58,8 +57,8 @@ public class MensaMeals extends ExpandableListActivity {
 	private static final int TODAY_ID = Menu.FIRST + 1;
 	private static final int SETTINGS_ID = Menu.FIRST + 2;
 
-	private static final int MENU_GROUP_MEAL_ID = 1;
-	private static final int MENU_GROUP_MENSA_ID = 2;
+	private static final int MENU_GROUP_MEAL_ID = Menu.FIRST;
+	private static final int MENU_GROUP_MENSA_ID = Menu.FIRST + 1;
 
 	private static final int MENU_SHARE_ID = ContextMenu.FIRST;
 	private static final int MENU_VOTE_ID = ContextMenu.FIRST + 1;
@@ -86,8 +85,7 @@ public class MensaMeals extends ExpandableListActivity {
 		public void handleMessage(Message msg) {
 			if (msg.what == 0) { // progress Dialog data update
 				mPDialog.dismiss();
-				// updateView after update. Don't do it for an update after
-				// startup
+				// updateView after update. Don't do it for an update after startup
 				mRestart = true;
 				// set update time
 				mSettings.setLastUpdate(mContext);
@@ -96,10 +94,16 @@ public class MensaMeals extends ExpandableListActivity {
 				invokeVoteUpdater();
 
 			} else if (msg.what == 1) { // VoteHelper finished updating votes
-
+				int scroll_pos = mActivity.getExpandableListView().getFirstVisiblePosition();
+				
 				// update data displayed
 				mRestart = true;
 				fillData();
+				
+				mActivity.getExpandableListView().setSelectionFromTop(scroll_pos, 0);
+			} else if (msg.what == 2) { // VoteHelper finished sending new vote
+				Toast.makeText(mContext, getResources().getText(R.string.dialog_vote_done), Toast.LENGTH_SHORT).show();
+				invokeVoteUpdater();
 			}
 		}
 	};
@@ -241,15 +245,14 @@ public class MensaMeals extends ExpandableListActivity {
 
 			// check if data avail, if not...
 			if (mChildLayoutUsed == R.layout.simple_expandable_list_item_2_rating) {
-				if (cursor.getFloat(cursor.getColumnIndexOrThrow(MealsDbAdapter.KEY_RESULT_VISUAL)) < 0.5 
-						&& cursor.getFloat(cursor.getColumnIndexOrThrow(MealsDbAdapter.KEY_RESULT_PRICE)) < 0.5
-						&& cursor.getFloat(cursor.getColumnIndexOrThrow(MealsDbAdapter.KEY_RESULT_TASTE)) < 0.5) {
+				View holder = new_view.findViewById(R.id.ratingHolder);
+				if (cursor.getFloat(cursor.getColumnIndexOrThrow(MealsDbAdapter.KEY_RESULT_VISUAL)) < 0.5f 
+						&& cursor.getFloat(cursor.getColumnIndexOrThrow(MealsDbAdapter.KEY_RESULT_PRICE)) < 0.5f
+						&& cursor.getFloat(cursor.getColumnIndexOrThrow(MealsDbAdapter.KEY_RESULT_TASTE)) < 0.5f) {
 					// hide stuff
-					View holder = new_view.findViewById(R.id.ratingHolder);
 					holder.setVisibility(View.GONE);
 				} else {
 					// show stuff
-					View holder = new_view.findViewById(R.id.ratingHolder);
 					holder.setVisibility(View.VISIBLE);
 				}
 			}
@@ -307,12 +310,12 @@ public class MensaMeals extends ExpandableListActivity {
 		int ver;
 		try {
 			ver = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
-			if (mSettings.m_iShowDialog == ver) {
-				//load some kind of a view
+			if (mSettings.m_iShowDialog != ver) {
+				// load some kind of a view
 			    LayoutInflater li = LayoutInflater.from(this);
 			    View view = li.inflate(R.layout.help_dialog, null);
 			 
-			    // TODO: lets webview look like a dialog
+			    // TODO let webview look like a dialog -> set as activity
 			    WebView wv = (WebView) view.findViewById(R.id.help_dialog_message);
 			    wv.loadUrl(getResources().getString(R.string.help_dialog_msg));
 			    
@@ -320,7 +323,6 @@ public class MensaMeals extends ExpandableListActivity {
 				d.setTitle(getResources().getString(R.string.help_dialog_title));
 				d.setIcon(android.R.drawable.ic_menu_info_details);
 				d.setView(view);
-//				d.setMessage(Html.fromHtml(getResources().getString(R.string.help_dialog_msg)));
 				d.show();
 				
 				mSettings.setLastDialogShown(this);
@@ -389,9 +391,9 @@ public class MensaMeals extends ExpandableListActivity {
 
 			// WORKAROUND: restart activity TODO may have side-effects in froyo
 			if (!mOldTheme.equals(mSettings.m_sThemes)) {
-				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+				//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 			}
 
 			// Reread data and display it
@@ -486,6 +488,9 @@ public class MensaMeals extends ExpandableListActivity {
 		return super.onContextItemSelected(item);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	protected Dialog onCreateDialog(int id) {
 		Dialog dialog = null;
 
@@ -542,9 +547,7 @@ public class MensaMeals extends ExpandableListActivity {
 						mDbHelper.updateMealInternalVotes(rowId, visual, price, taste);
 
 						// Save data (Inet)
-						new VoteHelper(mVoteDialogData).start();
-
-						invokeVoteUpdater();
+						new VoteHelper(mActivity, mVoteDialogData).start();
 					}
 				}
 			});
@@ -776,6 +779,16 @@ public class MensaMeals extends ExpandableListActivity {
 	}
 
 	private void fillData() {
+		// check for database connection
+		// maybe canceled due to low memory, etc.
+		if (mDbHelper == null || !mDbHelper.isOpen()) {
+			if (!mDbHelper.isOpen()) {
+				mDbHelper.close();
+			}
+			mDbHelper = new MealsDbAdapter(this);
+			mDbHelper.open();
+		}
+		
 		// prepare date string
 		String date = (String) DateFormat.format("yyyyMMdd", mToday);
 

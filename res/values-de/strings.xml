@@ -47,7 +47,7 @@
     <string name="note_phenylalanine_source">Phenylalaninquelle</string>
     <string name="note_waxed">gewachst</string>
     <string name="type_fish">Fisch</string>
-    <string name="contextmenu_share_with_friends">Teile mit Freunden</string>
+    <string name="contextmenu_share_with_friends">Mit Freunden teilen</string>
     <string name="contextmenu_meals">Essen</string>
     <string name="contextmenu_vote">Bewerte dein Essen</string>
     <string name="dialog_title_voting">Bewerte dein Essen</string>
@@ -66,4 +66,5 @@
     <string name="meals_visual">O:</string>
     <string name="dialog_vote_done">Die Bewertung wurde übertragen.</string>
     <string name="help_dialog_title">Funktionsüberblick</string>
+    <string name="help_dialog_msg">file:///android_asset/features-de.html</string>
 </resources>
