@@ -83,42 +83,45 @@ containing a value of this type.
         public static final int trans_pix=0x7f020014;
     }
     public static final class id {
-        public static final int TextView01=0x7f080007;
-        public static final int TextView02=0x7f080009;
-        public static final int TextView03=0x7f08000b;
-        public static final int ad=0x7f080006;
-        public static final int alreadyVoted=0x7f08000d;
-        public static final int btn_next=0x7f080004;
-        public static final int btn_prev=0x7f080002;
-        public static final int content=0x7f080005;
-        public static final int counter=0x7f08000e;
-        public static final int documentroot=0x7f080000;
-        public static final int linearLayout1=0x7f080014;
-        public static final int linearLayout3=0x7f080017;
-        public static final int linearLayout4=0x7f08001a;
-        public static final int list_header=0x7f080001;
-        public static final int meal=0x7f080012;
-        public static final int meal_type=0x7f080010;
-        public static final int price=0x7f08000a;
-        public static final int ratingHolder=0x7f080013;
-        public static final int taste=0x7f08000c;
-        public static final int textView1=0x7f080015;
-        public static final int textView2=0x7f080018;
-        public static final int textView3=0x7f08001b;
-        public static final int txt_date=0x7f080003;
-        public static final int visual=0x7f080008;
-        public static final int vote_price=0x7f080019;
-        public static final int vote_taste=0x7f08001c;
-        public static final int vote_visual=0x7f080016;
-        public static final int widget35=0x7f08000f;
-        public static final int widget37=0x7f080011;
+        public static final int TextView01=0x7f080009;
+        public static final int TextView02=0x7f08000b;
+        public static final int TextView03=0x7f08000d;
+        public static final int aboutscrollview=0x7f080000;
+        public static final int ad=0x7f080008;
+        public static final int alreadyVoted=0x7f08000f;
+        public static final int btn_next=0x7f080006;
+        public static final int btn_prev=0x7f080004;
+        public static final int content=0x7f080007;
+        public static final int counter=0x7f080010;
+        public static final int documentroot=0x7f080002;
+        public static final int help_dialog_message=0x7f080001;
+        public static final int linearLayout1=0x7f080016;
+        public static final int linearLayout3=0x7f080019;
+        public static final int linearLayout4=0x7f08001c;
+        public static final int list_header=0x7f080003;
+        public static final int meal=0x7f080014;
+        public static final int meal_type=0x7f080012;
+        public static final int price=0x7f08000c;
+        public static final int ratingHolder=0x7f080015;
+        public static final int taste=0x7f08000e;
+        public static final int textView1=0x7f080017;
+        public static final int textView2=0x7f08001a;
+        public static final int textView3=0x7f08001d;
+        public static final int txt_date=0x7f080005;
+        public static final int visual=0x7f08000a;
+        public static final int vote_price=0x7f08001b;
+        public static final int vote_taste=0x7f08001e;
+        public static final int vote_visual=0x7f080018;
+        public static final int widget35=0x7f080011;
+        public static final int widget37=0x7f080013;
     }
     public static final class layout {
-        public static final int meals_list=0x7f030000;
-        public static final int rating_dialog=0x7f030001;
-        public static final int simple_expandable_list_item_1=0x7f030002;
-        public static final int simple_expandable_list_item_2=0x7f030003;
-        public static final int simple_expandable_list_item_2_rating=0x7f030004;
+        public static final int help_dialog=0x7f030000;
+        public static final int meals_list=0x7f030001;
+        public static final int rating_dialog=0x7f030002;
+        public static final int simple_expandable_list_item_1=0x7f030003;
+        public static final int simple_expandable_list_item_2=0x7f030004;
+        public static final int simple_expandable_list_item_2_rating=0x7f030005;
     }
     public static final class string {
         public static final int PREF_KEY_ADS=0x7f06001e;
@@ -126,6 +129,7 @@ containing a value of this type.
         public static final int PREF_KEY_DELETE_OLD_DATA=0x7f06000f;
         public static final int PREF_KEY_ENABLE_VOTING=0x7f060024;
         public static final int PREF_KEY_GESTURES=0x7f060017;
+        public static final int PREF_KEY_LAST_DIALOG_SHOWN=0x7f060046;
         public static final int PREF_KEY_LAST_UPDATE=0x7f060021;
         public static final int PREF_KEY_MENSA_LOCATION=0x7f060010;
         public static final int PREF_KEY_THEMES=0x7f060011;
@@ -140,6 +144,8 @@ containing a value of this type.
         public static final int dialog_updating_text=0x7f060003;
         public static final int dialog_visual=0x7f06003e;
         public static final int dialog_vote_done=0x7f060045;
+        public static final int help_dialog_msg=0x7f060047;
+        public static final int help_dialog_title=0x7f060048;
         public static final int meals_price=0x7f060043;
         public static final int meals_taste=0x7f060042;
         public static final int meals_visual=0x7f060044;

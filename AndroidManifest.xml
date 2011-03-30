@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<manifest android:installLocation="auto" android:versionCode="19"
-    android:versionName="0.7" package="de.questmaster.tudmensa" xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest android:versionCode="19"
+    android:versionName="0.7" package="de.questmaster.tudmensa" xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="preferExternal">
     <application android:allowClearUserData="true"
         android:icon="@drawable/essenlogo" android:label="@string/app_name" android:debuggable="true">
         <activity android:label="@string/app_name" android:name=".MensaMeals">

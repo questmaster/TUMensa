@@ -28,12 +28,14 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.io.input.ReplaceFilterInputStream;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+import de.questmaster.tudmensa.tokenreplacer.MapTokenResolver;
+import de.questmaster.tudmensa.tokenreplacer.TokenReplacingInputStream;
 
 import android.os.Build;
 
@@ -45,7 +47,7 @@ public class DataExtractor implements Runnable {
 	private String mLocation = null;
 	private boolean mWork_done = false;
 	private MensaMealsSettings.Settings mSettings = new MensaMealsSettings.Settings();
-	private Map<byte[],byte[]> mMap;
+	private Map<String,String> mMap;
 
 	
 	public DataExtractor(MensaMeals c, String location) {
@@ -58,18 +60,19 @@ public class DataExtractor implements Runnable {
 		
 		// Setup replacement strings
 		if (Build.VERSION.SDK_INT < 8) { // if SDK < 2.2
-			mMap = new HashMap<byte[],byte[]>();
-	        mMap.put("&auml;".getBytes(),  "ä".getBytes());
-	        mMap.put("&ouml;".getBytes(),  "ö".getBytes());
-	        mMap.put("&uuml;".getBytes(),  "ü".getBytes());
-	        mMap.put("&Auml;".getBytes(),  "Ä".getBytes());
-	        mMap.put("&Ouml;".getBytes(),  "Ö".getBytes());
-	        mMap.put("&Uuml;".getBytes(),  "Ü".getBytes());
-	        mMap.put("&szlig;".getBytes(), "ß".getBytes());
-	        mMap.put("&amp;".getBytes(),   "&".getBytes());
-	        mMap.put("&qout;".getBytes(),  "\"".getBytes());
-	        mMap.put("&acute;".getBytes(), "\'".getBytes());
-	        mMap.put("&egrave;".getBytes(),"é".getBytes());
+			mMap = new HashMap<String,String>();
+	        mMap.put("auml",  "ä");
+	        mMap.put("ouml",  "ö");
+	        mMap.put("uuml",  "ü");
+	        mMap.put("Auml",  "Ä");
+	        mMap.put("Ouml",  "Ö");
+	        mMap.put("Uuml",  "Ü");
+	        mMap.put("szlig", "ß");
+	        mMap.put("amp",   "&amp;");
+	        mMap.put("quot",  "\"");
+	        mMap.put("acute", "\'");
+	        mMap.put("egrave","é");
+	        mMap.put("nbsp",  "&nbsp;");
 		}
 	}
 
@@ -179,7 +182,7 @@ public class DataExtractor implements Runnable {
 	// mFirstDate = tmp;
 	// }
 	//
-	// // €-sign unfortunately not encoded, so checking price-tag
+	// // ?-sign unfortunately not encoded, so checking price-tag
 	// } else if (tmp.lastIndexOf(",") > 0 && day_index < days.size() &&
 	// Character.isDigit(tmp.charAt(tmp.lastIndexOf(",") - 1)) &&
 	// Character.isDigit(tmp.charAt(tmp.lastIndexOf(",") + 1))
@@ -193,7 +196,7 @@ public class DataExtractor implements Runnable {
 	// tmp = tmp.substring(0, tmp.length() - price.length()).trim();
 	//
 	// // add EUR sign to price string
-	// price += " €";
+	// price += " ?";
 	//
 	// // type
 	// String type = tmp.substring(tmp.lastIndexOf(" ") + 1);
@@ -336,7 +339,7 @@ public class DataExtractor implements Runnable {
 
 	/**
 	 * The DOM parser is buggy till at least 2.1. This code works form android
-	 * 2.2 on. But has a workaround for bug, so can be used with all Android versions.
+	 * 2.2 on. But has a workaround for the bug, so can be used with all Android versions.
 	 * 
 	 * @param task
 	 * @param view
@@ -353,8 +356,10 @@ public class DataExtractor implements Runnable {
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			Document doc;
-			if (Build.VERSION.SDK_INT < 8) { // if SDK < 2.2
-				doc = db.parse(new BufferedInputStream(new ReplaceFilterInputStream(uMenuWebsite.openStream(), mMap), 2048));
+			if (Build.VERSION.SDK_INT < 8) { // TODO: workaround bug, if SDK < 2.2
+				TokenReplacingInputStream trr = new TokenReplacingInputStream(uMenuWebsite.openStream(), new MapTokenResolver(mMap));
+				
+				doc = db.parse(new BufferedInputStream(trr, 2048));
 			} else {
 				doc = db.parse(new BufferedInputStream(uMenuWebsite.openStream(), 2048));
 			}
@@ -619,7 +624,7 @@ public class DataExtractor implements Runnable {
 //								}
 //								new_row = false;
 //
-//								// €-sign unfortunately not encoded, so checking
+//								// ?-sign unfortunately not encoded, so checking
 //								// price-tag
 //							} else if (tmp.lastIndexOf(",") > 0 && day_index < days.size() && Character.isDigit(tmp.charAt(tmp.lastIndexOf(",") - 1))
 //									&& Character.isDigit(tmp.charAt(tmp.lastIndexOf(",") + 1)) && Character.isDigit(tmp.charAt(tmp.lastIndexOf(",") + 2))) {
@@ -632,7 +637,7 @@ public class DataExtractor implements Runnable {
 //								tmp = tmp.substring(0, tmp.length() - price.length()).trim();
 //
 //								// add EUR sign to price string
-//								price += " €";
+//								price += " ?";
 //
 //								// type
 //								String type = tmp.substring(tmp.lastIndexOf(" ") + 1);
